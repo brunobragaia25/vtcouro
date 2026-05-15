@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { readdirSync } from 'fs'
 import { join } from 'path'
 import { NextRequest, NextResponse } from 'next/server'

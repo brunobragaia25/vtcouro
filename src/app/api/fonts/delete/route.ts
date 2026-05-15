@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { unlinkSync } from 'fs'
 import { join } from 'path'
 import { NextRequest, NextResponse } from 'next/server'
