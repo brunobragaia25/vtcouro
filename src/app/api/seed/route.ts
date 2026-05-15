@@ -160,6 +160,7 @@ export async function POST() {
 
     const q3 = await prisma.quote.create({
       data: {
+        protocolNumber: 'ORC-003',
         name: 'Pedro Ramos',
         email: 'pedro@ramosecia.com',
         company: 'Ramos & Cia',

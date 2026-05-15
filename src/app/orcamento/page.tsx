@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
@@ -33,7 +33,7 @@ interface CustomerData {
   notes: string
 }
 
-export default function OrcamentoPage() {
+function OrcamentoPageContent() {
   const searchParams = useSearchParams()
   const { addToast } = useToast()
   const [step, setStep] = useState<1 | 2 | 3>(1)
@@ -950,5 +950,13 @@ export default function OrcamentoPage() {
       </main>
       <Footer />
     </>
+  )
+}
+
+export default function OrcamentoPage() {
+  return (
+    <Suspense>
+      <OrcamentoPageContent />
+    </Suspense>
   )
 }

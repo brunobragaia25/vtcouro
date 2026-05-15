@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
@@ -15,7 +15,7 @@ import Link from 'next/link'
 
 const iconHealth = '/images/Health.svg'
 
-export default function CatalogPage() {
+function CatalogPageContent() {
   const searchParams = useSearchParams()
   const categoryFromUrl = searchParams.get('category')
   const favoritesFromUrl = searchParams.get('favorites') === 'true'
@@ -324,5 +324,13 @@ export default function CatalogPage() {
       </main>
       <Footer />
     </>
+  )
+}
+
+export default function CatalogPage() {
+  return (
+    <Suspense>
+      <CatalogPageContent />
+    </Suspense>
   )
 }
