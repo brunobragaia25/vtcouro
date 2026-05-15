@@ -1,0 +1,128 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Categorias de Produtos
+model Category {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  description String?
+  specificationFields Json?  // Array of {label: string, key: string}
+  orderIndex Int     @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products Product[]
+  subcategories Subcategory[]
+
+  @@map("categories")
+}
+
+// Subcategorias
+model Subcategory {
+  id        String   @id @default(cuid())
+  categoryId String
+  name      String
+  slug      String
+  description String?
+  orderIndex Int     @default(0)
+  createdAt DateTime @default(now())
+
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  products Product[]
+
+  @@unique([categoryId, slug])
+  @@map("subcategories")
+}
+
+// Produtos
+model Product {
+  id        String   @id @default(cuid())
+  categoryId String
+  subcategoryId String?
+  name      String
+  slug      String   @unique
+  description String?
+  sku       String?  @unique
+  imageUrl  String?
+  images    String[]
+  minQuantity Int    @default(50)
+  availableColors String[]  @default(["Caramelo", "Preto", "Marrom", "Natural"])
+  specifications Json?  // Object with key-value pairs for specifications
+  customization String?
+  care String?
+  isFeatured    Boolean @default(false)
+  isNew         Boolean @default(false)
+  isActive      Boolean @default(true)
+  orderIndex    Int     @default(0)
+  featuredOrder Int     @default(0)
+  newOrder      Int     @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  subcategory Subcategory? @relation(fields: [subcategoryId], references: [id], onDelete: SetNull)
+  quoteItems QuoteItem[]
+
+  @@map("products")
+}
+
+// Orçamentos
+model Quote {
+  id              String   @id @default(cuid())
+  protocolNumber  String   @unique
+  name            String
+  email           String
+  phone           String?
+  company         String?
+  notes           String?
+  response        String?
+  status          String   @default("novo") // novo, em_progresso, respondido, concluído
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  items QuoteItem[]
+  order Order?
+
+  @@map("quotes")
+}
+
+// Itens do Orçamento
+model QuoteItem {
+  id        String   @id @default(cuid())
+  quoteId   String
+  productId String
+  quantity  Int
+  artFileUrl String?
+  addedAt   DateTime @default(now())
+
+  quote Quote @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@map("quote_items")
+}
+
+// Pedidos
+model Order {
+  id          String   @id @default(cuid())
+  orderNumber String   @unique
+  quoteId     String   @unique
+  status      String   @default("pendente") // pendente, em_producao, enviado, entregue, cancelado
+  totalValue  Float?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  quote Quote @relation(fields: [quoteId], references: [id], onDelete: Restrict)
+
+  @@map("orders")
+}

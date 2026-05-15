@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+}
+
+body {
+  @apply bg-white text-primary font-sans overflow-x-hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Utility Classes */
+@layer components {
+  .container-main {
+    @apply max-w-container mx-auto px-4 md:px-6 lg:px-8;
+  }
+
+  .btn-primary {
+    @apply px-6 py-3 bg-primary text-white rounded-md font-medium transition-colors hover:bg-opacity-90 active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 bg-secondary text-white rounded-md font-medium transition-colors hover:bg-opacity-90 active:scale-95;
+  }
+
+  .btn-outline {
+    @apply px-6 py-3 border border-primary text-primary rounded-md font-medium transition-colors hover:bg-accent active:scale-95;
+  }
+
+  .card {
+    @apply bg-white border border-gray-200 rounded-lg p-6;
+  }
+
+  .badge {
+    @apply inline-block px-3 py-1 rounded text-sm font-medium;
+  }
+
+  .badge-primary {
+    @apply badge bg-primary text-white;
+  }
+
+  .badge-secondary {
+    @apply badge bg-secondary text-white;
+  }
+
+  .badge-success {
+    @apply badge bg-green-100 text-green-800;
+  }
+
+  .badge-error {
+    @apply badge bg-red-100 text-red-800;
+  }
+}
+
+/* Scrollbar customizado */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d4a574;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c29660;
+}
