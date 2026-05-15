@@ -43,7 +43,9 @@ async function generateProtocolNumber() {
   return `${month}${day}-${String(Date.now()).slice(-5)}`;
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const authError = requireAdmin(request)
+  if (authError) return authError
   try {
     const quotes = await prisma.quote.findMany({
       include: {

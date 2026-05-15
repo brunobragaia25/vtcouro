@@ -34,7 +34,9 @@ async function generateOrderNumber() {
   return `PED${month}${day}-${sequence}`;
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const authError = requireAdmin(request)
+  if (authError) return authError
   try {
     const orders = await prisma.order.findMany({
       include: {
