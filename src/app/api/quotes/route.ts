@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic'
 
 ﻿import { prisma } from '@/lib/prisma';
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAdmin } from '@/lib/adminAuth';
 import { Resend } from 'resend';
 
 async function generateProtocolNumber() {
