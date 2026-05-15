@@ -23,6 +23,8 @@ export function useFavorites(availableProductIds?: string[]) {
     setMounted(true)
   }, [])
 
+  const productIdsKey = availableProductIds?.join(',') ?? ''
+
   // Remove orphaned favorites when product list is available
   useEffect(() => {
     if (!mounted || !availableProductIds || availableProductIds.length === 0) return
@@ -34,7 +36,8 @@ export function useFavorites(availableProductIds?: string[]) {
       }
       return cleaned
     })
-  }, [mounted, availableProductIds?.join(',')])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mounted, productIdsKey])
 
   // Listen for updates from other hook instances
   useEffect(() => {

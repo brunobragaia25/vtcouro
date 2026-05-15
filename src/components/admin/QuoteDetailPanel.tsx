@@ -272,7 +272,7 @@ export default function QuoteDetailPanel({
             Observações
           </label>
           <div className="bg-[#fff5ec] rounded-lg p-4 text-sm text-[#1f1f1f] min-h-20">
-            {quote.notes && <p className="italic">"{quote.notes}"</p>}
+            {quote.notes && <p className="italic">&quot;{quote.notes}&quot;</p>}
             {!quote.notes && <p className="text-gray-500">Sem observações</p>}
           </div>
         </div>
