@@ -40,6 +40,7 @@ export default function ProductDetailClient({
       setSelectedColor(defaultColor);
       setQuantity(product.minQuantity || 50);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product?.id]);
 
   const relatedProducts = useMemo(() => {

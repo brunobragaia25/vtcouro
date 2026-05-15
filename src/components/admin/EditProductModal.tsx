@@ -111,6 +111,7 @@ export default function EditProductModal({
       });
       setFormData(prev => ({ ...prev, specifications: emptySpecs }));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData.categoryId, categories]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
