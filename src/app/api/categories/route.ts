@@ -19,7 +19,7 @@ export async function GET() {
 
     return NextResponse.json(categoriesWithCount);
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch categories' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch categories', detail: String(error) }, { status: 500 });
   }
 }
 
