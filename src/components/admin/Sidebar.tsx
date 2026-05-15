@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard,
   Package,
@@ -47,7 +47,14 @@ const menuItems = [
 ];
 
 export default function Sidebar() {
-  const pathname = usePathname();
+  const pathname = usePathname()
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    await fetch('/api/admin/login', { method: 'DELETE' })
+    router.push('/admin/login')
+    router.refresh()
+  }
 
   return (
     <div className="w-64 bg-[#3d2817] text-white flex flex-col">
@@ -94,7 +101,7 @@ export default function Sidebar() {
       </div>
 
       {/* User Info */}
-      <div className="border-t border-[#5a3e2b] p-4">
+      <div className="border-t border-[#5a3e2b] p-4 flex flex-col gap-3">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-[#c4a677] rounded-full flex items-center justify-center">
             <span className="text-[#3d2817] font-bold text-sm">VT</span>
@@ -104,6 +111,13 @@ export default function Sidebar() {
             <p className="text-xs text-gray-400">vendas@vtcouro.com.br</p>
           </div>
         </div>
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-2 text-gray-400 hover:text-white transition text-xs px-1"
+        >
+          <LogOut size={14} />
+          Sair
+        </button>
       </div>
     </div>
   );
