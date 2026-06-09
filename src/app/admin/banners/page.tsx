@@ -136,7 +136,7 @@ export default function AdminBanners() {
       ) : banners.length === 0 ? (
         <div className="border-2 border-dashed border-gray-200 rounded-xl h-48 flex flex-col items-center justify-center text-gray-400 gap-2">
           <p className="text-sm">Nenhum banner cadastrado</p>
-          <p className="text-xs">Clique em "Adicionar banner" para começar</p>
+          <p className="text-xs">Clique em &quot;Adicionar banner&quot; para começar</p>
         </div>
       ) : (
         <div className="space-y-4">
