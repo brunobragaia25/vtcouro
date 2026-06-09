@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
@@ -275,7 +275,7 @@ export default function ProductDetailClient({
             <div className="flex flex-col gap-3 pt-4 md:flex-row md:gap-4">
               <Link
                 href={`/orcamento?product=${product.id}&quantity=${quantity}&color=${selectedColor}`}
-                className="flex-1 bg-[#4b1c09] hover:bg-[#3d1707] text-white font-medium py-4 rounded-lg flex items-center justify-center gap-2 transition-colors"
+                className="flex-1 bg-[#8B5240] hover:bg-[#3d1707] text-white font-medium py-4 rounded-lg flex items-center justify-center gap-2 transition-colors"
               >
                 Solicitar orçamento
                 <ChevronRight size={20} />
@@ -412,3 +412,4 @@ export default function ProductDetailClient({
     </div>
   );
 }
+

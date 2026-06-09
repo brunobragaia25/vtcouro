@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -9,6 +9,7 @@ import {
   FileText,
   BarChart3,
   ShoppingBag,
+  Image,
   LogOut,
 } from 'lucide-react';
 import clsx from 'clsx';
@@ -40,6 +41,11 @@ const menuItems = [
     icon: ShoppingBag,
   },
   {
+    name: 'Banners',
+    href: '/admin/banners',
+    icon: Image,
+  },
+  {
     name: 'Relatórios',
     href: '/admin/relatorios',
     icon: BarChart3,
@@ -57,9 +63,9 @@ export default function Sidebar() {
   }
 
   return (
-    <div className="w-64 bg-[#3d2817] text-white flex flex-col">
+    <div className="w-64 bg-[#8B5240] text-white flex flex-col">
       {/* Logo */}
-      <div className="p-6 border-b border-[#5a3e2b]">
+      <div className="p-6 border-b border-[#a06050]">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-white rounded flex items-center justify-center">
             <span className="text-[#3d2817] font-bold text-sm">V</span>
@@ -88,8 +94,8 @@ export default function Sidebar() {
                 className={clsx(
                   'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
                   isActive
-                    ? 'bg-[#5a3e2b] text-white'
-                    : 'text-gray-300 hover:text-white hover:bg-[#4a3326]'
+                    ? 'bg-[#a06050] text-white'
+                    : 'text-gray-300 hover:text-white hover:bg-[#9a5545]'
                 )}
               >
                 <Icon size={20} />
@@ -101,7 +107,7 @@ export default function Sidebar() {
       </div>
 
       {/* User Info */}
-      <div className="border-t border-[#5a3e2b] p-4 flex flex-col gap-3">
+      <div className="border-t border-[#a06050] p-4 flex flex-col gap-3">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-[#c4a677] rounded-full flex items-center justify-center">
             <span className="text-[#3d2817] font-bold text-sm">VT</span>
@@ -122,3 +128,4 @@ export default function Sidebar() {
     </div>
   );
 }
+

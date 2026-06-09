@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useRef, useState, useMemo } from 'react'
 import Link from 'next/link'
@@ -238,7 +238,7 @@ export function FeaturedProducts() {
               disabled={!canScrollLeft}
               className={`rounded-lg w-14 h-14 flex items-center justify-center transition ${
                 canScrollLeft
-                  ? 'bg-[#4b1c09] hover:bg-[#2c0f04] cursor-pointer'
+                  ? 'bg-[#8B5240] hover:bg-[#2c0f04] cursor-pointer'
                   : 'bg-[#d0d0d0] cursor-not-allowed'
               }`}
             >
@@ -249,7 +249,7 @@ export function FeaturedProducts() {
               disabled={!canScrollRight}
               className={`rounded-lg w-14 h-14 flex items-center justify-center transition ${
                 canScrollRight
-                  ? 'bg-[#4b1c09] hover:bg-[#2c0f04] cursor-pointer'
+                  ? 'bg-[#8B5240] hover:bg-[#2c0f04] cursor-pointer'
                   : 'bg-[#d0d0d0] cursor-not-allowed'
               }`}
             >
@@ -261,3 +261,4 @@ export function FeaturedProducts() {
     </section>
   )
 }
+

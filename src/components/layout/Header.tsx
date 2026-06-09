@@ -75,7 +75,7 @@ export function Header() {
   return (
     <header className="z-50">
       {/* Top Bar */}
-      <div className="w-screen h-[42px] bg-[#4b1c09] flex items-center">
+      <div className="w-screen h-[42px] bg-[#8B5240] flex items-center">
         <div className="max-w-container mx-auto w-full px-5 md:px-8 h-full flex items-center justify-between">
           <div className="flex items-center gap-4 md:gap-7">
             <a href="tel:(11)2636-1112" className="font-medium text-white text-[12px]">
@@ -86,9 +86,6 @@ export function Header() {
               vendas@vtcouro.com.br
             </a>
           </div>
-          <p className="text-[#d4a574] text-[12px] font-medium tracking-[2.88px] uppercase hidden md:block">
-            Couro genuíno · feito sob medida
-          </p>
         </div>
       </div>
 

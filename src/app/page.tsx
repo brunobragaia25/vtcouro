@@ -1,7 +1,6 @@
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { Hero } from '@/components/home/Hero'
-import { Features } from '@/components/home/Features'
+import { BannerSlider } from '@/components/home/BannerSlider'
 import { CategoriesSection } from '@/components/home/CategoriesSection'
 import { FeaturedProducts } from '@/components/home/FeaturedProducts'
 import { NewProducts } from '@/components/home/NewProducts'
@@ -12,8 +11,7 @@ export default function Home() {
     <>
       <Header />
       <main>
-        <Hero />
-        <Features />
+        <BannerSlider />
         <CategoriesSection />
         <FeaturedProducts />
         <NewProducts />

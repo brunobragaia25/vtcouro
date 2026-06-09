@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useMemo } from 'react';
 import { ChevronRight, ShoppingBag, RotateCcw } from 'lucide-react';
@@ -269,3 +269,4 @@ export default function AdminOrcamentos() {
     </div>
   );
 }
+

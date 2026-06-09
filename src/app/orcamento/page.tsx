@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useMemo, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
@@ -268,7 +268,7 @@ function OrcamentoPageContent() {
                 <div className="flex items-center gap-3 shrink-0">
                   <div className={`flex items-center justify-center w-8 h-8 rounded-full font-semibold text-sm transition-colors ${
                     step >= 1
-                      ? 'bg-[#4b1c09] text-white'
+                      ? 'bg-[#8B5240] text-white'
                       : 'bg-white text-[#1f1f1f]'
                   }`}>
                     1
@@ -287,7 +287,7 @@ function OrcamentoPageContent() {
                 <div className="flex items-center gap-3 shrink-0">
                   <div className={`flex items-center justify-center w-8 h-8 rounded-full font-semibold text-sm transition-colors ${
                     step >= 2
-                      ? 'bg-[#4b1c09] text-white'
+                      ? 'bg-[#8B5240] text-white'
                       : 'bg-white text-[#1f1f1f]'
                   }`}>
                     2
@@ -306,7 +306,7 @@ function OrcamentoPageContent() {
                 <div className="flex items-center gap-3 shrink-0">
                   <div className={`flex items-center justify-center w-8 h-8 rounded-full font-semibold text-sm transition-colors ${
                     step >= 3
-                      ? 'bg-[#4b1c09] text-white'
+                      ? 'bg-[#8B5240] text-white'
                       : 'bg-white text-[#1f1f1f]'
                   }`}>
                     3
@@ -328,7 +328,7 @@ function OrcamentoPageContent() {
               {/* Left Column - Products */}
               <div className="flex-1">
                 {/* Info Box */}
-                <div className="bg-[#4b1c09] rounded-2xl p-5 flex gap-4 mb-5">
+                <div className="bg-[#8B5240] rounded-2xl p-5 flex gap-4 mb-5">
                   <div className="flex-shrink-0 w-12 h-12 rounded-[10px] bg-white flex items-center justify-center">
                     <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="#4b1c09" strokeWidth="2">
                       <circle cx="6" cy="6" r="3"></circle>
@@ -514,7 +514,7 @@ function OrcamentoPageContent() {
                   <button
                     onClick={() => cart.length > 0 && setStep(2)}
                     disabled={cart.length === 0}
-                    className="flex-1 bg-[#4b1c09] text-white font-medium py-4 rounded-2xl hover:bg-[#3d1707] transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="flex-1 bg-[#8B5240] text-white font-medium py-4 rounded-2xl hover:bg-[#3d1707] transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     Continuar para dados
                     <ChevronRight size={20} />
@@ -559,13 +559,13 @@ function OrcamentoPageContent() {
                   </div>
 
                   {/* Finalizar Button */}
-                  <button className="w-full bg-[#4b1c09] text-white font-medium py-4 rounded-2xl hover:bg-[#3d1707] transition flex items-center justify-center gap-2 mb-5">
+                  <button className="w-full bg-[#8B5240] text-white font-medium py-4 rounded-2xl hover:bg-[#3d1707] transition flex items-center justify-center gap-2 mb-5">
                     Finalizar orçamento
                     <ChevronRight size={20} />
                   </button>
 
                   {/* Help Section */}
-                  <div className="bg-[#250b00] rounded-2xl p-7 text-white">
+                  <div className="bg-[#8B5240] rounded-2xl p-7 text-white">
                     <div className="flex gap-3 mb-4">
                       <div className="w-12 h-12 rounded-lg bg-[#d4a574] flex items-center justify-center flex-shrink-0">
                         <MessageCircle size={24} className="text-white" />
@@ -772,7 +772,7 @@ function OrcamentoPageContent() {
                   <button
                     onClick={handleSubmitQuote}
                     disabled={isSubmitting}
-                    className="flex-1 bg-[#4b1c09] text-white font-medium py-4 rounded-2xl hover:bg-[#3d1707] transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="flex-1 bg-[#8B5240] text-white font-medium py-4 rounded-2xl hover:bg-[#3d1707] transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? 'Enviando...' : 'Enviar orçamento'}
                     <ChevronRight size={24} />
@@ -817,13 +817,13 @@ function OrcamentoPageContent() {
                   </div>
 
                   {/* Finalizar Button */}
-                  <button className="w-full bg-[#4b1c09] text-white font-medium py-4 rounded-2xl hover:bg-[#3d1707] transition flex items-center justify-center gap-2 mb-5">
+                  <button className="w-full bg-[#8B5240] text-white font-medium py-4 rounded-2xl hover:bg-[#3d1707] transition flex items-center justify-center gap-2 mb-5">
                     Finalizar orçamento
                     <ChevronRight size={20} />
                   </button>
 
                   {/* Help Section */}
-                  <div className="bg-[#250b00] rounded-2xl p-7 text-white">
+                  <div className="bg-[#8B5240] rounded-2xl p-7 text-white">
                     <div className="flex gap-3 mb-4">
                       <div className="w-12 h-12 rounded-lg bg-[#d4a574] flex items-center justify-center flex-shrink-0">
                         <MessageCircle size={24} className="text-white" />
@@ -877,7 +877,7 @@ function OrcamentoPageContent() {
               <div className="flex">
                 <Link
                   href="/catalogo"
-                  className="bg-[#4b1c09] border border-[#4b1c09] text-white font-medium px-7 py-4 rounded-xl hover:bg-[#3d1707] transition flex items-center gap-1"
+                  className="bg-[#8B5240] border border-[#4b1c09] text-white font-medium px-7 py-4 rounded-xl hover:bg-[#3d1707] transition flex items-center gap-1"
                 >
                   <svg className="w-6 h-6 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -960,3 +960,4 @@ export default function OrcamentoPage() {
     </Suspense>
   )
 }
+

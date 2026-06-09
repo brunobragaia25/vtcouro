@@ -1,8 +1,8 @@
-import React from 'react';
+﻿import React from 'react';
 
 export default function BarBrown() {
   return (
-    <div className="bg-[#4b1c09] text-white text-sm">
+    <div className="bg-[#8B5240] text-white text-sm">
       <div className="mx-auto max-w-7xl px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-2">
@@ -18,3 +18,4 @@ export default function BarBrown() {
     </div>
   );
 }
+

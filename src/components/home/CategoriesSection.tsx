@@ -1,67 +1,101 @@
 'use client'
 
 import Link from 'next/link'
+import { useState, useEffect } from 'react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
-const imgPropagandista = '/images/bolsa e pastas.png'
-const imgViagem = '/images/mochila.png'
-const imgCorporativa = '/images/carteira-uso.png'
-
-interface CategoryCardProps {
-  title: string
-  image: string
-  href: string
-  className?: string
+interface Category {
+  id: string
+  name: string
+  slug: string
+  imageUrl?: string | null
 }
 
-function CategoryCard({ title, image, href, className = '' }: CategoryCardProps) {
-  return (
-    <Link href={href} className={`relative rounded-[28px] md:rounded-[40px] bg-[#250b00] overflow-hidden flex flex-col justify-between p-6 md:p-10 h-[280px] min-h-[280px] md:h-[420px] md:min-h-[420px] ${className}`}>
-      <img
-        src={image}
-        alt={title}
-        className="absolute inset-0 w-full h-full object-cover"
-      />
-      <div className="absolute inset-0 bg-black/30" />
-      <div className="relative z-10">
-        <span className="border border-white rounded-full px-4 py-2 md:px-5 md:py-3 text-white text-sm md:text-base font-normal hover:bg-white hover:text-[#250b00] transition">
-          Veja mais
-        </span>
-      </div>
-      <h2 className="relative z-10 font-serif font-semibold italic text-white leading-tight text-[40px] md:text-[68px]">
-        {title}
-      </h2>
-    </Link>
-  )
-}
+const VISIBLE = 3
 
 export function CategoriesSection() {
-  return (
-    <section className="w-full bg-white flex justify-center pt-[20px] pb-[20px]">
-      <div className="max-w-container w-full px-5">
-        {/* Row 1: Propagandista + Viagem */}
-        <div className="flex flex-col gap-4 mb-4 md:flex-row md:gap-5 md:mb-5">
-          <CategoryCard
-            title="Linha Propagandista"
-            image={imgPropagandista}
-            href="/catalogo?category=linha-propagandista"
-            className="md:flex-1"
-          />
-          <CategoryCard
-            title="Linha Viagem"
-            image={imgViagem}
-            href="/catalogo?category=linha-viagem"
-            className="md:flex-1"
-          />
-        </div>
+  const [categories, setCategories] = useState<Category[]>([])
+  const [offset, setOffset] = useState(0)
 
-        {/* Row 2: Corporativa - full width */}
-        <CategoryCard
-          title="Linha Corporativa"
-          image={imgCorporativa}
-          href="/catalogo?category=linha-corporativa"
-          className="w-full"
-        />
+  useEffect(() => {
+    fetch('/api/categories')
+      .then(r => r.json())
+      .then(data => setCategories(Array.isArray(data) ? data : []))
+      .catch(() => {})
+  }, [])
+
+  const total = categories.length
+  const isSlider = total > VISIBLE
+
+  const prev = () => setOffset((o) => Math.max(0, o - 1))
+  const next = () => setOffset((o) => Math.min(total - VISIBLE, o + 1))
+
+  const visible = isSlider ? categories.slice(offset, offset + VISIBLE) : categories
+
+  return (
+    <section className="w-full relative overflow-hidden">
+      <div className="flex h-[300px] md:h-[480px] xl:h-[560px]">
+        {visible.map((cat, i) => (
+          <div
+            key={cat.id}
+            className="relative flex-1 bg-[#d9d9d9] flex flex-col justify-between p-6 md:p-10 overflow-hidden"
+          >
+            {/* Separador vertical */}
+            {i > 0 && <div className="absolute left-0 top-0 h-full w-px bg-white/40 z-10" />}
+
+            {/* Imagem ou placeholder */}
+            {cat.imageUrl ? (
+              <img src={cat.imageUrl} alt={cat.name} className="absolute inset-0 w-full h-full object-cover" />
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-[#999] text-xs md:text-sm font-medium tracking-wide">Imagem da categoria aqui</span>
+              </div>
+            )}
+
+            {/* Overlay escuro quando tem imagem */}
+            {cat.imageUrl && <div className="absolute inset-0 bg-black/30" />}
+
+            {/* Veja mais */}
+            <div className="relative z-10">
+              <Link
+                href={`/catalogo?category=${cat.slug}`}
+                className={`border rounded-full px-4 py-2 text-xs md:text-sm font-normal transition w-fit block ${
+                  cat.imageUrl
+                    ? 'border-white text-white hover:bg-white hover:text-[#4b1c09]'
+                    : 'border-[#8B5240] text-[#8B5240] hover:bg-[#8B5240] hover:text-white'
+                }`}
+              >
+                Veja mais
+              </Link>
+            </div>
+
+            {/* Título */}
+            <h2 className={`relative z-10 font-serif font-normal italic leading-tight text-[24px] md:text-[36px] xl:text-[48px] ${cat.imageUrl ? 'text-white' : 'text-[#4b1c09]'}`}>
+              {cat.name}
+            </h2>
+          </div>
+        ))}
       </div>
+
+      {/* Setas — só aparecem se tiver mais de 3 categorias */}
+      {isSlider && (
+        <>
+          <button
+            onClick={prev}
+            disabled={offset === 0}
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/80 hover:bg-white shadow flex items-center justify-center disabled:opacity-30 transition"
+          >
+            <ChevronLeft size={18} className="text-[#4b1c09]" />
+          </button>
+          <button
+            onClick={next}
+            disabled={offset >= total - VISIBLE}
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/80 hover:bg-white shadow flex items-center justify-center disabled:opacity-30 transition"
+          >
+            <ChevronRight size={18} className="text-[#4b1c09]" />
+          </button>
+        </>
+      )}
     </section>
   )
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import Link from 'next/link';
 import { ShoppingBag, Heart, Search } from 'lucide-react';
 
@@ -52,3 +52,4 @@ export default function NavBar() {
     </nav>
   );
 }
+

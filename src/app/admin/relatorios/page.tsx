@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { useProducts } from '@/hooks/useProducts';
@@ -101,7 +101,7 @@ export default function RelatoriosPage() {
           <div className="bg-white rounded-2xl p-6 shadow-sm">
             <p className="text-[#999] text-sm font-semibold uppercase mb-2">Total de Orçamentos</p>
             <p className="text-4xl font-bold text-[#4b1c09] mb-2">{stats.total}</p>
-            <div className="h-1 bg-[#4b1c09] rounded-full"></div>
+            <div className="h-1 bg-[#8B5240] rounded-full"></div>
           </div>
 
           {/* Novo */}
@@ -182,7 +182,7 @@ export default function RelatoriosPage() {
               .map(([date, count]) => (
                 <div key={date} className="flex justify-between items-center p-3 bg-[#f9f9f9] rounded-lg">
                   <span className="text-[#1f1f1f] font-medium">{date}</span>
-                  <span className="bg-[#4b1c09] text-white px-3 py-1 rounded-full text-sm font-bold">{count}</span>
+                  <span className="bg-[#8B5240] text-white px-3 py-1 rounded-full text-sm font-bold">{count}</span>
                 </div>
               ))}
           </div>
@@ -191,3 +191,4 @@ export default function RelatoriosPage() {
     </div>
   );
 }
+

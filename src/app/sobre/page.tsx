@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import Link from 'next/link'
 import { ChevronRight, MessageCircle } from 'lucide-react'
@@ -28,7 +28,7 @@ export default function SobrePage() {
         {/* Intro */}
         <section className="w-full bg-white flex justify-center px-5 py-16 md:py-20">
           <div className="max-w-container w-full flex flex-col gap-10 md:flex-row md:gap-16 md:items-center">
-            <p className="flex-1 text-[#1f1f1f] font-normal text-xl md:text-2xl xl:text-[28px]" style={{ lineHeight: '40px' }}>
+            <p className="flex-1 text-[#1f1f1f] font-normal text-base md:text-lg xl:text-[20px]" style={{ lineHeight: '40px' }}>
               Há 27 anos transformamos couro nacional em peças que carregam a identidade de marcas brasileiras. Tradição artesanal, produção própria, e o cuidado de quem ama o que faz.
             </p>
             <div className="flex-1 h-[280px] md:h-[400px] xl:h-[480px] bg-[#d9d9d9] rounded-[20px] md:rounded-[28px] flex-shrink-0" />
@@ -36,19 +36,19 @@ export default function SobrePage() {
         </section>
 
         {/* Stats Bar */}
-        <section className="w-full bg-[#250b00] flex justify-center px-5 py-10 md:py-[40px]">
+        <section className="w-full bg-[#8B5240] flex justify-center px-5 py-10 md:py-[40px]">
           <div className="max-w-container w-full grid grid-cols-2 gap-8 md:flex md:justify-between md:items-center">
             {[
-              { value: '27+', label: 'ANOS DE ATELIER' },
+              { value: '27+', label: 'ANOS DE EMPRESA' },
               { value: '500+', label: 'MARCAS ATENDIDAS' },
               { value: '100k+', label: 'PEÇAS PRODUZIDAS' },
               { value: '100%', label: 'COURO NACIONAL' },
             ].map((stat, i) => (
               <div key={i} className="flex flex-col gap-3 items-center justify-center">
-                <p className="font-serif font-semibold text-[#d2741f] leading-[1.1] text-5xl md:text-6xl xl:text-[64px]">
+                <p className="font-serif font-semibold text-white leading-[1.1] text-4xl md:text-5xl xl:text-[48px]">
                   {stat.value}
                 </p>
-                <p className="font-medium text-[#fff5ec] text-sm md:text-base xl:text-[24px] tracking-wider text-center">
+                <p className="font-medium text-[#fff5ec] text-xs md:text-sm xl:text-base tracking-wider text-center">
                   {stat.label}
                 </p>
               </div>
@@ -66,52 +66,18 @@ export default function SobrePage() {
                   NOSSA HISTÓRIA
                 </p>
                 <h2 className="font-serif font-semibold text-[#4b1c09] leading-[1.1] text-4xl md:text-5xl xl:text-[64px]">
-                  De um pequeno atelier à referência nacional.
+                  De uma pequena empresa à referência nacional.
                 </h2>
               </div>
               <p className="text-[#1f1f1f] font-normal text-base md:text-lg xl:text-[20px]" style={{ lineHeight: '40px' }}>
-                Começamos com três artesãos e uma máquina de costura emprestada. Hoje, somos uma equipe de 24 pessoas em um atelier de 600m² no bairro do Cambuci, em São Paulo — e cada peça que sai daqui carrega a mesma atenção do primeiro dia.
+                Começamos com três artesãos e uma máquina de costura emprestada. Hoje, somos uma equipe de 24 pessoas em nossa sede de 600m² no bairro do Cambuci, em São Paulo — e cada peça que sai daqui carrega a mesma atenção do primeiro dia.
               </p>
-            </div>
-          </div>
-        </section>
-
-        {/* O que nos move */}
-        <section className="w-full bg-[#fff5ec] flex justify-center px-5 py-16 md:py-20">
-          <div className="max-w-container w-full flex flex-col gap-16">
-            <div className="flex flex-col gap-7 items-center text-center">
-              <p className="text-[#d2741f] text-sm font-bold tracking-[2.4px] uppercase">
-                O QUE NOS MOVE
-              </p>
-              <h2 className="font-serif font-semibold text-[#4b1c09] leading-[1.1] text-3xl md:text-4xl xl:text-[40px] max-w-xl">
-                Quatro princípios que guiam cada peça que sai do atelier.
-              </h2>
-            </div>
-
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-              {[
-                { icon: '/images/Bag 6.svg', title: 'Couro Selecionado', subtitle: 'Vegetal e cromo curtido' },
-                { icon: '/images/Scissors.svg', title: 'Corte sob medida', subtitle: 'Sua arte, nossa execução' },
-                { icon: '/images/Hand Shake.svg', title: 'Acabamento manual', subtitle: 'Costuras à mão' },
-                { icon: '/images/Bus.svg', title: 'Entrega Brasil', subtitle: 'Logística para todo o país' },
-              ].map((item, i) => (
-                <div key={i} className="bg-white border border-[#d7d7d7] rounded-[28px] p-5 flex gap-2.5 items-center">
-                  <div className="relative w-[72px] h-[72px] flex-shrink-0">
-                    <div className="absolute inset-0 bg-[#fff5ec] rounded-[20px]" />
-                    <img src={item.icon} alt={item.title} className="absolute inset-0 m-auto w-8 h-8" />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <p className="text-[#1f1f1f] text-base font-medium">{item.title}</p>
-                    <p className="text-[#1f1f1f] text-xs font-normal">{item.subtitle}</p>
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
         </section>
 
         {/* Como produzimos */}
-        <section className="w-full bg-[#fff5ec] flex justify-center px-5 pb-16 md:pb-20">
+        <section className="w-full bg-[#fff5ec] flex justify-center px-5 py-16 md:py-20">
           <div className="max-w-container w-full flex flex-col gap-16">
             <div className="flex flex-col gap-7 md:flex-row md:items-end md:justify-between">
               <div className="flex flex-col gap-7">
@@ -135,7 +101,7 @@ export default function SobrePage() {
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
               {[
                 { num: '01', label: 'SELEÇÃO DO COURO', desc: 'Recebemos peles inteiras dos curtumes e classificamos por espessura, textura e veio.' },
-                { num: '02', label: 'CORTE E MODELAGEM', desc: 'Moldes desenvolvidos no atelier, corte feito peça a peça com supervisão de mestres artesãos.' },
+                { num: '02', label: 'CORTE E MODELAGEM', desc: 'Moldes desenvolvidos na empresa, corte feito peça a peça com supervisão de mestres artesãos.' },
                 { num: '03', label: 'COSTURA E ACABAMENTO', desc: 'Costura à mão nas linhas finas, máquina industrial nos volumes. Acabamento manual em todas as bordas.' },
                 { num: '04', label: 'PERSONALIZAÇÃO', desc: 'Sua arte aplicada via hot stamping, laser ou bordado. Conferência final, embalagem e expedição.' },
               ].map((step, i) => (
@@ -151,16 +117,16 @@ export default function SobrePage() {
           </div>
         </section>
 
-        {/* CTA - Quer conhecer o atelier? */}
+        {/* CTA - Quer conhecer nosso showroom? */}
         <section className="w-full bg-white flex justify-center px-5 py-10 md:py-20">
           <div className="max-w-container w-full">
-            <div className="bg-[#4b1c09] rounded-[28px] md:rounded-[40px] p-10 md:p-20 flex flex-col gap-16">
+            <div className="bg-[#8B5240] rounded-[28px] md:rounded-[40px] p-10 md:p-20 flex flex-col gap-16">
               <div className="flex flex-col gap-5">
                 <h2 className="font-serif font-semibold text-[#d4a574] leading-[1.1] text-3xl md:text-4xl xl:text-[40px]">
-                  Quer conhecer o atelier?
+                  Quer conhecer nosso showroom?
                 </h2>
                 <p className="text-white font-normal leading-[1.4] text-sm md:text-base max-w-xl">
-                  Agende uma visita em São Paulo, conheça nossos couros e veja a produção de perto. Atendimento sob agendamento, de segunda a sexta.
+                  Agende uma visita ao nosso showroom em São Paulo, conheça nossos couros e veja a produção de perto. Atendimento sob agendamento, de segunda a sexta.
                 </p>
               </div>
               <div className="flex flex-col gap-3 md:flex-row md:gap-5">
@@ -185,3 +151,5 @@ export default function SobrePage() {
     </>
   )
 }
+
+

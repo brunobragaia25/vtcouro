@@ -1,7 +1,7 @@
-'use client';
+﻿'use client';
 
-import React, { useState } from 'react';
-import { Plus, Edit2, Trash2, GripVertical } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { Plus, Edit2, Trash2, GripVertical, ImageIcon } from 'lucide-react';
 import EditCategoryModal from '@/components/admin/EditCategoryModal';
 import DeleteConfirmModal from '@/components/admin/DeleteConfirmModal';
 import { useCategories, useUpdateCategory, useDeleteCategory, useCreateCategory, useReorderCategories } from '@/hooks/useCategories';
@@ -19,6 +19,9 @@ export default function AdminCategorias() {
   const [editingCategory, setEditingCategory] = useState<any>(null);
   const [deletingCategory, setDeletingCategory] = useState<any>(null);
   const [localCategories, setLocalCategories] = useState<any[]>([]);
+  const [uploadingId, setUploadingId] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const uploadTargetId = useRef<string | null>(null);
 
   const { data: categories = [], isLoading } = useCategories();
   const updateCategory = useUpdateCategory();
@@ -70,8 +73,35 @@ export default function AdminCategorias() {
     }
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    const id = uploadTargetId.current;
+    if (!file || !id) return;
+    setUploadingId(id);
+    try {
+      const form = new FormData();
+      form.append('file', file);
+      const res = await fetch('/api/categories/upload', { method: 'POST', body: form });
+      if (!res.ok) throw new Error();
+      const { url } = await res.json();
+      await updateCategory.mutateAsync({ id, data: { imageUrl: url } });
+    } catch {
+      alert('Erro ao enviar imagem');
+    } finally {
+      setUploadingId(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
+  const triggerImageUpload = (id: string) => {
+    uploadTargetId.current = id;
+    fileInputRef.current?.click();
+  };
+
   return (
     <div className="space-y-6">
+      <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
@@ -82,7 +112,7 @@ export default function AdminCategorias() {
         </div>
         <button
           onClick={() => setEditingCategory({})}
-          className="bg-[#3d2817] hover:bg-[#2d1810] text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+          className="bg-[#8B5240] hover:bg-[#2d1810] text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
         >
           <Plus size={20} />
           Nova categoria
@@ -113,8 +143,42 @@ export default function AdminCategorias() {
                 </button>
 
                 <div className="flex-1 flex items-center gap-4">
-                  <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center text-2xl">
-                    {categoryIcons[category.name] || '📦'}
+                  <div className="relative w-16 h-16 flex-shrink-0 group">
+                    <button
+                      onClick={() => triggerImageUpload(category.id)}
+                      disabled={uploadingId === category.id}
+                      className="w-16 h-16 rounded-lg overflow-hidden border-2 border-dashed border-gray-200 hover:border-[#8B5240] transition-colors relative"
+                      title="Clique para trocar a imagem"
+                    >
+                      {category.imageUrl ? (
+                        <>
+                          <img src={category.imageUrl} alt={category.name} className="w-full h-full object-cover" />
+                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <ImageIcon size={16} className="text-white" />
+                          </div>
+                        </>
+                      ) : (
+                        <div className="w-full h-full flex flex-col items-center justify-center gap-1 text-gray-300 hover:text-[#8B5240]">
+                          {uploadingId === category.id ? (
+                            <span className="text-[10px]">...</span>
+                          ) : (
+                            <>
+                              <ImageIcon size={16} />
+                              <span className="text-[9px] font-medium">Imagem</span>
+                            </>
+                          )}
+                        </div>
+                      )}
+                    </button>
+                    {category.imageUrl && (
+                      <button
+                        onClick={() => updateCategory.mutateAsync({ id: category.id, data: { imageUrl: null } })}
+                        className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-500 text-white rounded-full text-[11px] items-center justify-center hidden group-hover:flex z-10"
+                        title="Remover imagem"
+                      >
+                        ×
+                      </button>
+                    )}
                   </div>
 
                   <div className="flex-1">
@@ -174,3 +238,4 @@ export default function AdminCategorias() {
     </div>
   );
 }
+

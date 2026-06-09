@@ -1,10 +1,10 @@
-'use client'
+﻿'use client'
 
 export function CTA() {
   return (
     <section className="w-full bg-[#fff5ec] flex justify-center pt-10 md:pt-16 xl:pt-[64px] pb-[64px] md:pb-[96px] xl:pb-[128px]">
       <div className="max-w-container w-full px-5">
-        <div className="bg-[#250b00] rounded-[28px] md:rounded-[40px] flex flex-col items-center justify-center p-8 md:p-12 xl:p-[60px] h-auto xl:h-[520px] gap-6 xl:gap-[28px]">
+        <div className="bg-[#8B5240] rounded-[28px] md:rounded-[40px] flex flex-col items-center justify-center p-8 md:p-12 xl:p-[60px] h-auto xl:h-[520px] gap-6 xl:gap-[28px]">
 
           {/* Label and Heading */}
           <div className="flex flex-col gap-2.5 items-center">
@@ -12,9 +12,9 @@ export function CTA() {
               Próximo Passo
             </p>
             <h2 className="font-serif text-white font-semibold leading-tight text-center text-4xl md:text-5xl xl:text-6xl">
-              Pronto para começar
+              Ponto para começar
               <br />
-              seu projeto?
+              seu pedido?
             </h2>
           </div>
 
@@ -38,3 +38,4 @@ export function CTA() {
     </section>
   )
 }
+

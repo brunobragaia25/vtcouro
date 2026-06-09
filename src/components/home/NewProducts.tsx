@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useRef, useState, useMemo } from 'react'
 import Link from 'next/link'
@@ -260,3 +260,4 @@ export function NewProducts() {
     </section>
   )
 }
+

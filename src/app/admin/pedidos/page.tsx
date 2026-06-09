@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useMemo } from 'react';
 import { Search, Download } from 'lucide-react';
@@ -130,7 +130,7 @@ export default function PedidosPage() {
                   onClick={() => setStatusFilter(option.id)}
                   className={`px-4 py-2 rounded-lg font-medium text-sm transition ${
                     statusFilter === option.id
-                      ? 'bg-[#4b1c09] text-white'
+                      ? 'bg-[#8B5240] text-white'
                       : 'bg-gray-100 text-[#1f1f1f] hover:bg-gray-200'
                   }`}
                 >
@@ -155,7 +155,7 @@ export default function PedidosPage() {
                     }}
                     className={`px-3 py-1 rounded text-xs font-medium transition flex items-center gap-1 ${
                       sortBy === option
-                        ? 'bg-[#4b1c09] text-white'
+                        ? 'bg-[#8B5240] text-white'
                         : 'bg-transparent text-gray-600 hover:text-gray-900'
                     }`}
                   >
@@ -253,3 +253,4 @@ export default function PedidosPage() {
     </div>
   );
 }
+

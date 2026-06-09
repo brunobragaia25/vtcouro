@@ -1,10 +1,10 @@
-import React from 'react';
+﻿import React from 'react';
 import Link from 'next/link';
 import { ShoppingBag, Heart, Search } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="bg-[#250b00] text-white mt-20">
+    <footer className="bg-[#8B5240] text-white mt-20">
       <div className="mx-auto max-w-7xl px-6 py-16">
         {/* Main Content */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-12 mb-12">
@@ -12,7 +12,7 @@ export default function Footer() {
           <div className="col-span-2 md:col-span-1">
             <h3 className="text-2xl font-bold text-[#ecc29c] mb-4">VTCouro</h3>
             <p className="text-sm text-gray-400 leading-relaxed mb-6">
-              Especialistas em produtos de couro personalizados para empresas e marcas. Atelier próprio em São Paulo desde 1998.
+              Especialistas em produtos de couro personalizados para empresas e marcas. Showroom em São Paulo desde 1998.
             </p>
             <div className="flex gap-3">
               <button className="bg-[#ecc29c] p-2 rounded-full hover:bg-[#d4a574] transition-colors">
@@ -99,3 +99,5 @@ export default function Footer() {
     </footer>
   );
 }
+
+

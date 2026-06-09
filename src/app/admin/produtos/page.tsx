@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useMemo } from 'react';
 import { Plus, Edit2, Eye, Trash2, Copy } from 'lucide-react';
@@ -165,7 +165,7 @@ export default function AdminProdutos() {
         </div>
         <button
           onClick={() => setEditingProduct({})}
-          className="bg-[#3d2817] hover:bg-[#2d1810] text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+          className="bg-[#8B5240] hover:bg-[#2d1810] text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
         >
           <Plus size={20} />
           Novo produto
@@ -188,7 +188,7 @@ export default function AdminProdutos() {
             onClick={() => setSelectedCategory(category)}
             className={`px-3 py-1 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
               selectedCategory === category
-                ? 'bg-[#3d2817] text-white'
+                ? 'bg-[#8B5240] text-white'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
@@ -229,3 +229,4 @@ export default function AdminProdutos() {
     </div>
   );
 }
+

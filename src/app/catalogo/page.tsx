@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useMemo, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
@@ -303,7 +303,7 @@ function CatalogPageContent() {
                     onClick={() => setCurrentPage(page)}
                     className={`rounded-[6px] w-[50px] h-[50px] flex items-center justify-center font-normal text-base transition-colors ${
                       currentPage === page
-                        ? 'bg-[#4b1c09] text-white'
+                        ? 'bg-[#8B5240] text-white'
                         : 'bg-white text-[#8b8b8b] hover:bg-gray-100'
                     }`}
                   >
@@ -334,3 +334,4 @@ export default function CatalogPage() {
     </Suspense>
   )
 }
+

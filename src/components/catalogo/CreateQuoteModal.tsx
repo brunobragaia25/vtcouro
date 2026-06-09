@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
@@ -182,7 +182,7 @@ export default function CreateQuoteModal({
             <button
               type="submit"
               disabled={createQuote.isPending}
-              className="flex-1 px-4 py-2 bg-[#4b1c09] text-white rounded-lg hover:bg-[#3d1707] disabled:opacity-50 disabled:cursor-not-allowed font-medium transition-colors"
+              className="flex-1 px-4 py-2 bg-[#8B5240] text-white rounded-lg hover:bg-[#3d1707] disabled:opacity-50 disabled:cursor-not-allowed font-medium transition-colors"
             >
               {createQuote.isPending ? 'Enviando...' : 'Solicitar Orçamento'}
             </button>
@@ -192,3 +192,4 @@ export default function CreateQuoteModal({
     </div>
   );
 }
+

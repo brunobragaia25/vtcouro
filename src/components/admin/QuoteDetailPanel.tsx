@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import { X, Mail, MessageCircle, Download } from 'lucide-react';
@@ -142,7 +142,7 @@ export default function QuoteDetailPanel({
   return (
     <div className="flex flex-col h-full bg-white">
       {/* Header */}
-      <div className="bg-[#4b1c09] text-white p-6 flex items-start justify-between flex-shrink-0">
+      <div className="bg-[#8B5240] text-white p-6 flex items-start justify-between flex-shrink-0">
         <div className="flex-1">
           <p className="text-xs font-semibold tracking-wider uppercase text-gray-300">
             Protocolo
@@ -174,7 +174,7 @@ export default function QuoteDetailPanel({
                 onClick={() => handleStatusChange(option.id)}
                 className={`px-4 py-2 rounded-lg font-medium transition-colors text-sm ${
                   formData.status === option.id
-                    ? 'bg-[#4b1c09] text-white'
+                    ? 'bg-[#8B5240] text-white'
                     : 'bg-gray-100 text-[#1f1f1f] hover:bg-gray-200'
                 }`}
               >
@@ -310,7 +310,7 @@ export default function QuoteDetailPanel({
           </button>
           <button
             onClick={handleSendWhatsApp}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-[#4b1c09] text-white rounded-lg hover:bg-[#3d1707] transition font-medium"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-[#8B5240] text-white rounded-lg hover:bg-[#3d1707] transition font-medium"
           >
             <MessageCircle size={18} />
             WhatsApp
@@ -330,7 +330,7 @@ export default function QuoteDetailPanel({
         {/* Save Button */}
         <button
           onClick={handleSave}
-          className="w-full px-4 py-3 bg-[#4b1c09] text-white rounded-lg hover:bg-[#3d1707] transition font-medium"
+          className="w-full px-4 py-3 bg-[#8B5240] text-white rounded-lg hover:bg-[#3d1707] transition font-medium"
         >
           Salvar alterações
         </button>
@@ -338,3 +338,4 @@ export default function QuoteDetailPanel({
     </div>
   );
 }
+

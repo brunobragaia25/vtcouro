@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import { Search, MessageCircle, ChevronDown } from 'lucide-react'
@@ -317,7 +317,7 @@ export function ProductFilters({
       </div>
 
       {/* Help Card */}
-      <div className="bg-[#250b00] rounded-[16px] p-7 flex flex-col gap-7">
+      <div className="bg-[#8B5240] rounded-[16px] p-7 flex flex-col gap-7">
         <div className="flex items-center gap-3">
           <div className="bg-[#d4a574] rounded-[8px] w-[52px] h-[52px] flex items-center justify-center">
             <MessageCircle className="w-6 h-6 text-white" />
@@ -339,3 +339,4 @@ export function ProductFilters({
     </div>
   )
 }
+

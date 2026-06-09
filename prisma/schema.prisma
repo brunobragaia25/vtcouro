@@ -17,6 +17,7 @@ model Category {
   slug      String   @unique
   description String?
   specificationFields Json?  // Array of {label: string, key: string}
+  imageUrl    String?
   orderIndex Int     @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -109,6 +110,20 @@ model QuoteItem {
   product Product @relation(fields: [productId], references: [id], onDelete: Restrict)
 
   @@map("quote_items")
+}
+
+// Banners da home
+model Banner {
+  id         String   @id @default(cuid())
+  imageUrl         String
+  mobileImageUrl   String?
+  link             String?
+  isActive   Boolean  @default(true)
+  orderIndex Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("banners")
 }
 
 // Pedidos
