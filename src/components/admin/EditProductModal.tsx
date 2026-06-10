@@ -365,35 +365,6 @@ export default function EditProductModal({
 
         {/* Conteúdo das Abas */}
         <div className="border-b pb-4">
-          <h3 className="text-sm font-semibold text-gray-900 mb-3">Conteúdo das Abas</h3>
-
-          <div className="mb-3">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Personalização
-            </label>
-            <textarea
-              name="customization"
-              value={formData.customization}
-              onChange={handleChange}
-              rows={3}
-              placeholder="Descreva as opções de personalização disponíveis..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Cuidados
-            </label>
-            <textarea
-              name="care"
-              value={formData.care}
-              onChange={handleChange}
-              rows={3}
-              placeholder="Descreva os cuidados e limpeza recomendados..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
-            />
-          </div>
         </div>
 
         {/* Status e Destaque */}

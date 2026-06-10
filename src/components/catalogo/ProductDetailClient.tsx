@@ -375,20 +375,26 @@ export default function ProductDetailClient({
               )}
 
               {activeTab === 'customization' && (
-                <div className="prose prose-sm max-w-none">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Personalização</h3>
-                  <p className="text-gray-600 whitespace-pre-wrap">
-                    {product.customization || 'Nenhuma informação de personalização disponível'}
-                  </p>
+                <div className="space-y-3 text-gray-600 text-sm leading-relaxed">
+                  <p>Personalização em hot stamping nas opções:</p>
+                  <ul className="list-disc list-inside space-y-1">
+                    <li><strong>Baixo relevo</strong> — sua marca impressa sem cor, mas com grande destaque.</li>
+                    <li><strong>Colorida</strong> em prata ou dourado.</li>
+                  </ul>
                 </div>
               )}
 
               {activeTab === 'care' && (
-                <div className="prose prose-sm max-w-none">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Cuidados</h3>
-                  <p className="text-gray-600 whitespace-pre-wrap">
-                    {product.care || 'Nenhuma informação de cuidados disponível'}
-                  </p>
+                <div className="space-y-3 text-gray-600 text-sm leading-relaxed">
+                  <p><strong>Uma peça em couro é para durar uma vida se bem cuidada.</strong></p>
+                  <ul className="list-disc list-inside space-y-1">
+                    <li>Nunca mergulhe sua peça de couro na água.</li>
+                    <li>Limpe com produtos próprios para couro ou pano úmido, sem excesso de água.</li>
+                    <li>Jamais use álcool ou solventes.</li>
+                    <li>Hidrate com cremes próprios para couro ou até mesmo hidratante de mãos.</li>
+                  </ul>
+                  <p className="mt-4"><strong>E se mofar por causa da umidade?</strong></p>
+                  <p>Remova o mofo com um pano úmido sem excesso de água. Após a limpeza, mantenha a peça em local arejado, fora de embalagens ou armários, para que o couro possa respirar naturalmente.</p>
                 </div>
               )}
             </div>
