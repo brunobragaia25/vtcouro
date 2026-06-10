@@ -59,18 +59,20 @@ export default function SobrePage() {
         {/* Nossa História */}
         <section className="w-full bg-white flex justify-center px-5 py-16 md:py-20">
           <div className="max-w-container w-full flex flex-col gap-10 md:flex-row md:gap-16 md:items-center">
-            <div className="flex-1 h-[320px] md:h-[500px] xl:h-[626px] bg-[#d9d9d9] rounded-[28px] md:rounded-[40px] flex-shrink-0" />
+            <div className="flex-1 self-stretch bg-[#d9d9d9] rounded-[28px] md:rounded-[40px] flex-shrink-0 min-h-[320px]" />
             <div className="flex-1 flex flex-col gap-10">
               <div className="flex flex-col gap-7">
                 <p className="text-[#d2741f] text-sm font-bold tracking-[2.4px] uppercase">
                   NOSSA HISTÓRIA
                 </p>
                 <h2 className="font-serif font-semibold text-[#4b1c09] leading-[1.1] text-4xl md:text-5xl xl:text-[64px]">
-                  De uma pequena empresa à referência nacional.
+                  Nascida da amizade, construída com propósito.
                 </h2>
               </div>
               <p className="text-[#1f1f1f] font-normal text-base md:text-lg xl:text-[20px]" style={{ lineHeight: '40px' }}>
-                Começamos com três artesãos e uma máquina de costura emprestada. Hoje, somos uma equipe de 24 pessoas em nossa sede de 600m² no bairro do Cambuci, em São Paulo — e cada peça que sai daqui carrega a mesma atenção do primeiro dia.
+                A VTCOURO nasceu em 1999 a partir da amizade e do espírito empreendedor de Vera Sena e Rosana Cossielo. Ao longo dos anos, a empresa consolidou sua atuação no desenvolvimento de bolsas, mochilas e acessórios personalizados, sempre valorizando a qualidade dos materiais, a funcionalidade dos produtos e a atenção aos detalhes.
+                <br /><br />
+                Mais do que produzir bolsas, a VTCOURO acredita na construção de relações duradouras com clientes, parceiros e colaboradores — baseadas em confiança, compromisso e respeito. Nossa trajetória é feita por pessoas que acreditam no trabalho bem-feito, na evolução constante e na busca por soluções que unam praticidade, organização e qualidade.
               </p>
             </div>
           </div>
@@ -98,14 +100,17 @@ export default function SobrePage() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
               {[
-                { num: '01', label: 'SELEÇÃO DO COURO', desc: 'Recebemos peles inteiras dos curtumes e classificamos por espessura, textura e veio.' },
-                { num: '02', label: 'CORTE E MODELAGEM', desc: 'Moldes desenvolvidos na empresa, corte feito peça a peça com supervisão de mestres artesãos.' },
-                { num: '03', label: 'COSTURA E ACABAMENTO', desc: 'Costura à mão nas linhas finas, máquina industrial nos volumes. Acabamento manual em todas as bordas.' },
-                { num: '04', label: 'PERSONALIZAÇÃO', desc: 'Sua arte aplicada via hot stamping, laser ou bordado. Conferência final, embalagem e expedição.' },
+                { num: '01', label: 'DESENHO DO PROJETO', desc: 'Todas as informações colhidas com nosso cliente norteiam nosso design no desenvolvimento da primeira peça para aprovação. Estando tudo aprovado, partimos para a produção.', span: 'md:col-span-2' },
+                { num: '02', label: 'CORTE', desc: 'Nessa etapa é feito o corte do couro, revestimento interno, espuma e demais componentes.', span: 'md:col-span-1' },
+                { num: '03', label: 'REBAIXAMENTO E AVIAMENTOS', desc: 'Rebaixamento do couro nas áreas de costura e separação de todos os aviamentos.', span: 'md:col-span-1' },
+                { num: '04', label: 'PREPARAÇÃO E MONTAGEM', desc: 'Onde há dezenas ou até centenas de processos dependendo da peça — fazemos a preparação, montagem e costura das partes.', span: 'md:col-span-1' },
+                { num: '05', label: 'COSTURA DE FECHAMENTO', desc: 'Unimos todas as partes da peça, fazendo a costura pelo avesso.', span: 'md:col-span-1' },
+                { num: '06', label: 'MONTAGEM DE ACESSÓRIOS', desc: 'Desvira-se a peça para o lado certo, coloca-se acessórios como rodinhas quando necessário e faz-se uma primeira revisão.', span: 'md:col-span-1' },
+                { num: '07', label: 'FINALIZAÇÃO E ENVIO', desc: 'Revisão rigorosa e cuidadosa, limpeza, embalagem e envio.', span: 'md:col-span-2' },
               ].map((step, i) => (
-                <div key={i} className="bg-white rounded-[40px] p-10 flex flex-col gap-5">
+                <div key={i} className={`bg-white rounded-[40px] p-10 flex flex-col gap-5 ${step.span}`}>
                   <div className="flex flex-col gap-2.5">
                     <p className="font-serif font-semibold text-[#d2741f] text-[64px] leading-[1.1]">{step.num}</p>
                     <p className="text-[#1f1f1f] text-sm font-bold tracking-[2.4px]">{step.label}</p>
@@ -123,10 +128,10 @@ export default function SobrePage() {
             <div className="bg-[#8B5240] rounded-[28px] md:rounded-[40px] p-10 md:p-20 flex flex-col gap-16">
               <div className="flex flex-col gap-5">
                 <h2 className="font-serif font-semibold text-[#d4a574] leading-[1.1] text-3xl md:text-4xl xl:text-[40px]">
-                  Quer conhecer nosso showroom?
+                  Quer conhecer<br />nossos showrooms?
                 </h2>
                 <p className="text-white font-normal leading-[1.4] text-sm md:text-base max-w-xl">
-                  Agende uma visita ao nosso showroom em São Paulo, conheça nossos couros e veja a produção de perto. Atendimento sob agendamento, de segunda a sexta.
+                  Agende uma visita. Estamos em São Paulo.
                 </p>
               </div>
               <div className="flex flex-col gap-3 md:flex-row md:gap-5">
