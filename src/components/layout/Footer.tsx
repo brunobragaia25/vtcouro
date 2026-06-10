@@ -42,7 +42,7 @@ export function Footer() {
               </h4>
               <ul className="space-y-3 text-sm">
                 <li>
-                  <a href="/catalogo?category=linha-propagandista" className="text-[#1f1f1f] hover:text-[#d2741f] transition">
+                  <a href="/catalogo?category=linha-propagandista" className="text-[#1f1f1f] hover:text-[#8B5240] transition">
                     Ver produtos
                   </a>
                 </li>
@@ -56,7 +56,7 @@ export function Footer() {
               </h4>
               <ul className="space-y-3 text-sm">
                 <li>
-                  <a href="/catalogo?category=linha-viagem" className="text-[#1f1f1f] hover:text-[#d2741f] transition">
+                  <a href="/catalogo?category=linha-viagem" className="text-[#1f1f1f] hover:text-[#8B5240] transition">
                     Ver produtos
                   </a>
                 </li>
@@ -70,7 +70,7 @@ export function Footer() {
               </h4>
               <ul className="space-y-3 text-sm">
                 <li>
-                  <a href="/catalogo?category=linha-corporativa" className="text-[#1f1f1f] hover:text-[#d2741f] transition">
+                  <a href="/catalogo?category=linha-corporativa" className="text-[#1f1f1f] hover:text-[#8B5240] transition">
                     Ver produtos
                   </a>
                 </li>
@@ -84,9 +84,9 @@ export function Footer() {
                   Contato
                 </h4>
                 <div className="space-y-3 text-sm">
-                  <p className="text-[#1f1f1f]">R. Vergueiro, 2904 - São Paulo / SP</p>
+                  <a href="https://maps.google.com/?q=R.+Vergueiro,+2904,+São+Paulo,+SP" target="_blank" rel="noopener noreferrer" className="block text-[#1f1f1f] hover:text-[#8B5240] transition">R. Vergueiro, 2904 - São Paulo / SP</a>
                   <p className="text-[#1f1f1f]">(11) 2636-1112</p>
-                  <p className="text-[#1f1f1f]">vendas@vtcouro.com.br</p>
+                  <a href="mailto:vendas@vtcouro.com.br" className="block text-[#1f1f1f] hover:text-[#8B5240] transition">vendas@vtcouro.com.br</a>
                 </div>
               </div>
 
@@ -96,12 +96,12 @@ export function Footer() {
                 </h4>
                 <ul className="space-y-3 text-sm">
                   <li>
-                    <a href="#" className="text-[#1f1f1f] hover:text-[#d2741f] transition">
+                    <a href="/sobre" className="text-[#1f1f1f] hover:text-[#8B5240] transition">
                       Sobre nós
                     </a>
                   </li>
                   <li>
-                    <a href="#" className="text-[#1f1f1f] hover:text-[#d2741f] transition">
+                    <a href="/orcamento" className="text-[#1f1f1f] hover:text-[#8B5240] transition">
                       Orçamento
                     </a>
                   </li>
@@ -115,11 +115,11 @@ export function Footer() {
         <div className="flex flex-col gap-3 text-sm lg:flex-row lg:items-center lg:justify-between">
           <p className="text-[#1f1f1f]/60">© 2026 VTCouro. Todos os direitos reservados.</p>
           <div className="flex items-center gap-4 md:gap-6">
-            <a href="#" className="text-[#1f1f1f]/60 hover:text-[#d2741f] transition">
+            <a href="#" className="text-[#1f1f1f]/60 hover:text-[#8B5240] transition">
               Política de Privacidade
             </a>
             <div className="w-px h-3 bg-gray-600 hidden lg:block"></div>
-            <a href="#" className="text-[#1f1f1f]/60 hover:text-[#d2741f] transition">
+            <a href="#" className="text-[#1f1f1f]/60 hover:text-[#8B5240] transition">
               Termos de Serviço
             </a>
           </div>

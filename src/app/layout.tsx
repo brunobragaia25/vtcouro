@@ -3,6 +3,7 @@ import { DM_Sans, Playfair_Display } from 'next/font/google'
 import '../styles/globals.css'
 import { QueryProvider } from '@/providers/QueryProvider'
 import { ToastProvider } from '@/contexts/ToastContext'
+import { WhatsAppButton } from '@/components/ui/WhatsAppButton'
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
@@ -33,6 +34,7 @@ export default function RootLayout({
         <QueryProvider>
           <ToastProvider>
             {children}
+            <WhatsAppButton />
           </ToastProvider>
         </QueryProvider>
       </body>
