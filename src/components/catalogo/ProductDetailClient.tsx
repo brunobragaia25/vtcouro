@@ -33,12 +33,19 @@ export default function ProductDetailClient({
     return products.find((p: any) => p.slug === productSlug);
   }, [products, productSlug, initialProduct]);
 
+  const galleryImages: string[] = useMemo(() => {
+    if (product?.images?.length) return product.images;
+    if (product?.imageUrl) return [product.imageUrl];
+    return [];
+  }, [product]);
+
   // Initialize selected color and quantity based on product data
   useEffect(() => {
     if (product) {
       const defaultColor = product.availableColors?.[0] || 'Caramelo';
       setSelectedColor(defaultColor);
       setQuantity(product.minQuantity || 50);
+      setSelectedImageIndex(0);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product?.id]);
@@ -125,9 +132,9 @@ export default function ProductDetailClient({
           <div className="flex flex-col gap-5 h-full">
             {/* Main Image */}
             <div className="bg-gray-100 rounded-3xl overflow-hidden flex items-center justify-center relative h-full min-h-[500px]">
-              {product.imageUrl ? (
+              {galleryImages[selectedImageIndex] ? (
                 <Image
-                  src={product.imageUrl}
+                  src={galleryImages[selectedImageIndex]}
                   alt={product.name}
                   fill
                   className="object-cover"
@@ -143,29 +150,27 @@ export default function ProductDetailClient({
             </div>
 
             {/* Thumbnails */}
-            <div className="grid grid-cols-4 gap-4">
-              {[0, 1, 2, 3].map((idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setSelectedImageIndex(idx)}
-                  className={`aspect-square rounded-2xl overflow-hidden flex items-center justify-center ${
-                    selectedImageIndex === idx ? 'ring-2 ring-[#d2741f]' : 'bg-gray-100'
-                  }`}
-                >
-                  {product.imageUrl && idx === 0 ? (
+            {galleryImages.length > 1 && (
+              <div className="grid grid-cols-4 gap-4">
+                {galleryImages.map((image, idx) => (
+                  <button
+                    key={image}
+                    onClick={() => setSelectedImageIndex(idx)}
+                    className={`aspect-square rounded-2xl overflow-hidden flex items-center justify-center ${
+                      selectedImageIndex === idx ? 'ring-2 ring-[#d2741f]' : 'bg-gray-100'
+                    }`}
+                  >
                     <Image
-                      src={product.imageUrl}
-                      alt={`${product.name} thumbnail`}
+                      src={image}
+                      alt={`${product.name} thumbnail ${idx + 1}`}
                       width={200}
                       height={200}
                       className="w-full h-full object-cover"
                     />
-                  ) : (
-                    <div className="w-full h-full bg-gray-200" />
-                  )}
-                </button>
-              ))}
-            </div>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Product Details */}

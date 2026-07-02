@@ -9,13 +9,7 @@ import StatusBadge from '@/components/admin/StatusBadge';
 import EditProductModal from '@/components/admin/EditProductModal';
 import DeleteConfirmModal from '@/components/admin/DeleteConfirmModal';
 import { useProducts, useUpdateProduct, useDeleteProduct, useCreateProduct } from '@/hooks/useProducts';
-
-const categories = [
-  'Todas',
-  'Linha Propagandista',
-  'Linha Viagem',
-  'Linha Corporativa',
-];
+import { useCategories } from '@/hooks/useCategories';
 
 export default function AdminProdutos() {
   const [selectedCategory, setSelectedCategory] = useState('Todas');
@@ -24,9 +18,12 @@ export default function AdminProdutos() {
   const [deletingProduct, setDeletingProduct] = useState<any>(null);
 
   const { data: products = [], isLoading } = useProducts();
+  const { data: apiCategories = [] } = useCategories();
   const updateProduct = useUpdateProduct();
   const deleteProduct = useDeleteProduct();
   const createProduct = useCreateProduct();
+
+  const categories = ['Todas', ...apiCategories.map((c: any) => c.name)];
 
   const handleDuplicateProduct = async (product: any) => {
     try {
@@ -93,7 +90,11 @@ export default function AdminProdutos() {
       label: 'PRODUTO',
       render: (value: string, row: any) => (
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-amber-100 rounded"></div>
+          {row.imageUrl ? (
+            <img src={row.imageUrl} alt={value} className="w-8 h-8 rounded object-cover flex-shrink-0" />
+          ) : (
+            <div className="w-8 h-8 bg-amber-100 rounded flex-shrink-0"></div>
+          )}
           <div>
             <p className="font-medium text-gray-900">{value}</p>
             <p className="text-xs text-gray-500">{row.description?.substring(0, 50)}...</p>

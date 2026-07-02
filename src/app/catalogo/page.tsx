@@ -18,6 +18,7 @@ const iconHealth = '/images/Health.svg'
 function CatalogPageContent() {
   const searchParams = useSearchParams()
   const categoryFromUrl = searchParams.get('category')
+  const subcategoryFromUrl = searchParams.get('subcategory')
   const favoritesFromUrl = searchParams.get('favorites') === 'true'
   const { addToast } = useToast()
 
@@ -35,6 +36,9 @@ function CatalogPageContent() {
 
   const [selectedCategories, setSelectedCategories] = useState<string[]>(
     categoryFromUrl ? [categoryFromUrl] : []
+  )
+  const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>(
+    subcategoryFromUrl ? [subcategoryFromUrl] : []
   )
   const [selectedProducts, setSelectedProducts] = useState<string[]>([])
   const [selectedCollections, setSelectedCollections] = useState<string[]>([])
@@ -67,6 +71,29 @@ function CatalogPageContent() {
     return Array.from(cats.values())
   }, [apiProducts])
 
+  // Get unique subcategories from products
+  const subcategoriesData = useMemo(() => {
+    const subs = new Map<string, { id: string; name: string; categorySlug: string; count: number }>()
+
+    apiProducts.forEach((product: any) => {
+      if (product.subcategory?.id) {
+        const key = product.subcategory.id
+        if (!subs.has(key)) {
+          subs.set(key, {
+            id: product.subcategory.id,
+            name: product.subcategory.name,
+            categorySlug: product.category?.slug || '',
+            count: 0,
+          })
+        }
+        const sub = subs.get(key)
+        if (sub) sub.count++
+      }
+    })
+
+    return Array.from(subs.values())
+  }, [apiProducts])
+
   const categoryLabels = useMemo(() => {
     const labels: { [key: string]: string } = {}
     categories.forEach(cat => {
@@ -97,6 +124,8 @@ function CatalogPageContent() {
                            product.description?.toLowerCase().includes(searchTerm.toLowerCase())
       const matchesCategory = selectedCategories.length === 0 ||
                              selectedCategories.includes(product.category?.slug || '')
+      const matchesSubcategory = selectedSubcategories.length === 0 ||
+                             selectedSubcategories.includes(product.subcategory?.id || '')
       const matchesProduct = selectedProducts.length === 0 ||
                             selectedProducts.includes(product.id)
       const matchesCollection = selectedCollections.length === 0 || (
@@ -104,9 +133,9 @@ function CatalogPageContent() {
         (selectedCollections.includes('new') && product.isNew)
       )
       const matchesFavorites = !favoritesFromUrl || isFavorited(product.id)
-      return matchesSearch && matchesCategory && matchesProduct && matchesCollection && matchesFavorites
+      return matchesSearch && matchesCategory && matchesSubcategory && matchesProduct && matchesCollection && matchesFavorites
     })
-  }, [apiProducts, searchTerm, selectedCategories, selectedProducts, selectedCollections, favoritesFromUrl, isFavorited])
+  }, [apiProducts, searchTerm, selectedCategories, selectedSubcategories, selectedProducts, selectedCollections, favoritesFromUrl, isFavorited])
 
   const productsWithLikes = filteredProducts.map((product: any) => ({
     ...product,
@@ -259,6 +288,9 @@ function CatalogPageContent() {
               categories={CATEGORY_FILTERS}
               selectedCategories={selectedCategories}
               onCategoryChange={setSelectedCategories}
+              subcategories={subcategoriesData}
+              selectedSubcategories={selectedSubcategories}
+              onSubcategoryChange={setSelectedSubcategories}
               products={products}
               selectedProducts={selectedProducts}
               onProductChange={setSelectedProducts}

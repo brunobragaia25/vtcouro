@@ -7,7 +7,7 @@ import { requireAdmin } from '@/lib/adminAuth';
 export async function GET() {
   try {
     const products = await prisma.product.findMany({
-      include: { category: true },
+      include: { category: true, subcategory: true },
       orderBy: { createdAt: 'desc' },
     });
     return NextResponse.json(products);
@@ -19,7 +19,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, slug, sku, categoryId, description, minQuantity, availableColors, specifications, customization, care, imageUrl, isActive, isFeatured, isNew } = body;
+    const { name, slug, sku, categoryId, subcategoryId, description, minQuantity, availableColors, specifications, customization, care, imageUrl, isActive, isFeatured, isNew } = body;
 
     const product = await prisma.product.create({
       data: {
@@ -27,6 +27,7 @@ export async function POST(request: NextRequest) {
         slug: slug || name.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
         sku,
         categoryId,
+        subcategoryId: subcategoryId || null,
         description,
         minQuantity: minQuantity || 50,
         availableColors: availableColors || ['Caramelo', 'Preto', 'Marrom', 'Natural'],
@@ -38,7 +39,7 @@ export async function POST(request: NextRequest) {
         isFeatured: isFeatured || false,
         isNew: isNew || false,
       },
-      include: { category: true },
+      include: { category: true, subcategory: true },
     });
 
     return NextResponse.json(product, { status: 201 });

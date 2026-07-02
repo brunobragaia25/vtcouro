@@ -4,6 +4,7 @@ import React, { useState, useRef } from 'react';
 import { Plus, Edit2, Trash2, GripVertical, ImageIcon } from 'lucide-react';
 import EditCategoryModal from '@/components/admin/EditCategoryModal';
 import DeleteConfirmModal from '@/components/admin/DeleteConfirmModal';
+import CategorySubcategories from '@/components/admin/CategorySubcategories';
 import { useCategories, useUpdateCategory, useDeleteCategory, useCreateCategory, useReorderCategories } from '@/hooks/useCategories';
 
 const categoryIcons: { [key: string]: string } = {
@@ -213,6 +214,8 @@ export default function AdminCategorias() {
                   </button>
                 </div>
               </div>
+
+              <CategorySubcategories categoryId={category.id} />
             </div>
           ))}
         </div>

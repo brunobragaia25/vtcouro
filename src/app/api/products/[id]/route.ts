@@ -11,7 +11,7 @@ export async function GET(
   try {
     const product = await prisma.product.findUnique({
       where: { id: params.id },
-      include: { category: true },
+      include: { category: true, subcategory: true },
     });
 
     if (!product) {
@@ -30,13 +30,14 @@ export async function PUT(
 ) {
   try {
     const body = await request.json();
-    const { name, slug, sku, categoryId, description, minQuantity, customization, care, imageUrl, isActive, isFeatured, isNew, orderIndex, featuredOrder, newOrder } = body;
+    const { name, slug, sku, categoryId, subcategoryId, description, minQuantity, customization, care, imageUrl, isActive, isFeatured, isNew, orderIndex, featuredOrder, newOrder } = body;
 
     const updateData: any = {
       name,
       slug: slug || name.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
       sku,
       categoryId,
+      subcategoryId: subcategoryId || null,
       description,
       customization,
       care,
@@ -57,7 +58,7 @@ export async function PUT(
     const product = await prisma.product.update({
       where: { id: params.id },
       data: updateData,
-      include: { category: true },
+      include: { category: true, subcategory: true },
     });
 
     return NextResponse.json(product);

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Modal from './Modal';
 import ImageUploader from './ImageUploader';
 import axios from 'axios';
@@ -22,6 +22,7 @@ export default function EditProductModal({
     name: '',
     sku: '',
     categoryId: '',
+    subcategoryId: '',
     description: '',
     minQuantity: 50,
     availableColors: ['Caramelo', 'Preto', 'Marrom', 'Natural'],
@@ -39,6 +40,8 @@ export default function EditProductModal({
   });
   const [categories, setCategories] = useState<any[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<any>(null);
+  const [subcategories, setSubcategories] = useState<any[]>([]);
+  const prevCategoryId = useRef<string | null>(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -56,6 +59,7 @@ export default function EditProductModal({
               name: product.name || '',
               sku: product.sku || '',
               categoryId: product.categoryId || '',
+              subcategoryId: product.subcategoryId || '',
               description: product.description || '',
               minQuantity: product.minQuantity || 50,
               availableColors: product.availableColors || ['Caramelo', 'Preto', 'Marrom', 'Natural'],
@@ -77,6 +81,7 @@ export default function EditProductModal({
               name: '',
               sku: '',
               categoryId: '',
+              subcategoryId: '',
               description: '',
               minQuantity: 50,
               availableColors: ['Caramelo', 'Preto', 'Marrom', 'Natural'],
@@ -95,6 +100,8 @@ export default function EditProductModal({
           }
         })
         .catch(err => console.error('Failed to fetch categories', err));
+
+      prevCategoryId.current = product?.categoryId || null;
     }
   }, [product, isOpen]);
 
@@ -111,8 +118,25 @@ export default function EditProductModal({
       });
       setFormData(prev => ({ ...prev, specifications: emptySpecs }));
     }
+
+    // Reset subcategory when the user manually switches category
+    if (prevCategoryId.current !== null && prevCategoryId.current !== formData.categoryId) {
+      setFormData(prev => ({ ...prev, subcategoryId: '' }));
+    }
+    prevCategoryId.current = formData.categoryId;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData.categoryId, categories]);
+
+  // Fetch subcategories for the selected category
+  useEffect(() => {
+    if (!formData.categoryId) {
+      setSubcategories([]);
+      return;
+    }
+    axios.get('/api/subcategories', { params: { categoryId: formData.categoryId } })
+      .then(res => setSubcategories(res.data))
+      .catch(err => console.error('Failed to fetch subcategories', err));
+  }, [formData.categoryId]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -252,6 +276,28 @@ export default function EditProductModal({
               {categories.map((cat) => (
                 <option key={cat.id} value={cat.id}>
                   {cat.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="mt-3">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Subcategoria
+            </label>
+            <select
+              name="subcategoryId"
+              value={formData.subcategoryId || ''}
+              onChange={handleChange}
+              disabled={!formData.categoryId || subcategories.length === 0}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400 disabled:bg-gray-100 disabled:text-gray-400"
+            >
+              <option value="">
+                {subcategories.length === 0 ? 'Nenhuma subcategoria cadastrada' : 'Selecione uma subcategoria'}
+              </option>
+              {subcategories.map((sub) => (
+                <option key={sub.id} value={sub.id}>
+                  {sub.name}
                 </option>
               ))}
             </select>
