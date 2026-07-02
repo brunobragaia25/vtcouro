@@ -15,7 +15,7 @@ function HealthIcon({ color }: { color: 'pink' | 'gray' }) {
         src="/images/Health.svg"
         alt="heart"
         className="w-[12.889px] h-[12.889px]"
-        style={{ filter: color === 'pink' ? 'invert(48%) sepia(79%) saturate(2476%) hue-rotate(300deg) brightness(90%)' : 'brightness(0.4)' }}
+        style={{ filter: color === 'pink' ? 'brightness(0) invert(1)' : 'brightness(0.4)' }}
       />
     </div>
   )
@@ -70,7 +70,7 @@ function ProductCard({
           <button
             onClick={onToggleFavorite}
             className={`rounded-full flex items-center justify-center transition hover:scale-110 ${
-              isFavorited ? 'bg-[#ff82aa]' : 'bg-white border border-[#c8c8c8] hover:bg-[#ff82aa]'
+              isFavorited ? 'bg-[#ff82aa]' : 'bg-[#ffe6ee] hover:bg-[#ff82aa]'
             }`}
           >
             <HealthIcon color={isFavorited ? 'pink' : 'gray'} />

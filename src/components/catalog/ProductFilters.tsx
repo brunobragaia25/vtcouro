@@ -57,14 +57,8 @@ export function ProductFilters({
 }: ProductFiltersProps) {
   const [showCategories, setShowCategories] = useState(true)
   const [isClosingCategories, setIsClosingCategories] = useState(false)
-  const [showSubcategories, setShowSubcategories] = useState(true)
-  const [isClosingSubcategories, setIsClosingSubcategories] = useState(false)
   const [showProducts, setShowProducts] = useState(true)
   const [isClosingProducts, setIsClosingProducts] = useState(false)
-
-  const visibleSubcategories = subcategories.filter(
-    (sub) => selectedCategories.length === 0 || selectedCategories.includes(sub.categorySlug)
-  )
 
   const toggleCategoriesSection = () => {
     if (showCategories) {
@@ -75,18 +69,6 @@ export function ProductFilters({
       }, 500)
     } else {
       setShowCategories(true)
-    }
-  }
-
-  const toggleSubcategoriesSection = () => {
-    if (showSubcategories) {
-      setIsClosingSubcategories(true)
-      setTimeout(() => {
-        setShowSubcategories(false)
-        setIsClosingSubcategories(false)
-      }, 500)
-    } else {
-      setShowSubcategories(true)
     }
   }
 
@@ -251,108 +233,85 @@ export function ProductFilters({
         <div className={isClosingCategories ? 'filter-content-close' : showCategories ? 'filter-content-open' : ''}>
           {(showCategories || isClosingCategories) && (
             <div className="space-y-2">
-              {categories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => toggleCategory(category.id)}
-                  className={`w-full flex items-center justify-between p-3 rounded-[12px] transition-all ${
-                    selectedCategories.includes(category.id)
-                      ? 'bg-[#fff5ec] border border-[#d2741f]'
-                      : 'bg-[#f9f9f9] border border-transparent hover:bg-[#f0f0f0]'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className={`flex-shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${
-                      selectedCategories.includes(category.id)
-                        ? 'bg-[#d2741f] border-[#d2741f]'
-                        : 'border-[#c8c8c8]'
-                    }`}>
-                      {selectedCategories.includes(category.id) && (
-                        <span className="text-white text-xs font-bold">✓</span>
-                      )}
-                    </div>
-                    <span className={`text-sm font-normal ${
-                      selectedCategories.includes(category.id)
-                        ? 'text-[#4b1c09]'
-                        : 'text-[#8b8b8b]'
-                    }`}>
-                      {category.name}
-                    </span>
+              {categories.map((category) => {
+                const categorySelected = selectedCategories.includes(category.id)
+                const categorySubcategories = subcategories.filter((sub) => sub.categorySlug === category.id)
+
+                return (
+                  <div key={category.id}>
+                    <button
+                      onClick={() => toggleCategory(category.id)}
+                      className={`w-full flex items-center justify-between p-3 rounded-[12px] transition-all ${
+                        categorySelected
+                          ? 'bg-[#fff5ec] border border-[#d2741f]'
+                          : 'bg-[#f9f9f9] border border-transparent hover:bg-[#f0f0f0]'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`flex-shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${
+                          categorySelected
+                            ? 'bg-[#d2741f] border-[#d2741f]'
+                            : 'border-[#c8c8c8]'
+                        }`}>
+                          {categorySelected && (
+                            <span className="text-white text-xs font-bold">✓</span>
+                          )}
+                        </div>
+                        <span className={`text-sm font-normal ${
+                          categorySelected ? 'text-[#4b1c09]' : 'text-[#8b8b8b]'
+                        }`}>
+                          {category.name}
+                        </span>
+                      </div>
+                      <span className={`text-sm font-normal ${
+                        categorySelected ? 'text-[#d2741f]' : 'text-[#8b8b8b]'
+                      }`}>
+                        {category.count}
+                      </span>
+                    </button>
+
+                    {/* Subcategory dropdown, nested under its selected category */}
+                    {categorySelected && categorySubcategories.length > 0 && (
+                      <div className="mt-1.5 ml-4 pl-3 border-l-2 border-[#f0d9c2] space-y-1">
+                        {categorySubcategories.map((subcategory) => {
+                          const subSelected = selectedSubcategories.includes(subcategory.id)
+                          return (
+                            <button
+                              key={subcategory.id}
+                              onClick={() => toggleSubcategory(subcategory.id)}
+                              className={`w-full flex items-center justify-between px-2.5 py-2 rounded-[8px] transition-all ${
+                                subSelected ? 'bg-[#fff5ec]' : 'hover:bg-[#f9f9f9]'
+                              }`}
+                            >
+                              <div className="flex items-center gap-2">
+                                <div className={`flex-shrink-0 w-3.5 h-3.5 rounded-sm border flex items-center justify-center transition-all ${
+                                  subSelected ? 'bg-[#d2741f] border-[#d2741f]' : 'border-[#c8c8c8]'
+                                }`}>
+                                  {subSelected && <span className="text-white text-[9px] font-bold">✓</span>}
+                                </div>
+                                <span className={`text-xs font-normal ${
+                                  subSelected ? 'text-[#4b1c09]' : 'text-[#8b8b8b]'
+                                }`}>
+                                  {subcategory.name}
+                                </span>
+                              </div>
+                              <span className={`text-xs font-normal ${
+                                subSelected ? 'text-[#d2741f]' : 'text-[#8b8b8b]'
+                              }`}>
+                                {subcategory.count}
+                              </span>
+                            </button>
+                          )
+                        })}
+                      </div>
+                    )}
                   </div>
-                  <span className={`text-sm font-normal ${
-                    selectedCategories.includes(category.id)
-                      ? 'text-[#d2741f]'
-                      : 'text-[#8b8b8b]'
-                  }`}>
-                    {category.count}
-                  </span>
-                </button>
-              ))}
+                )
+              })}
             </div>
           )}
         </div>
       </div>
-
-      {/* Subcategories */}
-      {visibleSubcategories.length > 0 && (
-        <div className="bg-white rounded-[16px] p-7 flex flex-col gap-5">
-          <button
-            onClick={toggleSubcategoriesSection}
-            className="w-full flex items-center justify-between"
-          >
-            <p className="text-[#1f1f1f] text-xs font-extrabold tracking-wider uppercase">
-              Subcategorias
-            </p>
-            <ChevronDown
-              className={`w-4 h-4 text-[#8b8b8b] transition-transform duration-500 ${showSubcategories ? 'rotate-0' : '-rotate-90'}`}
-            />
-          </button>
-
-          <div className={isClosingSubcategories ? 'filter-content-close' : showSubcategories ? 'filter-content-open' : ''}>
-            {(showSubcategories || isClosingSubcategories) && (
-              <div className="space-y-2">
-                {visibleSubcategories.map((subcategory) => (
-                  <button
-                    key={subcategory.id}
-                    onClick={() => toggleSubcategory(subcategory.id)}
-                    className={`w-full flex items-center justify-between p-3 rounded-[12px] transition-all ${
-                      selectedSubcategories.includes(subcategory.id)
-                        ? 'bg-[#fff5ec] border border-[#d2741f]'
-                        : 'bg-[#f9f9f9] border border-transparent hover:bg-[#f0f0f0]'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className={`flex-shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${
-                        selectedSubcategories.includes(subcategory.id)
-                          ? 'bg-[#d2741f] border-[#d2741f]'
-                          : 'border-[#c8c8c8]'
-                      }`}>
-                        {selectedSubcategories.includes(subcategory.id) && (
-                          <span className="text-white text-xs font-bold">✓</span>
-                        )}
-                      </div>
-                      <span className={`text-sm font-normal ${
-                        selectedSubcategories.includes(subcategory.id)
-                          ? 'text-[#4b1c09]'
-                          : 'text-[#8b8b8b]'
-                      }`}>
-                        {subcategory.name}
-                      </span>
-                    </div>
-                    <span className={`text-sm font-normal ${
-                      selectedSubcategories.includes(subcategory.id)
-                        ? 'text-[#d2741f]'
-                        : 'text-[#8b8b8b]'
-                    }`}>
-                      {subcategory.count}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* Products */}
       <div className="bg-white rounded-[16px] p-7 flex flex-col gap-5">
