@@ -1,8 +1,28 @@
 ﻿'use client'
 
 import { FaInstagram, FaFacebook, FaLinkedin } from 'react-icons/fa'
+import { useCategories } from '@/hooks/useCategories'
+import { useSubcategories } from '@/hooks/useSubcategories'
+
+const CATEGORY_LABELS: Record<string, string> = {
+  'linha-propagandista': 'Linha Propagandista',
+  'linha-viagem': 'Linha Viagem',
+  'linha-corporativa': 'Linha Corporativa',
+}
+const CATEGORY_SLUGS = Object.keys(CATEGORY_LABELS)
 
 export function Footer() {
+  const { data: categories = [] } = useCategories()
+  const { data: allSubcategories = [] } = useSubcategories()
+
+  const subcategoriesByCategorySlug = CATEGORY_SLUGS.reduce((acc, slug) => {
+    const category = categories.find((c: any) => c.slug === slug)
+    acc[slug] = category
+      ? allSubcategories.filter((sub: any) => sub.categoryId === category.id)
+      : []
+    return acc
+  }, {} as Record<string, any[]>)
+
   return (
     <footer className="w-full bg-[#FFEEDE] text-[#1f1f1f] flex justify-center">
       <div className="max-w-container w-full px-5 md:px-8 py-12 md:py-16">
@@ -35,47 +55,31 @@ export function Footer() {
 
           {/* Links grid — 2 cols on mobile, inline on md+ */}
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:flex lg:gap-16">
-            {/* Column 1: Linha Propagandista */}
-            <div className="space-y-5">
-              <h4 className="text-[#d2741f] text-sm font-semibold tracking-wider uppercase">
-                Linha Propagandista
-              </h4>
-              <ul className="space-y-3 text-sm">
-                <li>
-                  <a href="/catalogo?category=linha-propagandista" className="text-[#1f1f1f] hover:text-[#8B5240] transition">
-                    Ver produtos
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            {/* Column 2: Linha Viagem */}
-            <div className="space-y-5">
-              <h4 className="text-[#d2741f] text-sm font-semibold tracking-wider uppercase">
-                Linha Viagem
-              </h4>
-              <ul className="space-y-3 text-sm">
-                <li>
-                  <a href="/catalogo?category=linha-viagem" className="text-[#1f1f1f] hover:text-[#8B5240] transition">
-                    Ver produtos
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            {/* Column 3: Linha Corporativa */}
-            <div className="space-y-5">
-              <h4 className="text-[#d2741f] text-sm font-semibold tracking-wider uppercase">
-                Linha Corporativa
-              </h4>
-              <ul className="space-y-3 text-sm">
-                <li>
-                  <a href="/catalogo?category=linha-corporativa" className="text-[#1f1f1f] hover:text-[#8B5240] transition">
-                    Ver produtos
-                  </a>
-                </li>
-              </ul>
-            </div>
+            {/* Columns 1-3: category links with subcategories */}
+            {CATEGORY_SLUGS.map((slug) => (
+              <div key={slug} className="space-y-5">
+                <h4 className="text-[#d2741f] text-sm font-semibold tracking-wider uppercase">
+                  {CATEGORY_LABELS[slug]}
+                </h4>
+                <ul className="space-y-3 text-sm">
+                  {subcategoriesByCategorySlug[slug]?.map((sub: any) => (
+                    <li key={sub.id}>
+                      <a
+                        href={`/catalogo?category=${slug}&subcategory=${sub.id}`}
+                        className="text-[#1f1f1f] hover:text-[#8B5240] transition"
+                      >
+                        {sub.name}
+                      </a>
+                    </li>
+                  ))}
+                  <li>
+                    <a href={`/catalogo?category=${slug}`} className="text-[#1f1f1f] hover:text-[#8B5240] transition">
+                      Ver produtos
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            ))}
 
             {/* Column 4: Contact & Company */}
             <div className="space-y-8">
