@@ -131,6 +131,15 @@ export default function AdminBanners() {
         </button>
       </div>
 
+      <div className="flex items-center gap-6 bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 mb-6 text-xs text-gray-500">
+        <span className="flex items-center gap-1.5">
+          <Monitor size={13} /> Desktop: <strong className="text-gray-700">1920 × 720px</strong>
+        </span>
+        <span className="flex items-center gap-1.5">
+          <Smartphone size={13} /> Mobile: <strong className="text-gray-700">800 × 1000px</strong>
+        </span>
+      </div>
+
       {loading ? (
         <div className="text-gray-400 text-sm">Carregando...</div>
       ) : banners.length === 0 ? (
