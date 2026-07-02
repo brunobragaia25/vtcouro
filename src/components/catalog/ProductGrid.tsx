@@ -33,9 +33,10 @@ export function ProductGrid({ products, onToggleLike }: ProductGridProps) {
   return (
     <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
       {products.map((product) => (
-        <div
+        <Link
           key={product.id}
-          className="bg-white rounded-2xl overflow-hidden flex flex-col"
+          href={`/catalogo/${product.category?.slug || 'produtos'}/${product.slug}`}
+          className="group bg-white rounded-2xl overflow-hidden flex flex-col hover:shadow-lg transition-shadow"
         >
           {/* Image */}
           <div className="relative h-56 md:h-72 xl:h-80 bg-gray-100 overflow-hidden flex items-center justify-center">
@@ -68,16 +69,20 @@ export function ProductGrid({ products, onToggleLike }: ProductGridProps) {
                 )}
               </div>
               <button
-                onClick={() => onToggleLike(product.id)}
+                onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  onToggleLike(product.id)
+                }}
                 className={`w-[29px] h-[29px] rounded-full flex items-center justify-center transition-colors pointer-events-auto ${
-                  product.liked ? 'bg-[#ff82aa]' : 'bg-white'
+                  product.liked ? 'bg-[#ff82aa]' : 'bg-[#ffe6ee]'
                 }`}
               >
                 <img
                   src="/images/Health.svg"
                   alt="heart"
                   className="w-[12.889px] h-[12.889px]"
-                  style={{ filter: product.liked ? 'invert(48%) sepia(79%) saturate(2476%) hue-rotate(300deg) brightness(90%)' : 'brightness(0.4)' }}
+                  style={{ filter: product.liked ? 'brightness(0) invert(1)' : 'brightness(0.4)' }}
                 />
               </button>
             </div>
@@ -106,16 +111,13 @@ export function ProductGrid({ products, onToggleLike }: ProductGridProps) {
             {/* Footer */}
             <div className="flex items-center justify-between mt-auto">
               <p className="text-sm text-gray-500">Mín {product.minQuantity}un.</p>
-              <Link
-                href={`/catalogo/${product.category?.slug || 'produtos'}/${product.slug}`}
-                className="flex items-center gap-1 text-sm font-medium text-gray-900 hover:text-[#d2741f] transition-colors"
-              >
+              <span className="flex items-center gap-1 text-sm font-medium text-gray-900 group-hover:text-[#d2741f] transition-colors">
                 Ver detalhes
                 <ChevronRight size={18} />
-              </Link>
+              </span>
             </div>
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   )
