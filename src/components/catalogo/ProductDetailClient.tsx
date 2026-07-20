@@ -70,8 +70,10 @@ export default function ProductDetailClient({
     return { name: raw, hex: legacyMap[raw] || '#cccccc' }
   }
 
+  const minQuantity = product?.minQuantity || 50;
+
   const handleQuantityChange = (value: number) => {
-    if (value >= 50 && value % 5 === 0) {
+    if (value >= minQuantity && value % 5 === 0) {
       setQuantity(value);
     }
   };
@@ -81,7 +83,7 @@ export default function ProductDetailClient({
   };
 
   const handleDecrement = () => {
-    if (quantity > 50) {
+    if (quantity > minQuantity) {
       handleQuantityChange(quantity - 5);
     }
   };
@@ -251,7 +253,7 @@ export default function ProductDetailClient({
                 <label className="text-xs font-extrabold text-[#d2741f] tracking-widest uppercase">
                   Quantidade
                 </label>
-                <span className="text-sm text-gray-900">(mín. 50)</span>
+                <span className="text-sm text-gray-900">(mín. {minQuantity})</span>
               </div>
               <div className="flex gap-4 items-center">
                 <div className="flex items-center border border-gray-300 rounded-lg">
@@ -310,7 +312,7 @@ export default function ProductDetailClient({
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <p className="text-[#1f1f1f] text-base font-semibold">Entrega para todo o Brasil</p>
-                  <p className="text-[#1f1f1f] text-xs font-normal">Prazo de produção: 15 a 25 dias úteis após aprovação.</p>
+                  <p className="text-[#1f1f1f] text-xs font-normal">Prazo de produção: A combinar</p>
                 </div>
               </div>
             </div>

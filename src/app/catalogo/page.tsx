@@ -217,7 +217,7 @@ function CatalogPageContent() {
                 <div className="w-full md:w-[485px] h-px bg-[#ecc29c]" />
 
                 <p className="text-[#1f1f1f] text-sm font-medium">
-                  Pedidos a partir de 15un.
+                  Pedidos a partir de 10un.
                 </p>
               </div>
             </div>

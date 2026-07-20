@@ -57,7 +57,7 @@ model Product {
   imageUrl  String?
   images    String[]
   minQuantity Int    @default(50)
-  availableColors String[]  @default(["Caramelo", "Preto", "Marrom", "Natural"])
+  availableColors String[]  @default(["Preto", "Marrom"])
   specifications Json?  // Object with key-value pairs for specifications
   customization String?
   care String?

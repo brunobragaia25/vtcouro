@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
         subcategoryId: subcategoryId || null,
         description,
         minQuantity: minQuantity || 50,
-        availableColors: availableColors || ['Caramelo', 'Preto', 'Marrom', 'Natural'],
+        availableColors: availableColors || ['Preto', 'Marrom'],
         specifications: specifications || {},
         customization,
         care,
