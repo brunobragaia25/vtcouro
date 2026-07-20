@@ -79,7 +79,7 @@ export async function POST(
           </p>
           <p style="margin: 5px 0; color: #4b1c09; font-weight: bold;">
             📧 vendas@vtcouro.com.br<br/>
-            📞 +55 (XX) XXXXX-XXXX
+            📞 (11) 2636-1112
           </p>
         </div>
 
@@ -93,7 +93,7 @@ export async function POST(
 
     const emailResponse = await resend.emails.send({
       from: FROM_EMAIL,
-      to: 'bragaiasouza@gmail.com',
+      to: quote.email,
       subject: `VTCouro - Resposta ao Orçamento #${quote.protocolNumber}`,
       html: emailHtml,
     });
