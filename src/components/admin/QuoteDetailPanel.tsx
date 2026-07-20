@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { X, Mail, MessageCircle, Download } from 'lucide-react';
+import { parseColorEntry } from '@/lib/colors';
 
 interface QuoteDetailPanelProps {
   isOpen: boolean;
@@ -240,6 +241,15 @@ export default function QuoteDetailPanel({
                   <div className="flex-1">
                     <p className="font-medium text-[#1f1f1f]">{item.product?.name}</p>
                     <p className="text-xs text-gray-500">{item.product?.sku}</p>
+                    {item.color && (
+                      <div className="flex items-center gap-1.5 mt-1">
+                        <span
+                          className="w-2.5 h-2.5 rounded-full border border-gray-300 flex-shrink-0"
+                          style={{ backgroundColor: parseColorEntry(item.color).hex }}
+                        />
+                        <span className="text-xs text-gray-500">{parseColorEntry(item.color).name}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="text-right flex flex-col items-end gap-2">

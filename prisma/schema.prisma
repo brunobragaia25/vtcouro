@@ -103,6 +103,7 @@ model QuoteItem {
   quoteId   String
   productId String
   quantity  Int
+  color     String?
   artFileUrl String?
   addedAt   DateTime @default(now())
 

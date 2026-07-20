@@ -84,6 +84,7 @@ export async function POST(request: NextRequest) {
           create: items.map((item: any) => ({
             productId: item.productId,
             quantity: item.quantity,
+            color: item.color || null,
             artFileUrl: item.artFile || null,
           })),
         },
@@ -101,7 +102,7 @@ export async function POST(request: NextRequest) {
     if (process.env.RESEND_API_KEY) {
       const resend = new Resend(process.env.RESEND_API_KEY);
       const itemsHtml = quote.items
-        .map(item => `<li>${item.product?.name} - ${item.quantity} un.</li>`)
+        .map(item => `<li>${item.product?.name}${item.color ? ` (${item.color})` : ''} - ${item.quantity} un.</li>`)
         .join('');
 
       const notificationHtml = `

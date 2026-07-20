@@ -38,7 +38,7 @@ export async function POST(
       .map(
         item => `
       <tr>
-        <td style="padding: 12px; border-bottom: 1px solid #e0e0e0;">${item.product?.name}</td>
+        <td style="padding: 12px; border-bottom: 1px solid #e0e0e0;">${item.product?.name}${item.color ? ` <span style="color: #999;">(${item.color})</span>` : ''}</td>
         <td style="padding: 12px; border-bottom: 1px solid #e0e0e0; text-align: center;">${item.quantity}</td>
         <td style="padding: 12px; border-bottom: 1px solid #e0e0e0; text-align: center;">
           ${item.artFileUrl ? '✓ Enviado' : '⚠ Pendente'}

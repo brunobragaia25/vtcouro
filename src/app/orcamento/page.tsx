@@ -9,10 +9,12 @@ import { useProducts } from '@/hooks/useProducts'
 import { useCreateQuote } from '@/hooks/useQuotes'
 import { useToast } from '@/contexts/ToastContext'
 import { useUploadArt } from '@/hooks/useUploadArt'
+import { parseColorEntry } from '@/lib/colors'
 import Link from 'next/link'
 
 interface CartItem {
   productId: string
+  color?: string
   name: string
   sku: string
   quantity: number
@@ -24,6 +26,8 @@ interface CartItem {
   artFileName?: string
   artFileUrl?: string
 }
+
+const cartItemKey = (productId: string, color?: string) => `${productId}::${color ?? ''}`
 
 interface CustomerData {
   name: string
@@ -91,15 +95,17 @@ function OrcamentoPageContent() {
 
     const productId = searchParams.get('product')
     const quantity = searchParams.get('quantity')
+    const color = searchParams.get('color') || undefined
 
     if (productId) {
       const product = products.find((p: any) => p.id === productId)
       setCart(prev => {
-        if (product && !prev.find(item => item.productId === productId)) {
+        if (product && !prev.find(item => item.productId === productId && item.color === color)) {
           return [
             ...prev,
             {
               productId: product.id,
+              color,
               name: product.name,
               sku: product.sku,
               quantity: quantity ? parseInt(quantity) : product.minQuantity || 50,
@@ -155,15 +161,15 @@ function OrcamentoPageContent() {
     }
   }
 
-  const handleQuantityChange = (productId: string, newQuantity: number) => {
-    const item = cart.find(i => i.productId === productId)
+  const handleQuantityChange = (productId: string, color: string | undefined, newQuantity: number) => {
+    const item = cart.find(i => i.productId === productId && i.color === color)
     if (!item) return
 
     if (newQuantity < item.minQuantity) return
     if (newQuantity % 5 !== 0) return
 
     setCart(cart.map(item =>
-      item.productId === productId
+      item.productId === productId && item.color === color
         ? { ...item, quantity: newQuantity }
         : item
     ))
@@ -171,11 +177,12 @@ function OrcamentoPageContent() {
 
   const handleArtFileUpload = async (
     productId: string,
+    color: string | undefined,
     file: File | undefined
   ) => {
     if (!file) {
       setCart(cart.map(item =>
-        item.productId === productId
+        item.productId === productId && item.color === color
           ? {
               ...item,
               artFile: undefined,
@@ -189,7 +196,7 @@ function OrcamentoPageContent() {
     try {
       const result = await uploadFile(file)
       setCart(cart.map(item =>
-        item.productId === productId
+        item.productId === productId && item.color === color
           ? {
               ...item,
               artFile: file,
@@ -204,8 +211,8 @@ function OrcamentoPageContent() {
     }
   }
 
-  const handleRemoveProduct = (productId: string) => {
-    setCart(cart.filter(item => item.productId !== productId))
+  const handleRemoveProduct = (productId: string, color: string | undefined) => {
+    setCart(cart.filter(item => !(item.productId === productId && item.color === color)))
   }
 
   const handleSubmitQuote = async () => {
@@ -231,6 +238,7 @@ function OrcamentoPageContent() {
         items: cart.map(item => ({
           productId: item.productId,
           quantity: item.quantity,
+          color: item.color || null,
           artFile: item.artFileUrl || null,
         })),
       }
@@ -351,7 +359,7 @@ function OrcamentoPageContent() {
                   {cart.length > 0 ? (
                     cart.map(item => (
                       <div
-                        key={item.productId}
+                        key={cartItemKey(item.productId, item.color)}
                         className="bg-white rounded-2xl p-7 border border-[#c8c8c8]"
                       >
                         {/* Product Header with Image */}
@@ -380,7 +388,7 @@ function OrcamentoPageContent() {
                                 onClick={(e) => {
                                   e.preventDefault()
                                   e.stopPropagation()
-                                  handleRemoveProduct(item.productId)
+                                  handleRemoveProduct(item.productId, item.color)
                                 }}
                                 className="text-red-500 hover:text-red-700 flex items-center gap-1"
                               >
@@ -390,9 +398,22 @@ function OrcamentoPageContent() {
                             </div>
 
                             {/* Product Name */}
-                            <h3 className="text-[#1f1f1f] text-xl font-semibold mb-3">
+                            <h3 className="text-[#1f1f1f] text-xl font-semibold mb-1">
                               {item.name}
                             </h3>
+
+                            {/* Color */}
+                            {item.color && (
+                              <div className="flex items-center gap-2 mb-3">
+                                <span
+                                  className="w-3.5 h-3.5 rounded-full border border-[#c8c8c8] flex-shrink-0"
+                                  style={{ backgroundColor: parseColorEntry(item.color).hex }}
+                                />
+                                <span className="text-sm text-[#1f1f1f]">
+                                  Cor: {parseColorEntry(item.color).name}
+                                </span>
+                              </div>
+                            )}
 
                             {/* Description */}
                             <p className="text-[#1f1f1f] text-sm mb-4">
@@ -406,6 +427,7 @@ function OrcamentoPageContent() {
                                   onClick={() =>
                                     handleQuantityChange(
                                       item.productId,
+                                      item.color,
                                       item.quantity - 5
                                     )
                                   }
@@ -421,6 +443,7 @@ function OrcamentoPageContent() {
                                   onClick={() =>
                                     handleQuantityChange(
                                       item.productId,
+                                      item.color,
                                       item.quantity + 5
                                     )
                                   }
@@ -469,7 +492,7 @@ function OrcamentoPageContent() {
                             <button
                               onClick={(e) => {
                                 e.preventDefault()
-                                handleArtFileUpload(item.productId, undefined)
+                                handleArtFileUpload(item.productId, item.color, undefined)
                               }}
                               className="ml-4 text-gray-400 hover:text-gray-600"
                             >
@@ -482,6 +505,7 @@ function OrcamentoPageContent() {
                             onChange={e =>
                               handleArtFileUpload(
                                 item.productId,
+                                item.color,
                                 e.target.files?.[0]
                               )
                             }
@@ -607,7 +631,7 @@ function OrcamentoPageContent() {
                   {/* Products List */}
                   <div className="space-y-5 mb-7">
                     {cart.map((item, index) => (
-                      <div key={item.productId}>
+                      <div key={cartItemKey(item.productId, item.color)}>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
                             <div className={`w-3 h-3 rounded-full flex-shrink-0 ${
@@ -615,6 +639,9 @@ function OrcamentoPageContent() {
                             }`}></div>
                             <span className="text-[#1f1f1f] text-sm">
                               <span className="font-semibold">{item.name}</span>
+                              {item.color && (
+                                <span className="text-[#8b8b8b]"> ({parseColorEntry(item.color).name})</span>
+                              )}
                               <span className="text-[#1f1f1f]"> x {item.quantity} unidades</span>
                             </span>
                           </div>

@@ -9,6 +9,7 @@ import { useFavorites } from '@/hooks/useFavorites';
 import { useToast } from '@/contexts/ToastContext';
 import { ProductDetailSkeleton } from '@/components/ui/Skeleton';
 import ProductCard from '@/components/catalogo/ProductCard';
+import { parseColorEntry as parseColor } from '@/lib/colors';
 
 interface ProductDetailClientProps {
   productSlug: string;
@@ -56,19 +57,6 @@ export default function ProductDetailClient({
       .filter((p: any) => p.category?.name === product.category?.name && p.id !== product.id)
       .slice(0, 3);
   }, [products, product]);
-
-  const parseColor = (raw: string): { name: string; hex: string } => {
-    if (raw.includes('|')) {
-      const idx = raw.lastIndexOf('|')
-      return { name: raw.slice(0, idx), hex: raw.slice(idx + 1) }
-    }
-    const legacyMap: { [key: string]: string } = {
-      'Caramelo': '#D4A574', 'Preto': '#1f1f1f', 'Marrom': '#8B4513',
-      'Natural': '#E8D4C0', 'Chocolate': '#6B4423', 'Café': '#8B6F47',
-      'Branco': '#F5F5F5', 'Cinza': '#808080', 'Vermelho': '#C41E3A', 'Azul': '#1E40AF',
-    }
-    return { name: raw, hex: legacyMap[raw] || '#cccccc' }
-  }
 
   const minQuantity = product?.minQuantity || 50;
 
