@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { X, Mail, MessageCircle, Download } from 'lucide-react';
 import { parseColorEntry } from '@/lib/colors';
 
@@ -17,6 +18,7 @@ export default function QuoteDetailPanel({
   onClose,
   onSave,
 }: QuoteDetailPanelProps) {
+  const queryClient = useQueryClient();
   const [formData, setFormData] = useState({
     status: 'novo',
     notes: '',
@@ -97,7 +99,8 @@ export default function QuoteDetailPanel({
       }
 
       alert('Resposta enviada com sucesso!');
-      setFormData(prev => ({ ...prev, response: '' }));
+      setFormData(prev => ({ ...prev, response: '', status: 'respondido' }));
+      queryClient.invalidateQueries({ queryKey: ['quotes'] });
     } catch (error) {
       console.error('Error sending response:', error);
       alert('Erro ao enviar resposta');
@@ -328,7 +331,7 @@ export default function QuoteDetailPanel({
         </div>
 
         {/* Convert to Order Button */}
-        {quote.status === 'respondido' && (
+        {formData.status === 'respondido' && (
           <button
             onClick={handleConvertToOrder}
             className="w-full px-4 py-3 bg-[#10b981] text-white rounded-lg hover:bg-[#059669] transition font-medium"
