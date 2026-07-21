@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
+import { createSessionToken } from '@/lib/adminSession'
 
 // In-memory rate limiter: max 5 attempts per IP per 15 minutes
 const attempts = new Map<string, { count: number; resetAt: number }>()
@@ -49,8 +50,9 @@ export async function POST(request: NextRequest) {
 
   attempts.delete(ip)
 
+  const sessionToken = await createSessionToken()
   const response = NextResponse.json({ ok: true })
-  response.cookies.set('admin_auth', adminPassword, {
+  response.cookies.set('admin_auth', sessionToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',

@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { verifySessionToken } from './adminSession'
 
-export function requireAdmin(request: NextRequest): NextResponse | null {
-  const adminPassword = process.env.ADMIN_PASSWORD
+export async function requireAdmin(request: NextRequest): Promise<NextResponse | null> {
   const cookie = request.cookies.get('admin_auth')?.value
+  const valid = await verifySessionToken(cookie)
 
-  if (!adminPassword || cookie !== adminPassword) {
+  if (!valid) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

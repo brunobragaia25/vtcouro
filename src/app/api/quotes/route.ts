@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 ﻿import { prisma } from '@/lib/prisma';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/adminAuth';
+import { escapeHtml } from '@/lib/html';
 import { Resend } from 'resend';
 
 async function generateProtocolNumber() {
@@ -44,7 +45,7 @@ async function generateProtocolNumber() {
 }
 
 export async function GET(request: NextRequest) {
-  const authError = requireAdmin(request)
+  const authError = await requireAdmin(request)
   if (authError) return authError
   try {
     const quotes = await prisma.quote.findMany({
@@ -102,7 +103,7 @@ export async function POST(request: NextRequest) {
     if (process.env.RESEND_API_KEY) {
       const resend = new Resend(process.env.RESEND_API_KEY);
       const itemsHtml = quote.items
-        .map(item => `<li>${item.product?.name}${item.color ? ` (${item.color})` : ''} - ${item.quantity} un.</li>`)
+        .map(item => `<li>${escapeHtml(item.product?.name)}${item.color ? ` (${escapeHtml(item.color)})` : ''} - ${item.quantity} un.</li>`)
         .join('');
 
       const notificationHtml = `
@@ -127,14 +128,14 @@ export async function POST(request: NextRequest) {
               <p style="margin: 0 0 5px 0; color: #999; font-size: 12px; text-transform: uppercase;">
                 Cliente
               </p>
-              <p style="margin: 0 0 10px 0; color: #1f1f1f; font-weight: bold;">${quote.name}</p>
-              <p style="margin: 0 0 20px 0; color: #666; font-size: 14px;">${quote.company || 'Sem empresa'}</p>
+              <p style="margin: 0 0 10px 0; color: #1f1f1f; font-weight: bold;">${escapeHtml(quote.name)}</p>
+              <p style="margin: 0 0 20px 0; color: #666; font-size: 14px;">${escapeHtml(quote.company) || 'Sem empresa'}</p>
 
               <p style="margin: 0 0 5px 0; color: #999; font-size: 12px; text-transform: uppercase;">
                 Contato
               </p>
-              <p style="margin: 0 0 5px 0; color: #666; font-size: 14px;">${quote.email}</p>
-              <p style="margin: 0 0 20px 0; color: #666; font-size: 14px;">${quote.phone || 'Sem telefone'}</p>
+              <p style="margin: 0 0 5px 0; color: #666; font-size: 14px;">${escapeHtml(quote.email)}</p>
+              <p style="margin: 0 0 20px 0; color: #666; font-size: 14px;">${escapeHtml(quote.phone) || 'Sem telefone'}</p>
 
               <p style="margin: 0 0 5px 0; color: #999; font-size: 12px; text-transform: uppercase;">
                 Itens (${quote.items.length})
@@ -147,7 +148,7 @@ export async function POST(request: NextRequest) {
                 <p style="margin: 0 0 5px 0; color: #999; font-size: 12px; text-transform: uppercase;">
                   Observações
                 </p>
-                <p style="margin: 0 0 20px 0; color: #666; font-size: 14px; font-style: italic;">"${quote.notes}"</p>
+                <p style="margin: 0 0 20px 0; color: #666; font-size: 14px; font-style: italic;">"${escapeHtml(quote.notes)}"</p>
               ` : ''}
 
               <a href="http://localhost:3000/admin/orcamentos" style="display: inline-block; padding: 12px 24px; background-color: #4b1c09; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 10px;">

@@ -12,6 +12,17 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'URL is required' }, { status: 400 });
     }
 
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    let parsedUrl: URL;
+    try {
+      parsedUrl = new URL(fileUrl);
+    } catch {
+      return NextResponse.json({ error: 'Invalid URL' }, { status: 400 });
+    }
+    if (!supabaseUrl || parsedUrl.hostname !== new URL(supabaseUrl).hostname) {
+      return NextResponse.json({ error: 'URL host not allowed' }, { status: 400 });
+    }
+
     const response = await fetch(fileUrl);
     if (!response.ok) {
       return NextResponse.json({ error: 'Failed to fetch file' }, { status: 500 });

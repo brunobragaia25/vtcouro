@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/adminAuth';
+import { escapeHtml } from '@/lib/html';
 import { Resend } from 'resend';
 import { prisma } from '@/lib/prisma';
 
@@ -51,7 +52,7 @@ export async function POST(
 
         <div style="padding: 30px; background-color: #f9f9f9;">
           <p style="margin-top: 0; font-size: 16px; color: #1f1f1f;">
-            Olá <strong>${order.quote.name}</strong>,
+            Olá <strong>${escapeHtml(order.quote.name)}</strong>,
           </p>
           <p style="color: #666; line-height: 1.6;">
             O status do seu pedido foi atualizado. Confira os detalhes abaixo:
@@ -93,7 +94,7 @@ export async function POST(
               <p style="margin: 0 0 5px 0; color: #999; font-size: 12px; text-transform: uppercase;">
                 Observações
               </p>
-              <p style="margin: 0 0 20px 0; color: #666; font-size: 14px;">${order.notes}</p>
+              <p style="margin: 0 0 20px 0; color: #666; font-size: 14px;">${escapeHtml(order.notes)}</p>
             `
                 : ''
             }

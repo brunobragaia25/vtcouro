@@ -38,8 +38,9 @@ export async function POST(request: NextRequest) {
       const bytes = await file.arrayBuffer()
       const buffer = Buffer.from(bytes)
 
-      // Salvar arquivo
-      const filePath = join(fontsDir, file.name)
+      // Sanitizar nome do arquivo (evitar path traversal)
+      const sanitizedName = file.name.replace(/[^\w.-]/g, '_')
+      const filePath = join(fontsDir, sanitizedName)
       writeFileSync(filePath, buffer)
       uploadedCount++
     }

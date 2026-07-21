@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/adminAuth';
+import { escapeHtml } from '@/lib/html';
 import { Resend } from 'resend';
 import { prisma } from '@/lib/prisma';
 
@@ -38,7 +39,7 @@ export async function POST(
       .map(
         item => `
       <tr>
-        <td style="padding: 12px; border-bottom: 1px solid #e0e0e0;">${item.product?.name}${item.color ? ` <span style="color: #999;">(${item.color})</span>` : ''}</td>
+        <td style="padding: 12px; border-bottom: 1px solid #e0e0e0;">${escapeHtml(item.product?.name)}${item.color ? ` <span style="color: #999;">(${escapeHtml(item.color)})</span>` : ''}</td>
         <td style="padding: 12px; border-bottom: 1px solid #e0e0e0; text-align: center;">${item.quantity}</td>
         <td style="padding: 12px; border-bottom: 1px solid #e0e0e0; text-align: center;">
           ${item.artFileUrl ? '✓ Enviado' : '⚠ Pendente'}
@@ -57,7 +58,7 @@ export async function POST(
 
         <div style="padding: 30px; background-color: #f9f9f9;">
           <p style="margin-top: 0; font-size: 16px; color: #1f1f1f;">
-            Olá <strong>${quote.name}</strong>,
+            Olá <strong>${escapeHtml(quote.name)}</strong>,
           </p>
           <p style="color: #666; line-height: 1.6;">
             Seu orçamento foi recebido e está em processamento. Você pode acompanhar os detalhes abaixo.
@@ -74,9 +75,9 @@ export async function POST(
             <p style="margin: 0 0 10px 0; color: #999; font-size: 12px; text-transform: uppercase;">
               Dados da Empresa
             </p>
-            <p style="margin: 0 0 5px 0; color: #1f1f1f;"><strong>${quote.company}</strong></p>
-            <p style="margin: 0 0 10px 0; color: #666; font-size: 14px;">${quote.email}</p>
-            <p style="margin: 0 0 20px 0; color: #666; font-size: 14px;">${quote.phone}</p>
+            <p style="margin: 0 0 5px 0; color: #1f1f1f;"><strong>${escapeHtml(quote.company)}</strong></p>
+            <p style="margin: 0 0 10px 0; color: #666; font-size: 14px;">${escapeHtml(quote.email)}</p>
+            <p style="margin: 0 0 20px 0; color: #666; font-size: 14px;">${escapeHtml(quote.phone)}</p>
 
             <table style="width: 100%; border-collapse: collapse;">
               <thead>
@@ -99,7 +100,7 @@ export async function POST(
               <p style="margin: 0 0 10px 0; color: #999; font-size: 12px; text-transform: uppercase;">
                 Observações
               </p>
-              <p style="margin: 0; color: #1f1f1f; line-height: 1.6;">${quote.notes}</p>
+              <p style="margin: 0; color: #1f1f1f; line-height: 1.6;">${escapeHtml(quote.notes)}</p>
             </div>
           `
               : ''
