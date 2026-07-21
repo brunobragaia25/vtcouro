@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import React, { useState, useMemo } from 'react';
-import { ChevronRight, ShoppingBag, RotateCcw } from 'lucide-react';
+import { ChevronRight, ShoppingBag, RotateCcw, Trash2 } from 'lucide-react';
 import SearchBar from '@/components/admin/SearchBar';
 import FilterTabs from '@/components/admin/FilterTabs';
 import DataTable from '@/components/admin/DataTable';
@@ -194,6 +194,17 @@ export default function AdminOrcamentos() {
               )}
             </>
           )}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              if (!row.order) setDeletingQuote(row);
+            }}
+            disabled={!!row.order}
+            title={row.order ? 'Desfaça o pedido antes de excluir' : 'Excluir orçamento'}
+            className={`transition ${row.order ? 'text-gray-300 cursor-not-allowed' : 'text-gray-400 hover:text-red-600'}`}
+          >
+            <Trash2 size={18} />
+          </button>
           <button
             onClick={() => setEditingQuote(row)}
             className="text-[#4b1c09] hover:text-[#3d1707]"

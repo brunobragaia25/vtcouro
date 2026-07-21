@@ -1,8 +1,16 @@
 'use client'
 
+import { usePathname } from 'next/navigation'
+
 const WHATSAPP_NUMBER = '5511999999999' // TODO: trocar pelo número real
 
 export function WhatsAppButton() {
+  const pathname = usePathname()
+
+  if (pathname?.startsWith('/admin')) {
+    return null
+  }
+
   return (
     <a
       href={`https://wa.me/${WHATSAPP_NUMBER}`}
