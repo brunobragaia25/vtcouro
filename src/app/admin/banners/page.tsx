@@ -115,7 +115,7 @@ export default function AdminBanners() {
 
   return (
     <div className="max-w-4xl">
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Banners</h1>
           <p className="text-sm text-gray-500 mt-1">Gerencie os banners do topo da home</p>
@@ -131,7 +131,7 @@ export default function AdminBanners() {
         </button>
       </div>
 
-      <div className="flex items-center gap-6 bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 mb-6 text-xs text-gray-500">
+      <div className="flex flex-wrap items-center gap-4 sm:gap-6 bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 mb-6 text-xs text-gray-500">
         <span className="flex items-center gap-1.5">
           <Monitor size={13} /> Desktop: <strong className="text-gray-700">1920 × 720px</strong>
         </span>
@@ -155,11 +155,11 @@ export default function AdminBanners() {
               className={`bg-white border rounded-xl p-4 ${banner.isActive ? 'border-gray-200' : 'border-gray-100 opacity-60'}`}
             >
               {/* Top row */}
-              <div className="flex items-start gap-4">
+              <div className="flex flex-wrap items-start gap-4">
                 <GripVertical size={16} className="text-gray-300 shrink-0 mt-1" />
 
                 {/* Images */}
-                <div className="flex gap-3 shrink-0">
+                <div className="flex gap-3 shrink-0 flex-wrap">
                   {/* Desktop image */}
                   <div className="flex flex-col items-center gap-1">
                     <img src={banner.imageUrl} alt="Desktop" className="w-28 h-14 object-cover rounded-lg" />
@@ -196,7 +196,7 @@ export default function AdminBanners() {
                 </div>
 
                 {/* Link */}
-                <div className="flex-1 min-w-0">
+                <div className="flex-1 min-w-0 basis-full sm:basis-auto">
                   {editingLink === banner.id ? (
                     <div className="flex gap-2">
                       <input
@@ -217,11 +217,11 @@ export default function AdminBanners() {
                   ) : (
                     <button
                       onClick={() => { setEditingLink(banner.id); setLinkValue(banner.link ?? '') }}
-                      className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition-colors"
+                      className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition-colors w-full min-w-0"
                     >
-                      <ExternalLink size={13} />
+                      <ExternalLink size={13} className="flex-shrink-0" />
                       {banner.link
-                        ? <span className="truncate max-w-xs">{banner.link}</span>
+                        ? <span className="truncate min-w-0">{banner.link}</span>
                         : <span className="text-gray-400">Sem link — clique para adicionar</span>
                       }
                     </button>

@@ -156,7 +156,7 @@ export default function AdminOrcamentos() {
       },
     },
     {
-      key: 'id',
+      key: 'actions',
       label: '',
       render: (value: any, row: any) => (
         <div className="flex items-center justify-end gap-2">
@@ -206,9 +206,9 @@ export default function AdminOrcamentos() {
   ];
 
   return (
-    <div className="flex gap-6 h-screen overflow-hidden">
+    <div className="flex gap-6 h-full md:h-screen overflow-hidden">
       {/* Left Column - Table */}
-      <div className={`flex-1 transition-all duration-300 flex flex-col overflow-hidden ${editingQuote ? 'max-w-4xl' : ''}`}>
+      <div className={`flex-1 transition-all duration-300 flex-col overflow-hidden ${editingQuote ? 'hidden md:flex md:max-w-4xl' : 'flex'}`}>
         <div className="space-y-6 overflow-y-auto pb-6">
           {/* Header */}
           <div>
@@ -227,9 +227,9 @@ export default function AdminOrcamentos() {
           </div>
 
           {/* Status Tabs */}
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
             <FilterTabs tabs={tabsWithCounts} activeTab={activeTab} onTabChange={setActiveTab} />
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-600 flex-shrink-0">
               {filteredQuotes.length} de {quotes.length}
             </div>
           </div>
@@ -247,7 +247,7 @@ export default function AdminOrcamentos() {
 
       {/* Right Column - Quote Detail Panel */}
       {editingQuote && (
-        <div className="w-full max-w-2xl border-l border-gray-200 overflow-y-auto">
+        <div className="w-full md:max-w-2xl md:border-l border-gray-200 overflow-y-auto">
           <QuoteDetailPanel
             isOpen={true}
             quote={editingQuote}

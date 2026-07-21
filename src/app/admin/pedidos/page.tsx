@@ -102,7 +102,7 @@ export default function PedidosPage() {
   return (
     <div className="flex h-full gap-5">
       {/* Left Column */}
-      <div className="flex-1 min-w-0 transition-all duration-300">
+      <div className={`flex-1 min-w-0 transition-all duration-300 ${selectedOrder ? 'hidden md:block' : 'block'}`}>
         <div className="bg-white rounded-2xl p-6 border border-[#c8c8c8] h-full flex flex-col">
           {/* Header */}
           <div className="mb-6">
@@ -241,7 +241,7 @@ export default function PedidosPage() {
 
       {/* Right Column - Detail Panel */}
       {selectedOrder && (
-        <div className="w-[420px] flex-shrink-0 bg-white rounded-2xl border border-[#c8c8c8] overflow-hidden shadow-lg">
+        <div className="w-full md:w-[420px] md:flex-shrink-0 bg-white rounded-2xl border border-[#c8c8c8] overflow-hidden shadow-lg">
           <OrderDetailPanel
             isOpen={true}
             order={selectedOrder}

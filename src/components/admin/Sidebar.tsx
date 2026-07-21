@@ -1,5 +1,6 @@
 ﻿'use client';
 
+import { useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
@@ -13,6 +14,11 @@ import {
   LogOut,
 } from 'lucide-react';
 import clsx from 'clsx';
+
+interface SidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
 
 const menuItems = [
   {
@@ -52,9 +58,14 @@ const menuItems = [
   },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
+
+  useEffect(() => {
+    onClose()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname])
 
   const handleLogout = async () => {
     await fetch('/api/admin/login', { method: 'DELETE' })
@@ -63,7 +74,21 @@ export default function Sidebar() {
   }
 
   return (
-    <div className="w-64 bg-[#8B5240] text-white flex flex-col">
+    <>
+      {/* Mobile backdrop */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={onClose}
+        />
+      )}
+
+      <div
+        className={clsx(
+          'w-64 bg-[#8B5240] text-white flex flex-col fixed inset-y-0 left-0 z-50 transition-transform duration-300 md:relative md:translate-x-0',
+          isOpen ? 'translate-x-0' : '-translate-x-full'
+        )}
+      >
       {/* Logo */}
       <div className="p-6 border-b border-[#a06050]">
         <div className="flex items-center gap-2">
@@ -125,7 +150,8 @@ export default function Sidebar() {
           Sair
         </button>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
 

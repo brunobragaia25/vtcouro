@@ -1,7 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { usePathname } from 'next/navigation';
+import { Menu } from 'lucide-react';
 import Sidebar from './Sidebar';
 
 export default function AdminLayoutClient({
@@ -10,6 +11,7 @@ export default function AdminLayoutClient({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   if (pathname === '/admin/login') {
     return <>{children}</>
@@ -17,12 +19,21 @@ export default function AdminLayoutClient({
 
   return (
     <div className="flex h-screen bg-gray-50">
-      <Sidebar />
-      <main className="flex-1 overflow-auto">
-        <div className="p-8">
-          {children}
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Mobile top bar */}
+        <div className="md:hidden flex items-center gap-3 bg-[#8B5240] text-white px-4 py-3 flex-shrink-0">
+          <button onClick={() => setSidebarOpen(true)} className="p-1">
+            <Menu size={22} />
+          </button>
+          <span className="font-bold text-sm">VTCouro Admin</span>
         </div>
-      </main>
+        <main className="flex-1 overflow-auto">
+          <div className="p-4 md:p-8">
+            {children}
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

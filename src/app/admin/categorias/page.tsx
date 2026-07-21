@@ -7,6 +7,8 @@ import DeleteConfirmModal from '@/components/admin/DeleteConfirmModal';
 import CategorySubcategories from '@/components/admin/CategorySubcategories';
 import { useCategories, useUpdateCategory, useDeleteCategory, useCreateCategory, useReorderCategories } from '@/hooks/useCategories';
 
+const EMPTY_CATEGORIES: any[] = [];
+
 const categoryIcons: { [key: string]: string } = {
   'Carteiras': '👜',
   'Bolsas': '👝',
@@ -24,7 +26,7 @@ export default function AdminCategorias() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const uploadTargetId = useRef<string | null>(null);
 
-  const { data: categories = [], isLoading } = useCategories();
+  const { data: categories = EMPTY_CATEGORIES, isLoading } = useCategories();
   const updateCategory = useUpdateCategory();
   const deleteCategory = useDeleteCategory();
   const createCategory = useCreateCategory();
@@ -104,7 +106,7 @@ export default function AdminCategorias() {
       <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
 
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-wrap justify-between items-center gap-3">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Categorias</h1>
           <p className="text-gray-600">
@@ -138,12 +140,12 @@ export default function AdminCategorias() {
                 draggedItem === idx ? 'opacity-50' : ''
               }`}
             >
-              <div className="flex items-center gap-4">
+              <div className="flex flex-wrap items-center gap-4">
                 <button className="text-gray-300 hover:text-gray-600">
                   <GripVertical size={20} />
                 </button>
 
-                <div className="flex-1 flex items-center gap-4">
+                <div className="flex-1 flex flex-wrap items-center gap-4 min-w-0">
                   <div className="relative w-16 h-16 flex-shrink-0 group">
                     <button
                       onClick={() => triggerImageUpload(category.id)}
@@ -182,16 +184,16 @@ export default function AdminCategorias() {
                     )}
                   </div>
 
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-[140px]">
                     <h3 className="font-bold text-gray-900">{category.name}</h3>
                     <p className="text-xs text-gray-500">{category.slug}</p>
                   </div>
 
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-[140px]">
                     <p className="text-sm text-gray-600">{category.description}</p>
                   </div>
 
-                  <div className="text-right">
+                  <div className="text-right min-w-[80px]">
                     <p className="text-lg font-bold text-gray-900">
                       {typeof category.products === 'number' ? category.products : 0}
                     </p>
@@ -199,7 +201,7 @@ export default function AdminCategorias() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 ml-auto">
                   <button
                     onClick={() => setEditingCategory(category)}
                     className="p-2 hover:bg-gray-100 rounded transition-colors"

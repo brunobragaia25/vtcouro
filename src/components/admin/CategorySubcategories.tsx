@@ -12,6 +12,8 @@ import {
   useReorderSubcategories,
 } from '@/hooks/useSubcategories';
 
+const EMPTY_SUBCATEGORIES: any[] = [];
+
 export default function CategorySubcategories({ categoryId }: { categoryId: string }) {
   const [expanded, setExpanded] = useState(false);
   const [draggedItem, setDraggedItem] = useState<number | null>(null);
@@ -19,7 +21,7 @@ export default function CategorySubcategories({ categoryId }: { categoryId: stri
   const [deletingSubcategory, setDeletingSubcategory] = useState<any>(null);
   const [localSubcategories, setLocalSubcategories] = useState<any[]>([]);
 
-  const { data: subcategories = [], isLoading } = useSubcategories(categoryId);
+  const { data: subcategories = EMPTY_SUBCATEGORIES, isLoading } = useSubcategories(categoryId);
   const createSubcategory = useCreateSubcategory();
   const updateSubcategory = useUpdateSubcategory();
   const deleteSubcategory = useDeleteSubcategory();

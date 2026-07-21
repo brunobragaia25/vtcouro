@@ -159,7 +159,7 @@ export default function AdminProdutos() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-wrap justify-between items-center gap-3">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Produtos</h1>
           <p className="text-gray-600">{products.length} produtos no catálogo</p>
