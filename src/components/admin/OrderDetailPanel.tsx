@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { X, Mail, Bell, Printer } from 'lucide-react';
 
 interface OrderDetailPanelProps {
@@ -16,6 +17,7 @@ export default function OrderDetailPanel({
   onClose,
   onSave,
 }: OrderDetailPanelProps) {
+  const queryClient = useQueryClient();
   const [formData, setFormData] = useState({
     status: 'pendente',
     totalValue: '',
@@ -48,13 +50,28 @@ export default function OrderDetailPanel({
   const handleSendStatus = async () => {
     setIsSending(true);
     try {
+      const saveResponse = await fetch(`/api/orders/${order.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          status: formData.status,
+          totalValue: formData.totalValue ? parseFloat(formData.totalValue) : null,
+          notes: formData.notes,
+        }),
+      });
+      if (!saveResponse.ok) {
+        alert('Erro ao salvar status antes de notificar');
+        return;
+      }
+
       const response = await fetch(`/api/orders/${order.id}/send-status`, {
         method: 'POST',
       });
       if (response.ok) {
-        alert('E-mail de notificação enviado com sucesso!');
+        queryClient.invalidateQueries({ queryKey: ['orders'] });
+        alert('Status salvo e e-mail de notificação enviado com sucesso!');
       } else {
-        alert('Erro ao enviar notificação');
+        alert('Status salvo, mas houve erro ao enviar a notificação por e-mail');
       }
     } catch (error) {
       console.error('Error sending status:', error);
