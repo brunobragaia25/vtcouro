@@ -59,7 +59,7 @@ export default function AdminCategorias() {
   };
 
   const handleSaveCategory = async (data: any) => {
-    if (editingCategory) {
+    if (editingCategory?.id) {
       await updateCategory.mutateAsync({
         id: editingCategory.id,
         data,

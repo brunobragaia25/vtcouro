@@ -136,8 +136,7 @@ export default function EditCategoryModal({
             value={formData.slug}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
-            placeholder="ex: carteiras"
-            required
+            placeholder="ex: carteiras (gerado do nome se deixar em branco)"
           />
         </div>
 
