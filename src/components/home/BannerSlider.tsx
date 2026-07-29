@@ -41,8 +41,8 @@ export function BannerSlider() {
 
   const banner = banners[current]
 
-  const inner = (
-    <div className="relative w-full h-[400px] md:h-[600px] xl:h-[720px] overflow-hidden">
+  const slides = (
+    <>
       {banners.map((b, i) => (
         <div
           key={b.id}
@@ -66,6 +66,18 @@ export function BannerSlider() {
           )}
         </div>
       ))}
+    </>
+  )
+
+  return (
+    <div className="relative w-full h-[400px] md:h-[600px] xl:h-[720px] overflow-hidden">
+      {banner.link ? (
+        <Link href={banner.link} className="absolute inset-0">
+          {slides}
+        </Link>
+      ) : (
+        <div className="absolute inset-0">{slides}</div>
+      )}
 
       {banners.length > 1 && (
         <>
@@ -101,14 +113,4 @@ export function BannerSlider() {
       )}
     </div>
   )
-
-  if (banner.link) {
-    return (
-      <Link href={banner.link} className="block w-full">
-        {inner}
-      </Link>
-    )
-  }
-
-  return <div className="w-full">{inner}</div>
 }

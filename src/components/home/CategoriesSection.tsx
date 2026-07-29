@@ -30,16 +30,22 @@ export function CategoriesSection() {
   const prev = () => setOffset((o) => Math.max(0, o - 1))
   const next = () => setOffset((o) => Math.min(total - VISIBLE, o + 1))
 
-  const visible = isSlider ? categories.slice(offset, offset + VISIBLE) : categories
-
   return (
     <section className="w-full relative overflow-hidden">
-      <div className="flex h-[300px] md:h-[480px] xl:h-[560px]">
-        {visible.map((cat, i) => (
+      <div className="overflow-hidden h-[300px] md:h-[480px] xl:h-[560px]">
+        <div
+          className="flex h-full transition-transform duration-500 ease-in-out"
+          style={{
+            width: `${(total / VISIBLE) * 100}%`,
+            transform: `translateX(-${total > 0 ? (offset / total) * 100 : 0}%)`,
+          }}
+        >
+        {categories.map((cat, i) => (
           <Link
             key={cat.id}
             href={`/catalogo?category=${cat.slug}`}
-            className="group relative flex-1 bg-[#d9d9d9] flex flex-col justify-between p-6 md:p-10 overflow-hidden"
+            className="group relative bg-[#d9d9d9] flex flex-col justify-between p-6 md:p-10 overflow-hidden"
+            style={{ width: `${100 / total}%` }}
           >
             {/* Separador vertical */}
             {i > 0 && <div className="absolute left-0 top-0 h-full w-px bg-white/40 z-10" />}
@@ -79,6 +85,7 @@ export function CategoriesSection() {
             </h2>
           </Link>
         ))}
+        </div>
       </div>
 
       {/* Setas — só aparecem se tiver mais de 3 categorias */}

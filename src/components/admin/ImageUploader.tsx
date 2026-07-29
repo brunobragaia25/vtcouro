@@ -19,7 +19,8 @@ export default function ImageUploader({
   const [error, setError] = useState('');
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.currentTarget.files;
+    const inputEl = e.currentTarget;
+    const files = inputEl.files;
     if (!files) return;
 
     const remainingSlots = maxImages - images.length;
@@ -53,7 +54,7 @@ export default function ImageUploader({
       setError(err instanceof Error ? err.message : 'Erro ao fazer upload');
     } finally {
       setIsUploading(false);
-      e.currentTarget.value = '';
+      inputEl.value = '';
     }
   };
 
