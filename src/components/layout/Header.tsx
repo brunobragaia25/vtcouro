@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation'
 import { X, Search, Menu } from 'lucide-react'
 import { useProducts } from '@/hooks/useProducts'
 import { useFavorites } from '@/hooks/useFavorites'
+import { useCategories } from '@/hooks/useCategories'
 
 const logoGroup = '/images/logotipo-nav-bar-vt-couro.svg'
 const iconBag = '/images/Bag 5.svg'
@@ -22,6 +23,7 @@ export function Header() {
   const [searchTerm, setSearchTerm] = useState('')
   const [menuOpen, setMenuOpen] = useState(false)
   const { data: products = [] } = useProducts()
+  const { data: categories = [] } = useCategories()
   const { count: favCount } = useFavorites(products.map((p: any) => p.id))
 
   const handleToggleSearch = (shouldOpen: boolean) => {
@@ -106,9 +108,15 @@ export function Header() {
             <div className="hidden lg:flex items-center gap-8 text-sm text-gray-800 font-medium">
               <Link href="/" className="hover:text-orange-700 transition">Início</Link>
               <Link href="/catalogo" className="hover:text-orange-700 transition">Catálogo</Link>
-              <Link href="/catalogo?category=linha-propagandista" className="hover:text-orange-700 transition">Linha Propagandista</Link>
-              <Link href="/catalogo?category=linha-viagem" className="hover:text-orange-700 transition">Linha Viagem</Link>
-              <Link href="/catalogo?category=linha-corporativa" className="hover:text-orange-700 transition">Linha Corporativa</Link>
+              {categories.map((category: any) => (
+                <Link
+                  key={category.id}
+                  href={`/catalogo?category=${category.slug}`}
+                  className="hover:text-orange-700 transition"
+                >
+                  {category.name}
+                </Link>
+              ))}
               <Link href="/sobre" className="hover:text-orange-700 transition">Sobre nós</Link>
             </div>
 
@@ -305,9 +313,10 @@ export function Header() {
                 {[
                   { href: '/', label: 'Início' },
                   { href: '/catalogo', label: 'Catálogo' },
-                  { href: '/catalogo?category=linha-propagandista', label: 'Linha Propagandista' },
-                  { href: '/catalogo?category=linha-viagem', label: 'Linha Viagem' },
-                  { href: '/catalogo?category=linha-corporativa', label: 'Linha Corporativa' },
+                  ...categories.map((category: any) => ({
+                    href: `/catalogo?category=${category.slug}`,
+                    label: category.name,
+                  })),
                   { href: '/sobre', label: 'Sobre nós' },
                 ].map((item) => (
                   <Link
