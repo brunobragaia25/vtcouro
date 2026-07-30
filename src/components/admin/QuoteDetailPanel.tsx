@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { X, Mail, MessageCircle, Download } from 'lucide-react';
+import { Mail, MessageCircle, Download } from 'lucide-react';
+import Modal from './Modal';
 import { parseColorEntry } from '@/lib/colors';
 
 interface QuoteDetailPanelProps {
@@ -144,31 +145,57 @@ export default function QuoteDetailPanel({
   const itemsWithArt = quote.items?.filter((item: any) => item.artFileUrl).length || 0;
 
   return (
-    <div className="flex flex-col h-full bg-white">
-      {/* Header */}
-      <div className="bg-[#8B5240] text-white p-6 flex items-start justify-between flex-shrink-0">
-        <div className="flex-1">
-          <p className="text-xs font-semibold tracking-wider uppercase text-gray-300">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      size="lg"
+      title={
+        <span className="block">
+          <span className="block text-[10px] font-sans font-semibold tracking-widest uppercase text-leather-500">
             Protocolo
-          </p>
-          <p className="text-2xl font-semibold mb-1">#{quote.protocolNumber}</p>
-          <p className="text-sm text-gray-300">
-            Recebido em {new Date(quote.createdAt).toLocaleDateString('pt-BR')} {new Date(quote.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
-          </p>
+          </span>
+          <span className="block">#{quote.protocolNumber}</span>
+          <span className="block font-sans text-xs font-normal text-leather-500 mt-0.5">
+            Recebido em {new Date(quote.createdAt).toLocaleDateString('pt-BR')} às {new Date(quote.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+          </span>
+        </span>
+      }
+      footer={
+        <div className="space-y-3">
+          <div className="flex gap-2">
+            <button
+              onClick={handleSendEmail}
+              className="flex-1 flex items-center justify-center gap-2 admin-btn-secondary"
+            >
+              <Mail size={16} />
+              E-mail
+            </button>
+            <button
+              onClick={handleSendWhatsApp}
+              className="flex-1 flex items-center justify-center gap-2 admin-btn-secondary"
+            >
+              <MessageCircle size={16} />
+              WhatsApp
+            </button>
+            {formData.status === 'respondido' && (
+              <button
+                onClick={handleConvertToOrder}
+                className="flex-1 px-4 py-2.5 text-sm font-medium bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition"
+              >
+                Converter em Pedido
+              </button>
+            )}
+          </div>
+          <button onClick={handleSave} className="w-full admin-btn-primary">
+            Salvar alterações
+          </button>
         </div>
-        <button
-          onClick={onClose}
-          className="text-white hover:text-gray-200 transition"
-        >
-          <X size={24} />
-        </button>
-      </div>
-
-      {/* Content */}
-      <div className="p-6 space-y-6 overflow-y-auto flex-1">
+      }
+    >
+      <div className="space-y-6">
         {/* Status */}
         <div>
-          <label className="block text-xs font-bold tracking-wider uppercase text-[#1f1f1f] mb-3">
+          <label className="admin-section-title mb-3">
             Status
           </label>
           <div className="flex gap-2">
@@ -178,8 +205,8 @@ export default function QuoteDetailPanel({
                 onClick={() => handleStatusChange(option.id)}
                 className={`px-4 py-2 rounded-lg font-medium transition-colors text-sm ${
                   formData.status === option.id
-                    ? 'bg-[#8B5240] text-white'
-                    : 'bg-gray-100 text-[#1f1f1f] hover:bg-gray-200'
+                    ? 'bg-leather-900 text-white'
+                    : 'bg-leather-100 text-leather-700 hover:bg-leather-200'
                 }`}
               >
                 {option.label}
@@ -189,22 +216,22 @@ export default function QuoteDetailPanel({
         </div>
 
         {/* Cliente */}
-        <div className="bg-[#fff5ec] rounded-2xl p-6">
-          <label className="block text-xs font-bold tracking-wider uppercase text-[#1f1f1f] mb-3">
+        <div className="bg-leather-100/60 rounded-2xl p-6">
+          <label className="admin-section-title mb-3">
             Cliente
           </label>
-          <p className="font-semibold text-lg text-[#1f1f1f] mb-1">{quote.name}</p>
-          <p className="text-sm text-gray-600 mb-3">{quote.company}</p>
+          <p className="font-semibold text-lg text-leather-900 mb-1">{quote.name}</p>
+          <p className="text-sm text-leather-500 mb-3">{quote.company}</p>
           <div className="space-y-2 text-sm">
-            <div className="flex items-center gap-2 text-[#1f1f1f]">
-              <Mail size={16} className="text-gray-400" />
-              <a href={`mailto:${quote.email}`} className="text-blue-600 hover:underline">
+            <div className="flex items-center gap-2 text-leather-900">
+              <Mail size={16} className="text-leather-400" />
+              <a href={`mailto:${quote.email}`} className="text-leather-700 hover:text-leather-900 hover:underline">
                 {quote.email}
               </a>
             </div>
-            <div className="flex items-center gap-2 text-[#1f1f1f]">
-              <MessageCircle size={16} className="text-gray-400" />
-              <a href={`tel:${quote.phone}`} className="text-blue-600 hover:underline">
+            <div className="flex items-center gap-2 text-leather-900">
+              <MessageCircle size={16} className="text-leather-400" />
+              <a href={`tel:${quote.phone}`} className="text-leather-700 hover:text-leather-900 hover:underline">
                 {quote.phone}
               </a>
             </div>
@@ -214,10 +241,10 @@ export default function QuoteDetailPanel({
         {/* Items */}
         <div>
           <div className="flex items-center justify-between mb-4">
-            <label className="block text-xs font-bold tracking-wider uppercase text-[#1f1f1f]">
+            <label className="admin-section-title">
               Items
             </label>
-            <span className="text-xs text-gray-600">
+            <span className="text-xs text-leather-500">
               {totalQuantity} unidades · {itemsWithArt}/{quote.items?.length} artes
             </span>
           </div>
@@ -225,10 +252,10 @@ export default function QuoteDetailPanel({
             {quote.items?.map((item: any) => (
               <div
                 key={item.id}
-                className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+                className="flex items-center justify-between p-3 bg-leather-50 border border-leather-200/60 rounded-xl"
               >
                 <div className="flex items-center gap-3 flex-1">
-                  <div className="w-10 h-10 bg-[#d9d9d9] rounded flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 bg-leather-200 rounded flex items-center justify-center flex-shrink-0">
                     {item.product?.imageUrl ? (
                       <img
                         src={item.product.imageUrl}
@@ -236,41 +263,41 @@ export default function QuoteDetailPanel({
                         className="w-full h-full object-cover rounded"
                       />
                     ) : (
-                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-leather-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
                     )}
                   </div>
                   <div className="flex-1">
-                    <p className="font-medium text-[#1f1f1f]">{item.product?.name}</p>
-                    <p className="text-xs text-gray-500">{item.product?.sku}</p>
+                    <p className="font-medium text-leather-900">{item.product?.name}</p>
+                    <p className="text-xs text-leather-500">{item.product?.sku}</p>
                     {item.color && (
                       <div className="flex items-center gap-1.5 mt-1">
                         <span
-                          className="w-2.5 h-2.5 rounded-full border border-gray-300 flex-shrink-0"
+                          className="w-2.5 h-2.5 rounded-full border border-leather-300 flex-shrink-0"
                           style={{ backgroundColor: parseColorEntry(item.color).hex }}
                         />
-                        <span className="text-xs text-gray-500">{parseColorEntry(item.color).name}</span>
+                        <span className="text-xs text-leather-500">{parseColorEntry(item.color).name}</span>
                       </div>
                     )}
                   </div>
                 </div>
                 <div className="text-right flex flex-col items-end gap-2">
-                  <p className="font-medium text-[#1f1f1f]">{item.quantity} un.</p>
+                  <p className="font-medium text-leather-900">{item.quantity} un.</p>
                   <div className="flex items-center gap-2">
                     {item.artFileUrl ? (
                       <>
-                        <span className="text-xs font-semibold text-[#10b981]">✓ Arte</span>
+                        <span className="text-xs font-semibold text-emerald-600">✓ Arte</span>
                         <a
                           href={`/api/download?url=${encodeURIComponent(item.artFileUrl)}&name=${item.product?.name}-arte`}
-                          className="text-[#4b1c09] hover:text-[#3d1707] transition"
+                          className="text-leather-600 hover:text-leather-900 transition"
                           title="Download arquivo de arte"
                         >
                           <Download size={16} />
                         </a>
                       </>
                     ) : (
-                      <span className="text-xs font-semibold text-[#d2741f]">SEM ARTE</span>
+                      <span className="text-xs font-semibold text-amber-600">SEM ARTE</span>
                     )}
                   </div>
                 </div>
@@ -281,74 +308,39 @@ export default function QuoteDetailPanel({
 
         {/* Observações */}
         <div>
-          <label className="block text-xs font-bold tracking-wider uppercase text-[#1f1f1f] mb-2">
+          <label className="admin-section-title mb-2">
             Observações
           </label>
-          <div className="bg-[#fff5ec] rounded-lg p-4 text-sm text-[#1f1f1f] min-h-20">
+          <div className="bg-leather-100/60 rounded-lg p-4 text-sm text-leather-900 min-h-20">
             {quote.notes && <p className="italic">&quot;{quote.notes}&quot;</p>}
-            {!quote.notes && <p className="text-gray-500">Sem observações</p>}
+            {!quote.notes && <p className="text-leather-500">Sem observações</p>}
           </div>
         </div>
 
         {/* Responder */}
         <div>
-          <label className="block text-xs font-bold tracking-wider uppercase text-[#1f1f1f] mb-2">
+          <label className="admin-section-title mb-2">
             Responder
           </label>
           <textarea
             value={formData.response}
             onChange={(e) => setFormData(prev => ({ ...prev, response: e.target.value }))}
             placeholder="Digite sua resposta..."
-            className="w-full px-4 py-3 border border-[#c8c8c8] rounded-lg focus:outline-none focus:border-[#4b1c09] focus:ring-1 focus:ring-[#4b1c09] resize-none"
+            className="w-full px-4 py-3 border border-leather-200 rounded-lg focus:outline-none focus:border-leather-400 focus:ring-2 focus:ring-leather-300/40 resize-none"
             rows={4}
           />
           {formData.response.trim() && (
             <button
               onClick={handleSendResponse}
-              className="mt-3 w-full px-4 py-2 bg-[#10b981] text-white rounded-lg hover:bg-[#059669] transition font-medium text-sm"
+              className="mt-3 w-full px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition font-medium text-sm"
             >
               Enviar resposta por e-mail
             </button>
           )}
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex gap-3">
-          <button
-            onClick={handleSendEmail}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 border border-[#c8c8c8] text-[#1f1f1f] rounded-lg hover:bg-gray-50 transition font-medium"
-          >
-            <Mail size={18} />
-            Enviar e-mail
-          </button>
-          <button
-            onClick={handleSendWhatsApp}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-[#8B5240] text-white rounded-lg hover:bg-[#3d1707] transition font-medium"
-          >
-            <MessageCircle size={18} />
-            WhatsApp
-          </button>
-        </div>
-
-        {/* Convert to Order Button */}
-        {formData.status === 'respondido' && (
-          <button
-            onClick={handleConvertToOrder}
-            className="w-full px-4 py-3 bg-[#10b981] text-white rounded-lg hover:bg-[#059669] transition font-medium"
-          >
-            Converter em Pedido
-          </button>
-        )}
-
-        {/* Save Button */}
-        <button
-          onClick={handleSave}
-          className="w-full px-4 py-3 bg-[#8B5240] text-white rounded-lg hover:bg-[#3d1707] transition font-medium"
-        >
-          Salvar alterações
-        </button>
       </div>
-    </div>
+    </Modal>
   );
 }
 

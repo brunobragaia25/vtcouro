@@ -212,16 +212,32 @@ export default function EditProductModal({
       isOpen={isOpen}
       title={product?.id ? 'Editar Produto' : 'Novo Produto'}
       onClose={onClose}
-      size="lg"
+      size="xl"
+      footer={
+        <div className="flex gap-3">
+          <button type="button" onClick={onClose} className="flex-1 admin-btn-secondary">
+            Cancelar
+          </button>
+          <button type="submit" form="product-form" className="flex-1 admin-btn-primary">
+            Salvar
+          </button>
+        </div>
+      }
     >
-      <form onSubmit={handleSubmit} className="space-y-4 max-h-[80vh] overflow-y-auto pr-2">
+      <form
+        id="product-form"
+        onSubmit={handleSubmit}
+        className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] gap-4 items-start"
+      >
+        {/* ---- Coluna principal ---- */}
+        <div className="space-y-4 min-w-0">
         {/* Informações Básicas */}
-        <div className="border-b pb-4">
-          <h3 className="text-sm font-semibold text-gray-900 mb-3">Informações Básicas</h3>
+        <div className="admin-section">
+          <h3 className="admin-section-title">Informações Básicas</h3>
 
-          <div className="grid grid-cols-2 gap-3 mb-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="admin-label">
                 Nome do Produto *
               </label>
               <input
@@ -229,13 +245,13 @@ export default function EditProductModal({
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                className="admin-input"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="admin-label">
                 SKU *
               </label>
               <input
@@ -243,21 +259,22 @@ export default function EditProductModal({
                 name="sku"
                 value={formData.sku}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                className="admin-input"
                 required
               />
             </div>
           </div>
 
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="admin-label">
               Categoria *
             </label>
             <select
               name="categoryId"
               value={formData.categoryId || ''}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+              className="admin-input"
               required
             >
               <option value="">Selecione uma categoria</option>
@@ -269,8 +286,8 @@ export default function EditProductModal({
             </select>
           </div>
 
-          <div className="mt-3">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+          <div>
+            <label className="admin-label">
               Subcategoria
             </label>
             <select
@@ -278,7 +295,7 @@ export default function EditProductModal({
               value={formData.subcategoryId || ''}
               onChange={handleChange}
               disabled={!formData.categoryId || subcategories.length === 0}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400 disabled:bg-gray-100 disabled:text-gray-400"
+              className="admin-input"
             >
               <option value="">
                 {subcategories.length === 0 ? 'Nenhuma subcategoria cadastrada' : 'Selecione uma subcategoria'}
@@ -290,36 +307,28 @@ export default function EditProductModal({
               ))}
             </select>
           </div>
+          </div>
 
           <div className="mt-3">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="admin-label">
               Descrição
             </label>
             <textarea
               name="description"
               value={formData.description}
               onChange={handleChange}
-              rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+              rows={2}
+              className="admin-input"
             />
           </div>
         </div>
 
-        {/* Imagens */}
-        <div className="border-b pb-4">
-          <ImageUploader
-            images={formData.images}
-            onImagesChange={handleImagesChange}
-            maxImages={4}
-          />
-        </div>
-
         {/* Configurações de Venda */}
-        <div className="border-b pb-4">
-          <h3 className="text-sm font-semibold text-gray-900 mb-3">Configurações de Venda</h3>
+        <div className="admin-section">
+          <h3 className="admin-section-title">Configurações de Venda</h3>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="admin-label">
               Quantidade Mínima de Pedido
             </label>
             <input
@@ -328,17 +337,17 @@ export default function EditProductModal({
               value={formData.minQuantity}
               onChange={handleChange}
               min="1"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+              className="admin-input"
             />
           </div>
 
           <div className="mt-3">
             <div className="flex items-center justify-between mb-2">
-              <label className="block text-sm font-medium text-gray-700">Cores Disponíveis</label>
+              <label className="block text-sm font-medium text-leather-700">Cores Disponíveis</label>
               <button
                 type="button"
                 onClick={addColor}
-                className="text-xs text-orange-600 hover:text-orange-700 font-medium"
+                className="text-xs font-medium text-leather-600 hover:text-leather-900"
               >
                 + Adicionar cor
               </button>
@@ -352,19 +361,19 @@ export default function EditProductModal({
                       type="color"
                       value={hex}
                       onChange={(e) => updateColorHex(index, e.target.value)}
-                      className="w-9 h-9 rounded cursor-pointer border border-gray-300 p-0.5"
+                      className="w-9 h-9 flex-shrink-0 rounded-lg cursor-pointer border border-leather-200 p-0.5"
                     />
                     <input
                       type="text"
                       value={name}
                       onChange={(e) => updateColorName(index, e.target.value)}
                       placeholder="Nome da cor"
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                      className="flex-1 admin-input"
                     />
                     <button
                       type="button"
                       onClick={() => removeColor(index)}
-                      className="text-gray-400 hover:text-red-500 transition text-lg leading-none"
+                      className="text-leather-400 hover:text-red-500 transition text-lg leading-none px-1"
                     >
                       ×
                     </button>
@@ -377,19 +386,19 @@ export default function EditProductModal({
 
         {/* Campos de Especificação */}
         {selectedCategory?.specificationFields && selectedCategory.specificationFields.length > 0 && (
-          <div className="border-b pb-4">
-            <h3 className="text-sm font-semibold text-gray-900 mb-3">Especificações</h3>
+          <div className="admin-section">
+            <h3 className="admin-section-title">Especificações</h3>
             <div className="space-y-3">
               {selectedCategory.specificationFields.map((field: any) => (
                 <div key={field.key}>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="admin-label">
                     {field.label}
                   </label>
                   <input
                     type="text"
                     value={formData.specifications[field.key] || ''}
                     onChange={(e) => handleSpecificationChange(field.key, e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                    className="admin-input"
                   />
                 </div>
               ))}
@@ -397,20 +406,30 @@ export default function EditProductModal({
           </div>
         )}
 
-        {/* Conteúdo das Abas */}
-        <div className="border-b pb-4">
         </div>
 
-        {/* Status e Destaque */}
-        <div className="border-t pt-4 space-y-3">
+        {/* ---- Coluna lateral ---- */}
+        <div className="space-y-4 min-w-0">
+        {/* Imagens */}
+        <div className="admin-section">
+          <ImageUploader
+            images={formData.images}
+            onImagesChange={handleImagesChange}
+            maxImages={4}
+          />
+        </div>
+
+        {/* Publicação */}
+        <div className="admin-section space-y-3">
+          <h3 className="admin-section-title">Publicação</h3>
           <label className="flex items-center gap-3 cursor-pointer">
             <input
               type="checkbox"
               checked={formData.isActive}
               onChange={(e) => setFormData(prev => ({ ...prev, isActive: e.target.checked }))}
-              className="w-4 h-4 text-orange-600 rounded focus:ring-2 focus:ring-orange-400"
+              className="admin-checkbox"
             />
-            <span className="text-sm font-medium text-gray-700">Produto Ativo</span>
+            <span className="text-sm font-medium text-leather-700">Produto Ativo</span>
           </label>
 
           <label className="flex items-center gap-3 cursor-pointer">
@@ -418,9 +437,9 @@ export default function EditProductModal({
               type="checkbox"
               checked={formData.isFeatured}
               onChange={(e) => setFormData(prev => ({ ...prev, isFeatured: e.target.checked }))}
-              className="w-4 h-4 text-orange-600 rounded focus:ring-2 focus:ring-orange-400"
+              className="admin-checkbox"
             />
-            <span className="text-sm font-medium text-gray-700">Destacar na Home</span>
+            <span className="text-sm font-medium text-leather-700">Destacar na Home</span>
           </label>
 
           <label className="flex items-center gap-3 cursor-pointer">
@@ -428,49 +447,36 @@ export default function EditProductModal({
               type="checkbox"
               checked={(formData as any).isNew}
               onChange={(e) => setFormData(prev => ({ ...prev, isNew: e.target.checked }))}
-              className="w-4 h-4 text-green-600 rounded focus:ring-2 focus:ring-green-400"
+              className="admin-checkbox"
             />
-            <span className="text-sm font-medium text-gray-700">Lançamento</span>
+            <span className="text-sm font-medium text-leather-700">Lançamento</span>
           </label>
 
-          <div className="flex items-center gap-3">
-            <label className="text-sm font-medium text-gray-700 whitespace-nowrap">Ordem em Destaque</label>
-            <input
-              type="number"
-              min="0"
-              value={(formData as any).featuredOrder}
-              onChange={(e) => setFormData(prev => ({ ...prev, featuredOrder: parseInt(e.target.value) || 0 }))}
-              className="w-20 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
-            />
-          </div>
+          <div className="pt-1 border-t border-leather-200/70 space-y-2">
+            <div className="flex items-center justify-between gap-3">
+              <label className="text-sm text-leather-700">Ordem em Destaque</label>
+              <input
+                type="number"
+                min="0"
+                value={(formData as any).featuredOrder}
+                onChange={(e) => setFormData(prev => ({ ...prev, featuredOrder: parseInt(e.target.value) || 0 }))}
+                className="w-20 admin-input"
+              />
+            </div>
 
-          <div className="flex items-center gap-3">
-            <label className="text-sm font-medium text-gray-700 whitespace-nowrap">Ordem em Lançamentos</label>
-            <input
-              type="number"
-              min="0"
-              value={(formData as any).newOrder}
-              onChange={(e) => setFormData(prev => ({ ...prev, newOrder: parseInt(e.target.value) || 0 }))}
-              className="w-20 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
-            />
-            <span className="text-xs text-gray-400">menor número = primeiro</span>
+            <div className="flex items-center justify-between gap-3">
+              <label className="text-sm text-leather-700">Ordem em Lançamentos</label>
+              <input
+                type="number"
+                min="0"
+                value={(formData as any).newOrder}
+                onChange={(e) => setFormData(prev => ({ ...prev, newOrder: parseInt(e.target.value) || 0 }))}
+                className="w-20 admin-input"
+              />
+            </div>
+            <p className="text-xs text-leather-400">Menor número aparece primeiro.</p>
           </div>
         </div>
-
-        <div className="flex gap-3 pt-4 sticky bottom-0 bg-white">
-          <button
-            type="button"
-            onClick={onClose}
-            className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
-          >
-            Cancelar
-          </button>
-          <button
-            type="submit"
-            className="flex-1 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors font-medium"
-          >
-            Salvar
-          </button>
         </div>
       </form>
     </Modal>

@@ -124,7 +124,7 @@ export default function AdminBanners() {
         <button
           onClick={() => triggerUpload({ type: 'new' })}
           disabled={uploading}
-          className="flex items-center gap-2 bg-[#8B5240] text-white px-4 py-2 rounded-lg hover:bg-[#a06050] transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 bg-leather-900 text-white px-4 py-2 rounded-lg hover:bg-leather-800 transition-colors disabled:opacity-50"
         >
           <Plus size={16} />
           {uploading ? 'Enviando...' : 'Adicionar banner'}
@@ -204,10 +204,10 @@ export default function AdminBanners() {
                         value={linkValue}
                         onChange={(e) => setLinkValue(e.target.value)}
                         placeholder="https://..."
-                        className="flex-1 border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#3d2817]"
+                        className="flex-1 border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-leather-300"
                         autoFocus
                       />
-                      <button onClick={() => saveLink(banner.id)} className="bg-[#8B5240] text-white px-3 py-1.5 rounded-lg text-sm hover:bg-[#a06050]">
+                      <button onClick={() => saveLink(banner.id)} className="bg-leather-900 text-white px-3 py-1.5 rounded-lg text-sm hover:bg-leather-800">
                         Salvar
                       </button>
                       <button onClick={() => setEditingLink(null)} className="border border-gray-200 px-3 py-1.5 rounded-lg text-sm hover:bg-gray-50">

@@ -93,7 +93,7 @@ export default function ImageUploader({
         </div>
 
         {images.length < maxImages && (
-          <label className="flex flex-col items-center justify-center gap-2 p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-orange-400 hover:bg-orange-50 transition-colors">
+          <label className="flex flex-col items-center justify-center gap-2 p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-leather-400 hover:bg-leather-50 transition-colors">
             <Upload size={24} className="text-gray-400" />
             <span className="text-sm font-medium text-gray-600">
               Clique para selecionar imagens

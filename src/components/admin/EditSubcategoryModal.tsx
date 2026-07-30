@@ -54,7 +54,7 @@ export default function EditSubcategoryModal({
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="admin-label">
             Nome da Subcategoria
           </label>
           <input
@@ -62,13 +62,13 @@ export default function EditSubcategoryModal({
             name="name"
             value={formData.name}
             onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+            className="admin-input"
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="admin-label">
             Slug (URL)
           </label>
           <input
@@ -76,13 +76,13 @@ export default function EditSubcategoryModal({
             name="slug"
             value={formData.slug}
             onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+            className="admin-input"
             placeholder="ex: bolsa-de-viagem"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="admin-label">
             Descrição
           </label>
           <textarea
@@ -90,7 +90,7 @@ export default function EditSubcategoryModal({
             value={formData.description}
             onChange={handleChange}
             rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+            className="admin-input"
           />
         </div>
 
@@ -98,13 +98,13 @@ export default function EditSubcategoryModal({
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+            className="flex-1 admin-btn-secondary"
           >
             Cancelar
           </button>
           <button
             type="submit"
-            className="flex-1 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors font-medium"
+            className="flex-1 admin-btn-primary"
           >
             Salvar
           </button>

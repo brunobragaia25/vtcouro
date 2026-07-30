@@ -108,14 +108,14 @@ export default function AdminCategorias() {
       {/* Header */}
       <div className="flex flex-wrap justify-between items-center gap-3">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Categorias</h1>
-          <p className="text-gray-600">
+          <h1 className="text-2xl md:text-3xl font-serif font-bold text-leather-900">Categorias</h1>
+          <p className="text-sm text-leather-500 mt-1">
             {localCategories.length} categorias - arraste para reordenar a exibição no site
           </p>
         </div>
         <button
           onClick={() => setEditingCategory({})}
-          className="bg-[#8B5240] hover:bg-[#2d1810] text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+          className="bg-leather-900 hover:bg-leather-800 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
         >
           <Plus size={20} />
           Nova categoria
@@ -125,7 +125,7 @@ export default function AdminCategorias() {
       {/* Categories List */}
       {isLoading ? (
         <div className="text-center py-12">
-          <p className="text-gray-600">Carregando categorias...</p>
+          <p className="text-sm text-leather-500 mt-1">Carregando categorias...</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -150,7 +150,7 @@ export default function AdminCategorias() {
                     <button
                       onClick={() => triggerImageUpload(category.id)}
                       disabled={uploadingId === category.id}
-                      className="w-16 h-16 rounded-lg overflow-hidden border-2 border-dashed border-gray-200 hover:border-[#8B5240] transition-colors relative"
+                      className="w-16 h-16 rounded-lg overflow-hidden border-2 border-dashed border-gray-200 hover:border-leather-400 transition-colors relative"
                       title="Clique para trocar a imagem"
                     >
                       {category.imageUrl ? (
@@ -161,7 +161,7 @@ export default function AdminCategorias() {
                           </div>
                         </>
                       ) : (
-                        <div className="w-full h-full flex flex-col items-center justify-center gap-1 text-gray-300 hover:text-[#8B5240]">
+                        <div className="w-full h-full flex flex-col items-center justify-center gap-1 text-gray-300 hover:text-leather-700">
                           {uploadingId === category.id ? (
                             <span className="text-[10px]">...</span>
                           ) : (

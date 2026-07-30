@@ -161,12 +161,12 @@ export default function AdminProdutos() {
       {/* Header */}
       <div className="flex flex-wrap justify-between items-center gap-3">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Produtos</h1>
-          <p className="text-gray-600">{products.length} produtos no catálogo</p>
+          <h1 className="text-2xl md:text-3xl font-serif font-bold text-leather-900">Produtos</h1>
+          <p className="text-sm text-leather-500 mt-1">{products.length} produtos no catálogo</p>
         </div>
         <button
           onClick={() => setEditingProduct({})}
-          className="bg-[#8B5240] hover:bg-[#2d1810] text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+          className="bg-leather-900 hover:bg-leather-800 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
         >
           <Plus size={20} />
           Novo produto
@@ -189,7 +189,7 @@ export default function AdminProdutos() {
             onClick={() => setSelectedCategory(category)}
             className={`px-3 py-1 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
               selectedCategory === category
-                ? 'bg-[#8B5240] text-white'
+                ? 'bg-leather-900 text-white'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
@@ -204,7 +204,7 @@ export default function AdminProdutos() {
       {/* Table */}
       {isLoading ? (
         <div className="text-center py-12">
-          <p className="text-gray-600">Carregando produtos...</p>
+          <p className="text-sm text-leather-500 mt-1">Carregando produtos...</p>
         </div>
       ) : (
         <DataTable columns={columns} data={filteredProducts} />

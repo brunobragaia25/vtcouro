@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { X, Mail, Bell, Printer } from 'lucide-react';
+import { Mail, Phone, Bell, Printer } from 'lucide-react';
+import Modal from './Modal';
 
 interface OrderDetailPanelProps {
   isOpen: boolean;
@@ -96,31 +97,50 @@ export default function OrderDetailPanel({
   ];
 
   return (
-    <div className="flex flex-col h-full bg-white">
-      {/* Header */}
-      <div className="bg-[#8B5240] text-white p-6 flex items-start justify-between flex-shrink-0">
-        <div className="flex-1">
-          <p className="text-xs font-semibold tracking-wider uppercase text-gray-300">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      size="lg"
+      title={
+        <span className="block">
+          <span className="block text-[10px] font-sans font-semibold tracking-widest uppercase text-leather-500">
             Número do Pedido
-          </p>
-          <p className="text-2xl font-semibold mb-1">#{order.orderNumber}</p>
-          <p className="text-sm text-gray-300">
-            Criado em {new Date(order.createdAt).toLocaleDateString('pt-BR')} {new Date(order.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
-          </p>
+          </span>
+          <span className="block">#{order.orderNumber}</span>
+          <span className="block font-sans text-xs font-normal text-leather-500 mt-0.5">
+            Criado em {new Date(order.createdAt).toLocaleDateString('pt-BR')} às {new Date(order.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+          </span>
+        </span>
+      }
+      footer={
+        <div className="space-y-3">
+          <div className="flex gap-2">
+            <button
+              onClick={handleSendStatus}
+              disabled={isSending}
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition disabled:opacity-50"
+            >
+              <Bell size={16} />
+              {isSending ? 'Enviando...' : 'Notificar'}
+            </button>
+            <button
+              onClick={handlePrint}
+              className="flex-1 flex items-center justify-center gap-2 admin-btn-secondary"
+            >
+              <Printer size={16} />
+              Imprimir
+            </button>
+          </div>
+          <button onClick={handleSave} className="w-full admin-btn-primary">
+            Salvar Alterações
+          </button>
         </div>
-        <button
-          onClick={onClose}
-          className="text-white hover:text-gray-200 transition"
-        >
-          <X size={24} />
-        </button>
-      </div>
-
-      {/* Content */}
-      <div className="p-6 space-y-6 overflow-y-auto flex-1">
+      }
+    >
+      <div className="space-y-6">
         {/* Status */}
         <div>
-          <label className="block text-xs font-bold tracking-wider uppercase text-[#1f1f1f] mb-3">
+          <label className="admin-section-title mb-3">
             Status
           </label>
           <div className="flex gap-2 flex-wrap">
@@ -130,8 +150,8 @@ export default function OrderDetailPanel({
                 onClick={() => handleStatusChange(option.id)}
                 className={`px-4 py-2 rounded-lg font-medium transition-colors text-sm ${
                   formData.status === option.id
-                    ? 'bg-[#8B5240] text-white'
-                    : 'bg-gray-100 text-[#1f1f1f] hover:bg-gray-200'
+                    ? 'bg-leather-900 text-white'
+                    : 'bg-leather-100 text-leather-700 hover:bg-leather-200'
                 }`}
               >
                 {option.label}
@@ -141,31 +161,33 @@ export default function OrderDetailPanel({
         </div>
 
         {/* Cliente */}
-        <div className="bg-[#fff5ec] rounded-2xl p-6">
-          <label className="block text-xs font-bold tracking-wider uppercase text-[#1f1f1f] mb-3">
+        <div className="bg-leather-100/60 rounded-2xl p-6">
+          <label className="admin-section-title mb-3">
             Cliente
           </label>
-          <p className="font-semibold text-lg text-[#1f1f1f] mb-1">{order.quote.name}</p>
-          <p className="text-sm text-gray-600 mb-3">{order.quote.company || 'Sem empresa'}</p>
+          <p className="font-semibold text-lg text-leather-900 mb-1">{order.quote.name}</p>
+          <p className="text-sm text-leather-500 mb-3">{order.quote.company || 'Sem empresa'}</p>
           <div className="space-y-2 text-sm">
-            <p className="text-[#1f1f1f]">
-              📧 <a href={`mailto:${order.quote.email}`} className="text-blue-600 hover:underline">
+            <div className="flex items-center gap-2">
+              <Mail size={16} className="text-leather-400 flex-shrink-0" />
+              <a href={`mailto:${order.quote.email}`} className="text-leather-700 hover:text-leather-900 hover:underline">
                 {order.quote.email}
               </a>
-            </p>
+            </div>
             {order.quote.phone && (
-              <p className="text-[#1f1f1f]">
-                📞 <a href={`tel:${order.quote.phone}`} className="text-blue-600 hover:underline">
+              <div className="flex items-center gap-2">
+                <Phone size={16} className="text-leather-400 flex-shrink-0" />
+                <a href={`tel:${order.quote.phone}`} className="text-leather-700 hover:text-leather-900 hover:underline">
                   {order.quote.phone}
                 </a>
-              </p>
+              </div>
             )}
           </div>
         </div>
 
         {/* Valor Total */}
         <div>
-          <label className="block text-xs font-bold tracking-wider uppercase text-[#1f1f1f] mb-2">
+          <label className="admin-section-title mb-2">
             Valor Total (R$)
           </label>
           <input
@@ -174,52 +196,26 @@ export default function OrderDetailPanel({
             value={formData.totalValue}
             onChange={(e) => setFormData(prev => ({ ...prev, totalValue: e.target.value }))}
             placeholder="0,00"
-            className="w-full px-4 py-3 border border-[#c8c8c8] rounded-lg focus:outline-none focus:border-[#4b1c09] focus:ring-1 focus:ring-[#4b1c09]"
+            className="admin-input"
           />
         </div>
 
         {/* Notas */}
         <div>
-          <label className="block text-xs font-bold tracking-wider uppercase text-[#1f1f1f] mb-2">
+          <label className="admin-section-title mb-2">
             Notas Internas
           </label>
           <textarea
             value={formData.notes}
             onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
             placeholder="Adicione notas sobre o pedido..."
-            className="w-full px-4 py-3 border border-[#c8c8c8] rounded-lg focus:outline-none focus:border-[#4b1c09] focus:ring-1 focus:ring-[#4b1c09] resize-none"
+            className="admin-input resize-none"
             rows={4}
           />
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex gap-3">
-          <button
-            onClick={handleSendStatus}
-            disabled={isSending}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-[#10b981] text-white rounded-lg hover:bg-[#059669] transition font-medium disabled:opacity-50"
-          >
-            <Bell size={18} />
-            {isSending ? 'Enviando...' : 'Notificar'}
-          </button>
-          <button
-            onClick={handlePrint}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-[#8B5240] text-white rounded-lg hover:bg-[#3d1707] transition font-medium"
-          >
-            <Printer size={18} />
-            Imprimir
-          </button>
-        </div>
-
-        {/* Save Button */}
-        <button
-          onClick={handleSave}
-          className="w-full px-4 py-3 bg-[#8B5240] text-white rounded-lg hover:bg-[#3d1707] transition font-medium"
-        >
-          Salvar Alterações
-        </button>
       </div>
-    </div>
+    </Modal>
   );
 }
 

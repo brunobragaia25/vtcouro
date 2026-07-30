@@ -28,7 +28,7 @@ export default function SearchBar({
         value={value}
         onChange={handleChange}
         placeholder={placeholder}
-        className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+        className="admin-input pl-10"
       />
     </div>
   );

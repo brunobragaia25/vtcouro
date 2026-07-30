@@ -18,11 +18,11 @@ export default function AdminLayoutClient({
   }
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-leather-50">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Mobile top bar */}
-        <div className="md:hidden flex items-center gap-3 bg-[#8B5240] text-white px-4 py-3 flex-shrink-0">
+        <div className="md:hidden flex items-center gap-3 bg-leather-900 text-white px-4 py-3 flex-shrink-0">
           <button onClick={() => setSidebarOpen(true)} className="p-1">
             <Menu size={22} />
           </button>

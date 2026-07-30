@@ -207,7 +207,7 @@ export default function AdminOrcamentos() {
           </button>
           <button
             onClick={() => setEditingQuote(row)}
-            className="text-[#4b1c09] hover:text-[#3d1707]"
+            className="text-leather-600 hover:text-leather-900"
           >
             <ChevronRight size={20} />
           </button>
@@ -217,55 +217,46 @@ export default function AdminOrcamentos() {
   ];
 
   return (
-    <div className="flex gap-6 h-full md:h-screen overflow-hidden">
-      {/* Left Column - Table */}
-      <div className={`flex-1 transition-all duration-300 flex-col overflow-hidden ${editingQuote ? 'hidden md:flex md:max-w-4xl' : 'flex'}`}>
-        <div className="space-y-6 overflow-y-auto pb-6">
-          {/* Header */}
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Orçamentos</h1>
-            <p className="text-gray-600">
-              {quotes.filter((q: any) => q.status === 'novo').length} aguardando primeira resposta
-            </p>
-          </div>
+    <div className="space-y-6">
+      {/* Header */}
+      <div>
+        <h1 className="text-2xl md:text-3xl font-serif font-bold text-leather-900">Orçamentos</h1>
+        <p className="text-sm text-leather-500 mt-1">
+          {quotes.filter((q: any) => q.status === 'novo').length} aguardando primeira resposta
+        </p>
+      </div>
 
-          {/* Search */}
-          <div>
-            <SearchBar
-              placeholder="Buscar por nome, empresa ou protocolo..."
-              onSearch={setSearchTerm}
-            />
-          </div>
+      {/* Search */}
+      <SearchBar
+        placeholder="Buscar por nome, empresa ou protocolo..."
+        onSearch={setSearchTerm}
+      />
 
-          {/* Status Tabs */}
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
-            <FilterTabs tabs={tabsWithCounts} activeTab={activeTab} onTabChange={setActiveTab} />
-            <div className="text-sm text-gray-600 flex-shrink-0">
-              {filteredQuotes.length} de {quotes.length}
-            </div>
-          </div>
-
-          {/* Table */}
-          {isLoading ? (
-            <div className="text-center py-12">
-              <p className="text-gray-600">Carregando orçamentos...</p>
-            </div>
-          ) : (
-            <DataTable columns={columns} data={filteredQuotes} />
-          )}
+      {/* Status Tabs */}
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+        <FilterTabs tabs={tabsWithCounts} activeTab={activeTab} onTabChange={setActiveTab} />
+        <div className="text-sm text-leather-500 flex-shrink-0">
+          {filteredQuotes.length} de {quotes.length}
         </div>
       </div>
 
-      {/* Right Column - Quote Detail Panel */}
-      {editingQuote && (
-        <div className="w-full md:max-w-2xl md:border-l border-gray-200 overflow-y-auto">
-          <QuoteDetailPanel
-            isOpen={true}
-            quote={editingQuote}
-            onClose={() => setEditingQuote(null)}
-            onSave={handleSaveQuote}
-          />
+      {/* Table */}
+      {isLoading ? (
+        <div className="text-center py-12">
+          <p className="text-sm text-leather-500">Carregando orçamentos...</p>
         </div>
+      ) : (
+        <DataTable columns={columns} data={filteredQuotes} />
+      )}
+
+      {/* Quote Detail Modal */}
+      {editingQuote && (
+        <QuoteDetailPanel
+          isOpen={true}
+          quote={editingQuote}
+          onClose={() => setEditingQuote(null)}
+          onSave={handleSaveQuote}
+        />
       )}
 
       <DeleteConfirmModal

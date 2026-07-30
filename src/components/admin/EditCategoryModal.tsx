@@ -109,126 +109,118 @@ export default function EditCategoryModal({
       isOpen={isOpen}
       title={category?.id ? 'Editar Categoria' : 'Nova Categoria'}
       onClose={onClose}
-      size="md"
+      size="lg"
+      footer={
+        <div className="flex gap-3">
+          <button type="button" onClick={onClose} className="flex-1 admin-btn-secondary">
+            Cancelar
+          </button>
+          <button type="submit" form="category-form" className="flex-1 admin-btn-primary">
+            Salvar
+          </button>
+        </div>
+      }
     >
-      <form onSubmit={handleSubmit} className="space-y-4 max-h-[80vh] overflow-y-auto">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Nome da Categoria
-          </label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
-            required
-          />
+      <form id="category-form" onSubmit={handleSubmit} className="space-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label className="admin-label">
+              Nome da Categoria
+            </label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="admin-input"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="admin-label">
+              Slug (URL)
+            </label>
+            <input
+              type="text"
+              name="slug"
+              value={formData.slug}
+              onChange={handleChange}
+              className="admin-input"
+              placeholder="gerado do nome"
+            />
+          </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Slug (URL)
-          </label>
-          <input
-            type="text"
-            name="slug"
-            value={formData.slug}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
-            placeholder="ex: carteiras (gerado do nome se deixar em branco)"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="admin-label">
             Descrição
           </label>
           <textarea
             name="description"
             value={formData.description}
             onChange={handleChange}
-            rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+            rows={2}
+            className="admin-input"
           />
         </div>
 
         {/* Specification Fields */}
-        <div className="border-t pt-4">
-          <h3 className="text-sm font-semibold text-gray-900 mb-4">Campos de Especificação</h3>
+        <div className="admin-section">
+          <h3 className="admin-section-title">Campos de Especificação</h3>
 
           {/* Add New Field Section */}
-          <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-4">
-            <p className="text-xs font-semibold text-orange-900 mb-3 uppercase">Adicionar Novo Campo</p>
+          <div className="flex flex-col sm:flex-row gap-2">
             <input
               type="text"
               value={newFieldLabel}
               onChange={(e) => setNewFieldLabel(e.target.value)}
-              placeholder="Ex: Material"
-              className="w-full px-3 py-2 border border-orange-300 rounded-lg focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400 text-sm mb-2"
+              placeholder="Rótulo (ex: Material)"
+              className="admin-input sm:flex-1"
             />
             <input
               type="text"
               value={newFieldKey}
               onChange={(e) => setNewFieldKey(e.target.value)}
               placeholder="Chave (ex: material)"
-              className="w-full px-3 py-2 border border-orange-300 rounded-lg focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400 text-sm mb-3"
+              className="admin-input sm:flex-1"
             />
             <button
               type="button"
               onClick={handleAddField}
-              className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors text-sm font-medium"
+              className="flex items-center justify-center gap-1.5 admin-btn-primary sm:w-auto whitespace-nowrap"
             >
               <Plus size={16} />
-              Adicionar Campo
+              Adicionar
             </button>
           </div>
 
           {/* Existing Fields */}
-          {formData.specificationFields.length > 0 && (
-            <div>
-              <p className="text-xs font-semibold text-gray-700 mb-3 uppercase">Campos Adicionados</p>
-              <div className="space-y-2">
-                {formData.specificationFields.map((field, idx) => (
-                  <div key={idx} className="flex items-center justify-between gap-2 p-3 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors">
-                    <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-900">{field.label}</p>
-                      <p className="text-xs text-gray-500 font-mono">{field.key}</p>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveField(idx)}
-                      className="p-2 hover:bg-red-100 rounded text-red-600 transition-colors flex-shrink-0"
-                    >
-                      <X size={18} />
-                    </button>
-                  </div>
-                ))}
-              </div>
+          {formData.specificationFields.length > 0 ? (
+            <div className="mt-3 flex flex-wrap gap-2">
+              {formData.specificationFields.map((field, idx) => (
+                <span
+                  key={idx}
+                  className="inline-flex items-center gap-2 pl-3 pr-1.5 py-1.5 bg-white border border-leather-200 rounded-full"
+                >
+                  <span className="text-sm text-leather-800">{field.label}</span>
+                  <code className="text-[11px] text-leather-400">{field.key}</code>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveField(idx)}
+                    aria-label={`Remover ${field.label}`}
+                    className="p-0.5 rounded-full text-leather-400 hover:bg-red-50 hover:text-red-600 transition-colors"
+                  >
+                    <X size={14} />
+                  </button>
+                </span>
+              ))}
             </div>
+          ) : (
+            <p className="mt-3 text-xs text-leather-400">
+              Nenhum campo adicionado. Eles aparecem no formulário de produtos desta categoria.
+            </p>
           )}
-
-          {formData.specificationFields.length === 0 && (
-            <div className="text-center py-6 text-gray-500">
-              <p className="text-sm">Nenhum campo adicionado</p>
-            </div>
-          )}
-        </div>
-
-        <div className="flex gap-3 pt-4 border-t">
-          <button
-            type="button"
-            onClick={onClose}
-            className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
-          >
-            Cancelar
-          </button>
-          <button
-            type="submit"
-            className="flex-1 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors font-medium"
-          >
-            Salvar
-          </button>
         </div>
       </form>
     </Modal>

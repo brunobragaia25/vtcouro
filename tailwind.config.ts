@@ -15,6 +15,18 @@ const config: Config = {
         success: '#10B981',
         error: '#EF4444',
         warning: '#F59E0B',
+        leather: {
+          50: '#FAF7F4',
+          100: '#F3EBE3',
+          200: '#E8D5C4',
+          300: '#D4A574',
+          400: '#C08B52',
+          500: '#A0703F',
+          600: '#7A5230',
+          700: '#573A22',
+          800: '#3D2817',
+          900: '#2C1810',
+        },
       },
       fontFamily: {
         sans: ['var(--font-dm-sans)', 'sans-serif'],

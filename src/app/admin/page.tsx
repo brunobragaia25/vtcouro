@@ -2,6 +2,7 @@
 
 import React, { useMemo } from 'react';
 import Link from 'next/link';
+import { FileText, Clock, Package, Grid3X3, ArrowRight, Inbox } from 'lucide-react';
 import MetricCard from '@/components/admin/MetricCard';
 import DataTable from '@/components/admin/DataTable';
 import StatusBadge from '@/components/admin/StatusBadge';
@@ -20,34 +21,38 @@ export default function AdminDashboard() {
 
     return [
       {
-        title: 'ORÇAMENTOS NO MÊS',
+        title: 'Orçamentos no mês',
         value: quotes.length,
         subtext: `${novasCount} novos`,
-        chartColor: 'orange' as const,
+        icon: <FileText size={18} />,
+        tone: 'leather' as const,
       },
       {
-        title: 'AGUARDANDO RESPOSTA',
+        title: 'Aguardando resposta',
         value: novasCount,
         subtext: 'para processar',
-        chartColor: 'yellow' as const,
+        icon: <Clock size={18} />,
+        tone: 'gold' as const,
       },
       {
-        title: 'PRODUTOS ATIVOS',
+        title: 'Produtos ativos',
         value: products.length,
         subtext: `${destaques} destaques`,
-        chartColor: 'black' as const,
+        icon: <Package size={18} />,
+        tone: 'neutral' as const,
       },
       {
-        title: 'CATEGORIAS',
+        title: 'Categorias',
         value: categories.length,
         subtext: 'todas ativas',
-        chartColor: 'teal' as const,
+        icon: <Grid3X3 size={18} />,
+        tone: 'success' as const,
       },
     ];
   }, [quotes, products, categories]);
 
   const recentQuotes = useMemo(() => {
-    return quotes
+    return [...quotes]
       .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
       .slice(0, 5)
       .map((quote: any) => ({
@@ -67,8 +72,8 @@ export default function AdminDashboard() {
       label: 'PROTOCOLO',
       render: (value: string, row: any) => (
         <div>
-          <p className="font-medium">#{value}</p>
-          <p className="text-xs text-gray-500">{row.date}</p>
+          <p className="font-medium text-leather-900">#{value}</p>
+          <p className="text-xs text-leather-500 mt-0.5">{row.date}</p>
         </div>
       ),
     },
@@ -77,8 +82,8 @@ export default function AdminDashboard() {
       label: 'CLIENTE',
       render: (value: string, row: any) => (
         <div>
-          <p className="font-medium">{value}</p>
-          <p className="text-xs text-gray-500">{row.company}</p>
+          <p className="font-medium text-leather-900">{value}</p>
+          <p className="text-xs text-leather-500 mt-0.5">{row.company}</p>
         </div>
       ),
     },
@@ -87,8 +92,8 @@ export default function AdminDashboard() {
       label: 'ITENS',
       render: (value: string, row: any) => (
         <div>
-          <p className="font-medium">{value}</p>
-          <p className="text-xs text-gray-500">{row.quantity}</p>
+          <p className="font-medium text-leather-900">{value}</p>
+          <p className="text-xs text-leather-500 mt-0.5">{row.quantity}</p>
         </div>
       ),
     },
@@ -107,46 +112,74 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-7xl mx-auto space-y-8">
-        {/* Header */}
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-            <p className="text-gray-600 mt-1">Visão geral do seu negócio</p>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <Link href="/admin/orcamentos" className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition">
-              Ver Orçamentos
-            </Link>
-            <Link href="/admin/produtos" className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition">
-              Ver Produtos
-            </Link>
-            <Link href="/admin/categorias" className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition">
-              Ver Categorias
-            </Link>
-          </div>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-serif font-bold text-leather-900">
+            Dashboard
+          </h1>
+          <p className="text-sm text-leather-500 mt-1">Visão geral do seu negócio</p>
         </div>
-
-        {/* Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {metrics.map((metric, index) => (
-            <MetricCard key={index} {...metric} />
-          ))}
+        <div className="flex flex-wrap gap-2">
+          <Link
+            href="/admin/orcamentos"
+            className="px-4 py-2 text-sm font-medium bg-leather-900 text-white rounded-lg hover:bg-leather-800 transition"
+          >
+            Ver Orçamentos
+          </Link>
+          <Link
+            href="/admin/produtos"
+            className="px-4 py-2 text-sm font-medium bg-white text-leather-800 border border-leather-200 rounded-lg hover:bg-leather-100 transition"
+          >
+            Ver Produtos
+          </Link>
+          <Link
+            href="/admin/categorias"
+            className="px-4 py-2 text-sm font-medium bg-white text-leather-800 border border-leather-200 rounded-lg hover:bg-leather-100 transition"
+          >
+            Ver Categorias
+          </Link>
         </div>
+      </div>
 
-        {/* Recent Quotes */}
-        <div className="bg-white rounded-lg shadow">
-          <div className="p-6 border-b border-gray-200">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-gray-900">Últimos Orçamentos</h2>
-              <Link href="/admin/orcamentos" className="text-orange-600 hover:text-orange-700 font-medium">
-                Ver tudo →
-              </Link>
+      {/* Metrics */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {metrics.map((metric, index) => (
+          <MetricCard key={index} {...metric} />
+        ))}
+      </div>
+
+      {/* Recent Quotes */}
+      <div className="bg-white rounded-xl border border-leather-200/60 shadow-sm overflow-hidden">
+        <div className="px-5 py-4 border-b border-leather-200/60 flex items-center justify-between gap-3">
+          <h2 className="font-serif text-lg font-bold text-leather-900">
+            Últimos Orçamentos
+          </h2>
+          <Link
+            href="/admin/orcamentos"
+            className="inline-flex items-center gap-1 text-sm text-leather-600 hover:text-leather-900 font-medium transition"
+          >
+            Ver tudo <ArrowRight size={14} />
+          </Link>
+        </div>
+        {recentQuotes.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-14 text-center">
+            <div className="w-12 h-12 rounded-full bg-leather-100 flex items-center justify-center mb-3">
+              <Inbox size={22} className="text-leather-400" />
             </div>
+            <p className="text-sm font-medium text-leather-800">
+              Nenhum orçamento ainda
+            </p>
+            <p className="text-xs text-leather-500 mt-1">
+              Os pedidos recebidos pelo site aparecem aqui.
+            </p>
           </div>
-          <DataTable columns={quoteColumns} data={recentQuotes} />
-        </div>
+        ) : (
+          <div className="p-4 md:p-0">
+            <DataTable columns={quoteColumns} data={recentQuotes} bare />
+          </div>
+        )}
       </div>
     </div>
   );
