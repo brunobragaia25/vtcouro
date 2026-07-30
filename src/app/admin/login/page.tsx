@@ -12,16 +12,32 @@ export default function AdminLoginPage() {
     setLoading(true)
     setError('')
 
-    const res = await fetch('/api/admin/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password }),
-    })
+    try {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      })
 
-    if (res.ok) {
-      window.location.href = '/admin'
-    } else {
-      setError('Senha incorreta. Tente novamente.')
+      if (res.ok) {
+        window.location.href = '/admin'
+        return
+      }
+
+      // Cada falha tem uma causa diferente: mostrar tudo como "senha incorreta"
+      // esconde bloqueio por tentativas e erro de configuracao do servidor.
+      if (res.status === 401) {
+        setError('Senha incorreta. Tente novamente.')
+      } else if (res.status === 429) {
+        setError('Muitas tentativas seguidas. Aguarde alguns minutos e tente de novo.')
+      } else if (res.status === 500) {
+        setError('Erro de configuracao no servidor (ADMIN_PASSWORD ausente). Avise o suporte.')
+      } else {
+        setError(`Nao foi possivel entrar (erro ${res.status}). Tente novamente.`)
+      }
+    } catch {
+      setError('Sem conexao com o servidor. Verifique sua internet e tente de novo.')
+    } finally {
       setLoading(false)
     }
   }
