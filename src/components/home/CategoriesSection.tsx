@@ -13,6 +13,46 @@ interface Category {
 
 const VISIBLE = 3
 
+function CategoryCardContent({ cat }: { cat: Category }) {
+  return (
+    <>
+      {/* Imagem ou placeholder */}
+      {cat.imageUrl ? (
+        <img
+          src={cat.imageUrl}
+          alt={cat.name}
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+        />
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-[#999] text-xs md:text-sm font-medium tracking-wide">Imagem da categoria aqui</span>
+        </div>
+      )}
+
+      {/* Overlay escuro quando tem imagem */}
+      {cat.imageUrl && <div className="absolute inset-0 bg-black/30" />}
+
+      {/* Veja mais */}
+      <div className="relative z-10">
+        <span
+          className={`border rounded-full px-4 py-2 text-xs md:text-sm font-normal transition w-fit block ${
+            cat.imageUrl
+              ? 'border-white text-white group-hover:bg-white group-hover:text-[#4b1c09]'
+              : 'border-[#8B5240] text-[#8B5240] group-hover:bg-[#8B5240] group-hover:text-white'
+          }`}
+        >
+          Veja mais
+        </span>
+      </div>
+
+      {/* Título */}
+      <h2 className={`relative z-10 font-serif font-normal italic leading-tight text-[24px] md:text-[36px] xl:text-[48px] ${cat.imageUrl ? 'text-white' : 'text-[#4b1c09]'}`}>
+        {cat.name}
+      </h2>
+    </>
+  )
+}
+
 export function CategoriesSection() {
   const [categories, setCategories] = useState<Category[]>([])
   const [offset, setOffset] = useState(0)
@@ -31,82 +71,66 @@ export function CategoriesSection() {
   const next = () => setOffset((o) => Math.min(total - VISIBLE, o + 1))
 
   return (
-    <section className="w-full relative overflow-hidden">
-      <div className="overflow-hidden h-[300px] md:h-[480px] xl:h-[560px]">
-        <div
-          className="flex h-full transition-transform duration-500 ease-in-out"
-          style={{
-            width: `${(total / VISIBLE) * 100}%`,
-            transform: `translateX(-${total > 0 ? (offset / total) * 100 : 0}%)`,
-          }}
-        >
-        {categories.map((cat, i) => (
+    <section className="w-full">
+      {/* Mobile: pilha vertical, sem slider — o carrossel horizontal nao cabe bem numa tela estreita */}
+      <div className="md:hidden flex flex-col gap-3 px-4 py-2">
+        {categories.map((cat) => (
           <Link
             key={cat.id}
             href={`/catalogo?category=${cat.slug}`}
-            className="group relative bg-[#d9d9d9] flex flex-col justify-between p-6 md:p-10 overflow-hidden"
-            style={{ width: `${100 / total}%` }}
+            className="group relative bg-[#d9d9d9] rounded-2xl flex flex-col justify-between p-6 h-[220px] overflow-hidden"
           >
-            {/* Separador vertical */}
-            {i > 0 && <div className="absolute left-0 top-0 h-full w-px bg-white/40 z-10" />}
-
-            {/* Imagem ou placeholder */}
-            {cat.imageUrl ? (
-              <img
-                src={cat.imageUrl}
-                alt={cat.name}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
-              />
-            ) : (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-[#999] text-xs md:text-sm font-medium tracking-wide">Imagem da categoria aqui</span>
-              </div>
-            )}
-
-            {/* Overlay escuro quando tem imagem */}
-            {cat.imageUrl && <div className="absolute inset-0 bg-black/30" />}
-
-            {/* Veja mais */}
-            <div className="relative z-10">
-              <span
-                className={`border rounded-full px-4 py-2 text-xs md:text-sm font-normal transition w-fit block ${
-                  cat.imageUrl
-                    ? 'border-white text-white group-hover:bg-white group-hover:text-[#4b1c09]'
-                    : 'border-[#8B5240] text-[#8B5240] group-hover:bg-[#8B5240] group-hover:text-white'
-                }`}
-              >
-                Veja mais
-              </span>
-            </div>
-
-            {/* Título */}
-            <h2 className={`relative z-10 font-serif font-normal italic leading-tight text-[24px] md:text-[36px] xl:text-[48px] ${cat.imageUrl ? 'text-white' : 'text-[#4b1c09]'}`}>
-              {cat.name}
-            </h2>
+            <CategoryCardContent cat={cat} />
           </Link>
         ))}
-        </div>
       </div>
 
-      {/* Setas — só aparecem se tiver mais de 3 categorias */}
-      {isSlider && (
-        <>
-          <button
-            onClick={prev}
-            disabled={offset === 0}
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/80 hover:bg-white shadow flex items-center justify-center disabled:opacity-30 transition"
+      {/* Desktop: carrossel horizontal */}
+      <div className="hidden md:block relative overflow-hidden">
+        <div className="overflow-hidden h-[480px] xl:h-[560px]">
+          <div
+            className="flex h-full transition-transform duration-500 ease-in-out"
+            style={{
+              width: `${(total / VISIBLE) * 100}%`,
+              transform: `translateX(-${total > 0 ? (offset / total) * 100 : 0}%)`,
+            }}
           >
-            <ChevronLeft size={18} className="text-[#4b1c09]" />
-          </button>
-          <button
-            onClick={next}
-            disabled={offset >= total - VISIBLE}
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/80 hover:bg-white shadow flex items-center justify-center disabled:opacity-30 transition"
-          >
-            <ChevronRight size={18} className="text-[#4b1c09]" />
-          </button>
-        </>
-      )}
+          {categories.map((cat, i) => (
+            <Link
+              key={cat.id}
+              href={`/catalogo?category=${cat.slug}`}
+              className="group relative bg-[#d9d9d9] flex flex-col justify-between p-10 overflow-hidden"
+              style={{ width: `${100 / total}%` }}
+            >
+              {/* Separador vertical */}
+              {i > 0 && <div className="absolute left-0 top-0 h-full w-px bg-white/40 z-10" />}
+
+              <CategoryCardContent cat={cat} />
+            </Link>
+          ))}
+          </div>
+        </div>
+
+        {/* Setas — só aparecem se tiver mais de 3 categorias */}
+        {isSlider && (
+          <>
+            <button
+              onClick={prev}
+              disabled={offset === 0}
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/80 hover:bg-white shadow flex items-center justify-center disabled:opacity-30 transition"
+            >
+              <ChevronLeft size={18} className="text-[#4b1c09]" />
+            </button>
+            <button
+              onClick={next}
+              disabled={offset >= total - VISIBLE}
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/80 hover:bg-white shadow flex items-center justify-center disabled:opacity-30 transition"
+            >
+              <ChevronRight size={18} className="text-[#4b1c09]" />
+            </button>
+          </>
+        )}
+      </div>
     </section>
   )
 }

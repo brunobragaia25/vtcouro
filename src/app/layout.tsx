@@ -71,7 +71,7 @@ const organizationJsonLd = {
   description: SITE_DESCRIPTION,
   email: ORGANIZATION.email,
   telephone: ORGANIZATION.telephone,
-  address: { '@type': 'PostalAddress', addressCountry: 'BR' },
+  address: { '@type': 'PostalAddress', ...ORGANIZATION.address },
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'sales',

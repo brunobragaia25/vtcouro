@@ -6,7 +6,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { ProductFilters } from '@/components/catalog/ProductFilters'
 import { ProductGrid } from '@/components/catalog/ProductGrid'
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight, SlidersHorizontal, ChevronDown } from 'lucide-react'
 import { useProducts } from '@/hooks/useProducts'
 import { useFavorites } from '@/hooks/useFavorites'
 import { useToast } from '@/contexts/ToastContext'
@@ -45,6 +45,10 @@ function CatalogPageContent() {
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [showFavorites, setShowFavorites] = useState(false)
+  // No mobile os filtros comecam fechados: a lista inteira (favoritos,
+  // categorias, subcategorias, produtos, colecoes) antes do scroll da grade
+  // deixava a pagina cansativa de rolar num aparelho pequeno.
+  const [showMobileFilters, setShowMobileFilters] = useState(false)
 
   const productsPerPage = 12
 
@@ -155,6 +159,13 @@ function CatalogPageContent() {
     new: apiProducts.filter((p: any) => p.isNew).length,
   }), [apiProducts])
 
+  const activeFiltersCount =
+    selectedCategories.length +
+    selectedSubcategories.length +
+    selectedProducts.length +
+    selectedCollections.length +
+    (searchTerm ? 1 : 0)
+
   // Pagination
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage)
   const startIndex = (currentPage - 1) * productsPerPage
@@ -226,8 +237,30 @@ function CatalogPageContent() {
 
         {/* Catalog Content */}
         <section className="bg-[#fff5ec] rounded-[28px] md:rounded-[40px] max-w-container mx-auto px-4 md:px-8 py-8 md:py-16 mb-0 flex flex-col md:flex-row gap-5 mt-5 md:mt-8 overflow-visible">
+          {/* Filters toggle — so no mobile, o painel comeca fechado */}
+          <button
+            onClick={() => setShowMobileFilters((v) => !v)}
+            className="md:hidden w-full flex items-center justify-between bg-white rounded-[16px] px-5 py-4"
+          >
+            <span className="flex items-center gap-2 text-[#1f1f1f] font-medium text-sm">
+              <SlidersHorizontal size={16} />
+              Filtros
+              {activeFiltersCount > 0 && (
+                <span className="bg-[#8B5240] text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
+                  {activeFiltersCount}
+                </span>
+              )}
+            </span>
+            <ChevronDown
+              size={18}
+              className={`text-[#8b8b8b] transition-transform ${showMobileFilters ? 'rotate-180' : ''}`}
+            />
+          </button>
+
           {/* Filters Sidebar */}
-          <div className="w-full md:w-[326px] md:flex-shrink-0 flex flex-col gap-5">
+          <div
+            className={`w-full md:w-[326px] md:flex-shrink-0 flex-col gap-5 ${showMobileFilters ? 'flex' : 'hidden'} md:flex`}
+          >
             {/* Favorites Section */}
             <div className="bg-white rounded-[16px] p-7">
               <button

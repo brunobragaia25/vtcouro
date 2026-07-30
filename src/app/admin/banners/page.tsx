@@ -1,7 +1,7 @@
 ﻿'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Plus, Trash2, GripVertical, ExternalLink, Monitor, Smartphone } from 'lucide-react'
+import { Plus, Trash2, GripVertical, ExternalLink, Monitor } from 'lucide-react'
 
 interface Banner {
   id: string
@@ -12,8 +12,6 @@ interface Banner {
   orderIndex: number
 }
 
-type UploadTarget = { type: 'new' } | { type: 'mobile'; id: string }
-
 export default function AdminBanners() {
   const [banners, setBanners] = useState<Banner[]>([])
   const [loading, setLoading] = useState(true)
@@ -21,7 +19,6 @@ export default function AdminBanners() {
   const [editingLink, setEditingLink] = useState<string | null>(null)
   const [linkValue, setLinkValue] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const uploadTarget = useRef<UploadTarget>({ type: 'new' })
 
   const load = async () => {
     const res = await fetch('/api/banners?admin=1')
@@ -47,21 +44,11 @@ export default function AdminBanners() {
     setUploading(true)
     try {
       const url = await uploadFile(file)
-      const target = uploadTarget.current
-
-      if (target.type === 'new') {
-        await fetch('/api/banners', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ imageUrl: url, orderIndex: banners.length }),
-        })
-      } else {
-        await fetch(`/api/banners/${target.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ mobileImageUrl: url }),
-        })
-      }
+      await fetch('/api/banners', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageUrl: url, orderIndex: banners.length }),
+      })
       await load()
     } catch {
       alert('Erro ao enviar imagem')
@@ -71,19 +58,8 @@ export default function AdminBanners() {
     }
   }
 
-  const triggerUpload = (target: UploadTarget) => {
-    uploadTarget.current = target
+  const triggerUpload = () => {
     fileInputRef.current?.click()
-  }
-
-  const removeMobile = async (id: string) => {
-    const res = await fetch(`/api/banners/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ mobileImageUrl: null }),
-    })
-    const updated = await res.json()
-    setBanners((b) => b.map((x) => (x.id === id ? updated : x)))
   }
 
   const handleDelete = async (id: string) => {
@@ -122,7 +98,7 @@ export default function AdminBanners() {
         </div>
         <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
         <button
-          onClick={() => triggerUpload({ type: 'new' })}
+          onClick={() => triggerUpload()}
           disabled={uploading}
           className="flex items-center gap-2 bg-leather-900 text-white px-4 py-2 rounded-lg hover:bg-leather-800 transition-colors disabled:opacity-50"
         >
@@ -135,9 +111,7 @@ export default function AdminBanners() {
         <span className="flex items-center gap-1.5">
           <Monitor size={13} /> Desktop: <strong className="text-gray-700">1920 × 720px</strong>
         </span>
-        <span className="flex items-center gap-1.5">
-          <Smartphone size={13} /> Mobile: <strong className="text-gray-700">800 × 1000px</strong>
-        </span>
+        <span className="text-gray-400">A imagem é redimensionada automaticamente no mobile.</span>
       </div>
 
       {loading ? (
@@ -165,32 +139,6 @@ export default function AdminBanners() {
                     <img src={banner.imageUrl} alt="Desktop" className="w-28 h-14 object-cover rounded-lg" />
                     <span className="flex items-center gap-1 text-[10px] text-gray-400">
                       <Monitor size={10} /> Desktop
-                    </span>
-                  </div>
-
-                  {/* Mobile image */}
-                  <div className="flex flex-col items-center gap-1">
-                    {banner.mobileImageUrl ? (
-                      <div className="relative group">
-                        <img src={banner.mobileImageUrl} alt="Mobile" className="w-14 h-14 object-cover rounded-lg" />
-                        <button
-                          onClick={() => removeMobile(banner.id)}
-                          className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full text-[10px] items-center justify-center hidden group-hover:flex"
-                        >
-                          ×
-                        </button>
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => triggerUpload({ type: 'mobile', id: banner.id })}
-                        disabled={uploading}
-                        className="w-14 h-14 border-2 border-dashed border-gray-200 rounded-lg flex flex-col items-center justify-center text-gray-300 hover:border-gray-400 hover:text-gray-400 transition-colors disabled:opacity-50"
-                      >
-                        <Plus size={14} />
-                      </button>
-                    )}
-                    <span className="flex items-center gap-1 text-[10px] text-gray-400">
-                      <Smartphone size={10} /> Mobile
                     </span>
                   </div>
                 </div>

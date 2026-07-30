@@ -27,4 +27,12 @@ export const ORGANIZATION = {
   email: 'vendas@vtcouro.com.br',
   telephone: '+551126361112',
   url: SITE_URL,
+  // Sem CEP: preencher assim que soubermos, mas nao deixar postalCode vazio
+  // no JSON-LD (o validador do Google pode acusar campo invalido).
+  address: {
+    streetAddress: 'Alameda Segundo Sargento Névio Baracho Dos Santos, 114',
+    addressLocality: 'São Paulo',
+    addressRegion: 'SP',
+    addressCountry: 'BR',
+  },
 };

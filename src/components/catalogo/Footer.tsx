@@ -72,7 +72,7 @@ export default function Footer() {
               Contato
             </h4>
             <ul className="space-y-3 text-sm">
-              <li>R. Vergueiro, 2904<br/>São Paulo / SP</li>
+              <li>Al. Segundo Sargento Névio Baracho Dos Santos, 114<br/>Pq Novo Mundo - São Paulo / SP</li>
               <li>(11) 2636-1112</li>
               <li><Link href="mailto:vendas@vtcouro.com.br" className="hover:text-[#ecc29c] transition-colors">vendas@vtcouro.com.br</Link></li>
             </ul>
