@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { DM_Sans, Playfair_Display } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/next'
 import '../styles/globals.css'
 import { QueryProvider } from '@/providers/QueryProvider'
 import { ToastProvider } from '@/contexts/ToastContext'
@@ -116,6 +117,8 @@ export default function RootLayout({
             <WhatsAppButton />
           </ToastProvider>
         </QueryProvider>
+        {/* nao rastreia o painel administrativo, so o site publico */}
+        <Analytics beforeSend={(event) => (event.url.startsWith('/admin') ? null : event)} />
       </body>
     </html>
   )
