@@ -100,19 +100,31 @@ body {
 
 /* Scrollbar customizado */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 12px;
+  height: 12px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #f3ebe3;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d4a574;
-  border-radius: 4px;
+  background: #a0703f;
+  border-radius: 6px;
+  /* borda na cor do trilho: cria respiro e deixa o thumb com forma visivel */
+  border: 3px solid #f3ebe3;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #c29660;
+  background: #7a5230;
+}
+
+/* Firefox: usa as propriedades padrao. Precisa ficar dentro do @supports
+   porque o Chrome moderno tambem as suporta e, quando presentes, ignora
+   todo o ::-webkit-scrollbar acima. */
+@supports not selector(::-webkit-scrollbar) {
+  html {
+    scrollbar-width: auto;
+    scrollbar-color: #a0703f #f3ebe3;
+  }
 }
