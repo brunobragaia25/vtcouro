@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Lock } from 'lucide-react'
 
 export default function AdminLoginPage() {
   const [password, setPassword] = useState('')
@@ -31,54 +32,60 @@ export default function AdminLoginPage() {
       } else if (res.status === 429) {
         setError('Muitas tentativas seguidas. Aguarde alguns minutos e tente de novo.')
       } else if (res.status === 500) {
-        setError('Erro de configuracao no servidor (ADMIN_PASSWORD ausente). Avise o suporte.')
+        setError('Erro de configuração no servidor (ADMIN_PASSWORD ausente). Avise o suporte.')
       } else {
-        setError(`Nao foi possivel entrar (erro ${res.status}). Tente novamente.`)
+        setError(`Não foi possível entrar (erro ${res.status}). Tente novamente.`)
       }
     } catch {
-      setError('Sem conexao com o servidor. Verifique sua internet e tente de novo.')
+      setError('Sem conexão com o servidor. Verifique sua internet e tente de novo.')
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-[#1c0d00] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-leather-50 flex items-center justify-center px-4">
       {/* Background pattern */}
-      <div className="absolute inset-0 opacity-5" style={{
-        backgroundImage: 'radial-gradient(circle at 1px 1px, #d2741f 1px, transparent 0)',
-        backgroundSize: '40px 40px'
-      }} />
+      <div
+        className="absolute inset-0 opacity-[0.35]"
+        style={{
+          backgroundImage: 'radial-gradient(circle at 1px 1px, #D4A574 1px, transparent 0)',
+          backgroundSize: '40px 40px',
+        }}
+      />
 
       <div className="relative w-full max-w-md">
         {/* Card */}
         <div className="bg-white rounded-[28px] overflow-hidden shadow-2xl">
           {/* Top bar */}
-          <div className="bg-[#d2741f] px-10 py-8">
+          <div className="bg-leather-900 px-10 py-8">
             <div className="flex items-center gap-3">
               <img src="/images/logotipo-nav-bar-vt-couro.svg" alt="VTCouro" className="h-10 brightness-0 invert" />
             </div>
-            <p className="text-white/80 text-sm mt-2">Painel administrativo</p>
+            <p className="text-leather-300 text-sm mt-2">Painel administrativo</p>
           </div>
 
           {/* Form */}
           <div className="px-10 py-8 flex flex-col gap-6">
             <div>
-              <h2 className="text-[#1f1f1f] font-semibold text-xl">Bem-vindo de volta</h2>
-              <p className="text-gray-400 text-sm mt-1">Digite sua senha para acessar o painel.</p>
+              <h2 className="text-leather-900 font-serif font-bold text-xl">Bem-vindo de volta</h2>
+              <p className="text-leather-500 text-sm mt-1">Digite sua senha para acessar o painel.</p>
             </div>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-[#1f1f1f]">Senha</label>
-                <input
-                  type="password"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  className="border border-gray-200 rounded-[12px] px-4 py-3 text-sm outline-none focus:border-[#d2741f] focus:ring-2 focus:ring-[#d2741f]/20 transition"
-                  autoFocus
-                />
+                <label className="admin-label">Senha</label>
+                <div className="relative">
+                  <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-leather-400" />
+                  <input
+                    type="password"
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="admin-input pl-10 py-3"
+                    autoFocus
+                  />
+                </div>
               </div>
 
               {error && (
@@ -90,7 +97,7 @@ export default function AdminLoginPage() {
               <button
                 type="submit"
                 disabled={loading || !password}
-                className="bg-[#d2741f] text-white rounded-[12px] py-3.5 font-medium hover:bg-[#b8611a] transition disabled:opacity-50 disabled:cursor-not-allowed mt-1"
+                className="admin-btn-primary py-3.5 mt-1"
               >
                 {loading ? 'Entrando...' : 'Entrar no painel'}
               </button>
@@ -98,7 +105,7 @@ export default function AdminLoginPage() {
           </div>
         </div>
 
-        <p className="text-center text-white/30 text-xs mt-6">
+        <p className="text-center text-leather-500 text-xs mt-6">
           © 2026 VTCouro · Área restrita
         </p>
       </div>
