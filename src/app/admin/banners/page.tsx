@@ -136,7 +136,7 @@ export default function AdminBanners() {
           <Monitor size={13} /> Desktop: <strong className="text-gray-700">1920 × 800px</strong>
         </span>
         <span className="flex items-center gap-1.5">
-          <Smartphone size={13} /> Mobile: <strong className="text-gray-700">800 × 1000px</strong>
+          <Smartphone size={13} /> Mobile: <strong className="text-gray-700">780 × 840px</strong>
         </span>
       </div>
 

@@ -33,7 +33,7 @@ export function BannerSlider() {
 
   if (banners.length === 0) {
     return (
-      <div className="w-full h-[520px] md:h-[600px] xl:h-[800px] bg-gray-200 flex items-center justify-center">
+      <div className="w-full h-[420px] md:h-[600px] xl:h-[800px] bg-gray-200 flex items-center justify-center">
         <span className="text-gray-400 text-sm">Nenhum banner cadastrado</span>
       </div>
     )
@@ -70,7 +70,7 @@ export function BannerSlider() {
   )
 
   return (
-    <div className="relative w-full h-[520px] md:h-[600px] xl:h-[800px] overflow-hidden">
+    <div className="relative w-full h-[420px] md:h-[600px] xl:h-[800px] overflow-hidden">
       {banner.link ? (
         <Link href={banner.link} className="absolute inset-0">
           {slides}
