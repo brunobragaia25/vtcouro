@@ -10,6 +10,7 @@ import { useCreateQuote } from '@/hooks/useQuotes'
 import { useToast } from '@/contexts/ToastContext'
 import { useUploadArt } from '@/hooks/useUploadArt'
 import { parseColorEntry } from '@/lib/colors'
+import { whatsappUrl } from '@/lib/seo'
 import Link from 'next/link'
 
 interface CartItem {
@@ -604,9 +605,14 @@ function OrcamentoPageContent() {
                         <p className="text-sm text-white">Fale com nossa equipe e tire suas dúvidas sobre couros, prazos e personalização.</p>
                       </div>
                     </div>
-                    <button className="w-full bg-[#d4a574] text-white font-medium py-3 rounded-2xl hover:bg-[#c29354] transition">
+                    <a
+                      href={whatsappUrl()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block w-full text-center bg-[#d4a574] text-white font-medium py-3 rounded-2xl hover:bg-[#c29354] transition"
+                    >
                       Falar agora
-                    </button>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -865,9 +871,14 @@ function OrcamentoPageContent() {
                         <p className="text-sm text-white">Fale com nossa equipe e tire suas dúvidas sobre couros, prazos e personalização.</p>
                       </div>
                     </div>
-                    <button className="w-full bg-[#d4a574] text-white font-medium py-3 rounded-2xl hover:bg-[#c29354] transition">
+                    <a
+                      href={whatsappUrl()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block w-full text-center bg-[#d4a574] text-white font-medium py-3 rounded-2xl hover:bg-[#c29354] transition"
+                    >
                       Falar agora
-                    </button>
+                    </a>
                   </div>
                 </div>
               </div>

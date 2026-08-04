@@ -3,6 +3,7 @@
 import { FaInstagram, FaLinkedin } from 'react-icons/fa'
 import { useCategories } from '@/hooks/useCategories'
 import { useSubcategories } from '@/hooks/useSubcategories'
+import { whatsappUrl } from '@/lib/seo'
 
 export function Footer() {
   const { data: categories = [] } = useCategories()
@@ -89,6 +90,14 @@ export function Footer() {
                 <div className="space-y-3 text-sm">
                   <a href="https://maps.google.com/?q=Alameda+Segundo+Sargento+Névio+Baracho+Dos+Santos,+114,+São+Paulo,+SP" target="_blank" rel="noopener noreferrer" className="block text-[#1f1f1f] hover:text-[#8B5240] transition">Al. Segundo Sargento Névio Baracho Dos Santos, 114 - Pq Novo Mundo, São Paulo / SP</a>
                   <p className="text-[#1f1f1f]">(11) 2636-1112</p>
+                  <a
+                    href={whatsappUrl()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block text-[#1f1f1f] hover:text-[#8B5240] transition"
+                  >
+                    (11) 94138-2445
+                  </a>
                   <a href="mailto:vendas@vtcouro.com.br" className="block text-[#1f1f1f] hover:text-[#8B5240] transition">vendas@vtcouro.com.br</a>
                 </div>
               </div>
