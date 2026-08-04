@@ -5,8 +5,7 @@ import { requireAdmin } from '@/lib/adminAuth';
 import { escapeHtml } from '@/lib/html';
 import { Resend } from 'resend';
 import { prisma } from '@/lib/prisma';
-
-const FROM_EMAIL = 'onboarding@resend.dev';
+import { FROM_EMAIL } from '@/lib/seo';
 
 const statusLabels = {
   pendente: 'Pendente',

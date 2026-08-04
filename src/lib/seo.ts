@@ -43,3 +43,10 @@ export const ORGANIZATION = {
     addressCountry: 'BR',
   },
 };
+
+/**
+ * Remetente dos e-mails transacionais (Resend). Precisa ser um endereco do
+ * dominio verificado na conta Resend em uso - sem isso, o Resend aceita o
+ * envio apenas para o proprio e-mail dono da conta (modo sandbox).
+ */
+export const FROM_EMAIL = ORGANIZATION.email;

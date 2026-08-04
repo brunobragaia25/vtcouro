@@ -5,9 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/adminAuth';
 import { escapeHtml } from '@/lib/html';
 import { Resend } from 'resend';
-import { ORGANIZATION, absoluteUrl } from '@/lib/seo';
-
-const FROM_EMAIL = 'onboarding@resend.dev';
+import { FROM_EMAIL, ORGANIZATION, absoluteUrl } from '@/lib/seo';
 
 async function generateProtocolNumber() {
   const now = new Date();
