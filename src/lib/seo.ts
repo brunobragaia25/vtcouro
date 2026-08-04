@@ -16,8 +16,7 @@ export const SITE_DESCRIPTION =
 /** Imagem padrao de compartilhamento (1200x630). */
 export const OG_IMAGE = `${SITE_URL}/images/og-default.jpg`;
 
-// TODO: trocar pelo numero real de WhatsApp da empresa.
-export const WHATSAPP_NUMBER = '5511999999999';
+export const WHATSAPP_NUMBER = '5511941382445';
 
 export function whatsappUrl(message?: string): string {
   const text = message ? `?text=${encodeURIComponent(message)}` : '';

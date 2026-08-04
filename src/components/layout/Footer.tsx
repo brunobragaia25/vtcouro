@@ -1,6 +1,6 @@
 ﻿'use client'
 
-import { FaInstagram, FaFacebook, FaLinkedin } from 'react-icons/fa'
+import { FaInstagram, FaLinkedin } from 'react-icons/fa'
 import { useCategories } from '@/hooks/useCategories'
 import { useSubcategories } from '@/hooks/useSubcategories'
 
@@ -31,13 +31,22 @@ export function Footer() {
               Especialistas em produtos de couro personalizados para empresas e marcas. Showroom em São Paulo desde 1998.
             </p>
             <div className="flex items-center gap-2">
-              <a href="#" className="w-9 h-9 border border-[#1f1f1f]/30 rounded-full flex items-center justify-center text-[#1f1f1f] hover:bg-[#d2741f] hover:border-[#d2741f] hover:text-white transition">
+              <a
+                href="https://www.instagram.com/vtcouro_oficial/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram da VTCouro"
+                className="w-9 h-9 border border-[#1f1f1f]/30 rounded-full flex items-center justify-center text-[#1f1f1f] hover:bg-[#d2741f] hover:border-[#d2741f] hover:text-white transition"
+              >
                 <FaInstagram size={16} />
               </a>
-              <a href="#" className="w-9 h-9 border border-[#1f1f1f]/30 rounded-full flex items-center justify-center text-[#1f1f1f] hover:bg-[#d2741f] hover:border-[#d2741f] hover:text-white transition">
-                <FaFacebook size={16} />
-              </a>
-              <a href="#" className="w-9 h-9 border border-[#1f1f1f]/30 rounded-full flex items-center justify-center text-[#1f1f1f] hover:bg-[#d2741f] hover:border-[#d2741f] hover:text-white transition">
+              <a
+                href="https://www.linkedin.com/company/vt-couro"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn da VTCouro"
+                className="w-9 h-9 border border-[#1f1f1f]/30 rounded-full flex items-center justify-center text-[#1f1f1f] hover:bg-[#d2741f] hover:border-[#d2741f] hover:text-white transition"
+              >
                 <FaLinkedin size={16} />
               </a>
             </div>
