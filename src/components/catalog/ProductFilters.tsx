@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Search, MessageCircle, ChevronDown } from 'lucide-react'
+import { whatsappUrl } from '@/lib/seo'
 
 interface Category {
   id: string
@@ -389,9 +390,14 @@ export function ProductFilters({
             Fale com nossa equipe e tire suas dúvidas sobre couros, prazos e personalização.
           </p>
         </div>
-        <button className="bg-[#d4a574] hover:bg-[#c29660] transition text-white font-medium px-7 py-4 rounded-[12px] w-full">
+        <a
+          href={whatsappUrl()}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block text-center bg-[#d4a574] hover:bg-[#c29660] transition text-white font-medium px-7 py-4 rounded-[12px] w-full"
+        >
           Falar agora
-        </button>
+        </a>
       </div>
       </div>
     </div>

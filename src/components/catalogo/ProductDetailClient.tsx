@@ -10,6 +10,7 @@ import { useToast } from '@/contexts/ToastContext';
 import { ProductDetailSkeleton } from '@/components/ui/Skeleton';
 import { ProductGrid } from '@/components/catalog/ProductGrid';
 import { parseColorEntry as parseColor } from '@/lib/colors';
+import { whatsappUrl } from '@/lib/seo';
 
 interface ProductDetailClientProps {
   productSlug: string;
@@ -286,10 +287,15 @@ export default function ProductDetailClient({
                 Solicitar orçamento
                 <ChevronRight size={20} />
               </Link>
-              <button className="flex-1 border border-gray-900 text-gray-900 hover:bg-gray-50 font-medium py-4 rounded-lg flex items-center justify-center gap-2 transition-colors">
+              <a
+                href={whatsappUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 border border-gray-900 text-gray-900 hover:bg-gray-50 font-medium py-4 rounded-lg flex items-center justify-center gap-2 transition-colors"
+              >
                 <MessageCircle size={20} />
                 Falar com vendas
-              </button>
+              </a>
             </div>
 
             {/* Info Cards */}
