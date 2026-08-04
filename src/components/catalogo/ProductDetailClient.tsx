@@ -8,7 +8,7 @@ import { useProducts } from '@/hooks/useProducts';
 import { useFavorites } from '@/hooks/useFavorites';
 import { useToast } from '@/contexts/ToastContext';
 import { ProductDetailSkeleton } from '@/components/ui/Skeleton';
-import ProductCard from '@/components/catalogo/ProductCard';
+import { ProductGrid } from '@/components/catalog/ProductGrid';
 import { parseColorEntry as parseColor } from '@/lib/colors';
 
 interface ProductDetailClientProps {
@@ -23,6 +23,8 @@ export default function ProductDetailClient({
   initialProduct
 }: ProductDetailClientProps) {
   const { data: products = [], isLoading } = useProducts();
+  const { toggleFavorite, isFavorited } = useFavorites(products.map((p: any) => p.id));
+  const { addToast } = useToast();
   const [selectedColor, setSelectedColor] = useState<string>('');
   const [quantity, setQuantity] = useState<number>(50);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -57,6 +59,15 @@ export default function ProductDetailClient({
       .filter((p: any) => p.category?.name === product.category?.name && p.id !== product.id)
       .slice(0, 3);
   }, [products, product]);
+
+  const handleToggleFavorite = (productId: string) => {
+    const isFav = isFavorited(productId);
+    toggleFavorite(productId);
+    addToast(
+      isFav ? 'Removido dos favoritos' : 'Adicionado aos favoritos',
+      isFav ? 'info' : 'success'
+    );
+  };
 
   const minQuantity = product?.minQuantity || 50;
 
@@ -402,10 +413,14 @@ export default function ProductDetailClient({
             <h2 className="text-2xl md:text-4xl font-semibold text-[#4b1c09]">
               Mais em {categoryName}
             </h2>
-            <div className="bg-[#fff5ec] rounded-3xl p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-              {relatedProducts.map((relProduct: any) => (
-                <ProductCard key={relProduct.id} product={relProduct} />
-              ))}
+            <div className="bg-[#fff5ec] rounded-3xl p-6">
+              <ProductGrid
+                products={relatedProducts.map((relProduct: any) => ({
+                  ...relProduct,
+                  liked: isFavorited(relProduct.id),
+                }))}
+                onToggleLike={handleToggleFavorite}
+              />
             </div>
           </div>
         )}

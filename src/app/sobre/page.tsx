@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { ChevronRight, MessageCircle } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { whatsappUrl } from '@/lib/seo'
 
 export default function SobrePage() {
   return (
@@ -142,10 +143,15 @@ export default function SobrePage() {
                   Catálogo completo
                   <ChevronRight size={20} />
                 </Link>
-                <button className="bg-white text-[#1f1f1f] rounded-[12px] px-7 py-4 flex items-center justify-center gap-3 w-fit hover:bg-[#d4a574] hover:text-white transition font-medium">
+                <a
+                  href={whatsappUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-white text-[#1f1f1f] rounded-[12px] px-7 py-4 flex items-center justify-center gap-3 w-fit hover:bg-[#d4a574] hover:text-white transition font-medium"
+                >
                   <MessageCircle size={20} />
                   Falar com vendas
-                </button>
+                </a>
               </div>
             </div>
           </div>
