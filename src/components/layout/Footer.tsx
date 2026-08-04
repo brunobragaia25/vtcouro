@@ -88,7 +88,13 @@ export function Footer() {
                   Contato
                 </h4>
                 <div className="space-y-3 text-sm">
-                  <a href="https://maps.google.com/?q=Alameda+Segundo+Sargento+Névio+Baracho+Dos+Santos,+114,+São+Paulo,+SP" target="_blank" rel="noopener noreferrer" className="block text-[#1f1f1f] hover:text-[#8B5240] transition">Al. Segundo Sargento Névio Baracho Dos Santos, 114 - Pq Novo Mundo, São Paulo / SP</a>
+                  <a href="https://maps.google.com/?q=Alameda+Segundo+Sargento+Névio+Baracho+Dos+Santos,+114,+São+Paulo,+SP" target="_blank" rel="noopener noreferrer" className="block text-[#1f1f1f] hover:text-[#8B5240] transition">
+                    Al. Segundo Sargento Névio Baracho Dos Santos, 114
+                    <br />
+                    Pq Novo Mundo
+                    <br />
+                    São Paulo / SP
+                  </a>
                   <p className="text-[#1f1f1f]">(11) 2636-1112</p>
                   <a
                     href={whatsappUrl()}
