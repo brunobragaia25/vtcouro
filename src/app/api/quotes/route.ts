@@ -5,6 +5,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/adminAuth';
 import { escapeHtml } from '@/lib/html';
 import { Resend } from 'resend';
+import { ORGANIZATION, absoluteUrl } from '@/lib/seo';
+
+const FROM_EMAIL = 'onboarding@resend.dev';
 
 async function generateProtocolNumber() {
   const now = new Date();
@@ -151,7 +154,7 @@ export async function POST(request: NextRequest) {
                 <p style="margin: 0 0 20px 0; color: #666; font-size: 14px; font-style: italic;">"${escapeHtml(quote.notes)}"</p>
               ` : ''}
 
-              <a href="http://localhost:3000/admin/orcamentos" style="display: inline-block; padding: 12px 24px; background-color: #4b1c09; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 10px;">
+              <a href="${absoluteUrl('/admin/orcamentos')}" style="display: inline-block; padding: 12px 24px; background-color: #4b1c09; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 10px;">
                 Acessar Admin
               </a>
             </div>
@@ -165,12 +168,86 @@ export async function POST(request: NextRequest) {
         </div>
       `;
 
-      await resend.emails.send({
-        from: 'onboarding@resend.dev',
-        to: 'bragaiasouza@gmail.com',
-        subject: `Novo Orçamento - #${quote.protocolNumber} de ${quote.name}`,
-        html: notificationHtml,
-      }).catch(err => console.error('Failed to send notification:', err));
+      // resend.emails.send() nao rejeita em erro de negocio (dominio nao
+      // verificado, destinatario bloqueado em sandbox etc) - ele resolve
+      // com { error }. So .catch() nao pega isso, precisa checar o campo.
+      const notificationResult = await resend.emails
+        .send({
+          from: FROM_EMAIL,
+          to: 'bragaiasouza@gmail.com',
+          subject: `Novo Orçamento - #${quote.protocolNumber} de ${quote.name}`,
+          html: notificationHtml,
+        })
+        .catch(err => ({ error: err, data: null }));
+      if (notificationResult.error) {
+        console.error('Failed to send notification email:', notificationResult.error);
+      }
+
+      // Confirmacao para o cliente: a tela de sucesso do site ja informa que
+      // um e-mail foi enviado para ele, entao isso precisa acontecer de fato.
+      const confirmationItemsHtml = quote.items
+        .map(item => `<li>${escapeHtml(item.product?.name)}${item.color ? ` (${escapeHtml(item.color)})` : ''} - ${item.quantity} un.</li>`)
+        .join('');
+
+      const confirmationHtml = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <div style="background-color: #4b1c09; color: white; padding: 30px; text-align: center;">
+            <h1 style="margin: 0; font-size: 28px;">VTCouro</h1>
+            <p style="margin: 5px 0 0 0; font-size: 14px;">Confirmação de Orçamento</p>
+          </div>
+
+          <div style="padding: 30px; background-color: #f9f9f9;">
+            <p style="margin-top: 0; font-size: 16px; color: #1f1f1f;">
+              Olá <strong>${escapeHtml(quote.name)}</strong>,
+            </p>
+            <p style="color: #666; line-height: 1.6;">
+              Recebemos sua solicitação de orçamento! Nossa equipe entrará em contato em até 24 horas úteis com os valores detalhados.
+            </p>
+
+            <div style="background-color: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+              <p style="margin: 0 0 10px 0; color: #999; font-size: 12px; text-transform: uppercase;">
+                Protocolo
+              </p>
+              <p style="margin: 0 0 20px 0; font-size: 24px; color: #4b1c09; font-weight: bold;">
+                #${quote.protocolNumber}
+              </p>
+
+              <p style="margin: 0 0 5px 0; color: #999; font-size: 12px; text-transform: uppercase;">
+                Itens (${quote.items.length})
+              </p>
+              <ul style="margin: 0; padding-left: 20px; color: #666; font-size: 14px;">
+                ${confirmationItemsHtml}
+              </ul>
+            </div>
+
+            <p style="color: #666; line-height: 1.6; margin-top: 20px; font-size: 14px;">
+              Qualquer dúvida, entre em contato conosco:
+            </p>
+            <p style="margin: 5px 0; color: #4b1c09; font-weight: bold;">
+              📧 ${ORGANIZATION.email}<br/>
+              📞 (11) 2636-1112
+            </p>
+          </div>
+
+          <div style="background-color: #f0f0f0; padding: 20px; text-align: center; font-size: 12px; color: #999;">
+            <p style="margin: 0;">
+              © 2026 VTCouro. Todos os direitos reservados.
+            </p>
+          </div>
+        </div>
+      `;
+
+      const confirmationResult = await resend.emails
+        .send({
+          from: FROM_EMAIL,
+          to: quote.email,
+          subject: `Recebemos seu orçamento - Protocolo #${quote.protocolNumber}`,
+          html: confirmationHtml,
+        })
+        .catch(err => ({ error: err, data: null }));
+      if (confirmationResult.error) {
+        console.error('Failed to send confirmation email to customer:', confirmationResult.error);
+      }
     }
 
     return NextResponse.json(quote, { status: 201 });

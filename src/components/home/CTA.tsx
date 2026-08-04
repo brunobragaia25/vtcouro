@@ -1,5 +1,8 @@
 ﻿'use client'
 
+import Link from 'next/link'
+import { whatsappUrl } from '@/lib/seo'
+
 export function CTA() {
   return (
     <section className="w-full bg-[#fff5ec] flex justify-center pt-10 md:pt-16 xl:pt-[64px] pb-[64px] md:pb-[96px] xl:pb-[128px]">
@@ -25,13 +28,21 @@ export function CTA() {
 
           {/* Buttons */}
           <div className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-5 w-full md:w-auto">
-            <button className="w-full md:w-auto bg-[#d2741f] text-white px-7 py-4 rounded-[12px] font-medium hover:opacity-90 transition flex items-center justify-center gap-1">
+            <Link
+              href="/catalogo"
+              className="w-full md:w-auto bg-[#d2741f] text-white px-7 py-4 rounded-[12px] font-medium hover:opacity-90 transition flex items-center justify-center gap-1"
+            >
               Iniciar Orçamento
               <span>→</span>
-            </button>
-            <button className="w-full md:w-auto border border-white text-white px-7 py-4 rounded-[12px] font-medium hover:bg-white hover:text-[#250b00] transition">
+            </Link>
+            <a
+              href={whatsappUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full md:w-auto border border-white text-white px-7 py-4 rounded-[12px] font-medium hover:bg-white hover:text-[#250b00] transition text-center"
+            >
               Whatsapp
-            </button>
+            </a>
           </div>
         </div>
       </div>

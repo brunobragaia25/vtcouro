@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { ChevronRight, X, Check, MessageCircle } from 'lucide-react'
+import { ChevronRight, X, Check, MessageCircle, Mail } from 'lucide-react'
 import { useProducts } from '@/hooks/useProducts'
 import { useCreateQuote } from '@/hooks/useQuotes'
 import { useToast } from '@/contexts/ToastContext'
@@ -247,6 +247,11 @@ function OrcamentoPageContent() {
       setQuoteId(result.protocolNumber)
       setStep(3)
       addToast('Orçamento criado com sucesso!', 'success')
+
+      // Limpa o carrinho: sem isso o pedido concluido continuava aparecendo
+      // se o cliente voltasse ao catalogo ou reabrisse /orcamento.
+      setCart([])
+      localStorage.removeItem('orcamento_cart')
     } catch (error) {
       console.error('Erro ao criar orçamento:', error)
       addToast('Erro ao enviar orçamento. Tente novamente.', 'error')
@@ -885,7 +890,7 @@ function OrcamentoPageContent() {
                     Orçamento enviado!
                   </h2>
                   <p className="text-[#1f1f1f] text-base leading-relaxed">
-                    Recebemos seu pedido e nossa equipe entrará em contato em até 24 horas úteis com um orçamento detalhado. Uma confirmação foi enviada para {customerData.email}.
+                    Recebemos seu pedido e nossa equipe entrará em contato em até 24 horas úteis com um orçamento detalhado.
                   </p>
                 </div>
               </div>
@@ -898,6 +903,12 @@ function OrcamentoPageContent() {
                 <p className="text-[#1f1f1f] text-2xl font-medium">
                   #{quoteId}
                 </p>
+                <div className="flex items-center gap-2 mt-4 pt-4 border-t border-[#ecc29c] text-[#4b1c09] text-sm">
+                  <Mail size={16} className="flex-shrink-0" />
+                  <span>
+                    Enviamos uma confirmação do orçamento para <strong>{customerData.email}</strong>.
+                  </span>
+                </div>
               </div>
 
               {/* Back Button */}

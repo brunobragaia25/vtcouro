@@ -1,8 +1,7 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-
-const WHATSAPP_NUMBER = '5511999999999' // TODO: trocar pelo número real
+import { whatsappUrl } from '@/lib/seo'
 
 export function WhatsAppButton() {
   const pathname = usePathname()
@@ -13,7 +12,7 @@ export function WhatsAppButton() {
 
   return (
     <a
-      href={`https://wa.me/${WHATSAPP_NUMBER}`}
+      href={whatsappUrl()}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Falar pelo WhatsApp"
