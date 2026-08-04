@@ -109,11 +109,11 @@ export function Footer() {
         <div className="flex flex-col gap-3 text-sm lg:flex-row lg:items-center lg:justify-between">
           <p className="text-[#1f1f1f]/60">© 2026 VTCouro. Todos os direitos reservados.</p>
           <div className="flex items-center gap-4 md:gap-6">
-            <a href="#" className="text-[#1f1f1f]/60 hover:text-[#8B5240] transition">
+            <a href="/politica-de-privacidade" className="text-[#1f1f1f]/60 hover:text-[#8B5240] transition">
               Política de Privacidade
             </a>
             <div className="w-px h-3 bg-gray-600 hidden lg:block"></div>
-            <a href="#" className="text-[#1f1f1f]/60 hover:text-[#8B5240] transition">
+            <a href="/termos-de-servico" className="text-[#1f1f1f]/60 hover:text-[#8B5240] transition">
               Termos de Serviço
             </a>
           </div>

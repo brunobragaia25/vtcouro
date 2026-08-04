@@ -86,11 +86,11 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between text-xs text-gray-400">
           <p>© 2026 VTCouro. Todos os direitos reservados.</p>
           <div className="flex items-center gap-6 mt-4 md:mt-0">
-            <Link href="#" className="hover:text-white transition-colors">
+            <Link href="/politica-de-privacidade" className="hover:text-white transition-colors">
               Política de Privacidade
             </Link>
             <span>|</span>
-            <Link href="#" className="hover:text-white transition-colors">
+            <Link href="/termos-de-servico" className="hover:text-white transition-colors">
               Termos de Serviço
             </Link>
           </div>
