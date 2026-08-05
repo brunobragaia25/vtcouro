@@ -1,10 +1,21 @@
 export const dynamic = 'force-dynamic'
 
-import { writeFileSync, mkdirSync } from 'fs'
-import { join } from 'path'
 import { NextRequest, NextResponse } from 'next/server'
+import { requireAdmin } from '@/lib/adminAuth'
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
+
+const ALLOWED_EXTENSIONS = ['.ttf', '.woff', '.woff2', '.otf']
+const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 
 export async function POST(request: NextRequest) {
+  const authError = await requireAdmin(request)
+  if (authError) return authError
+
   try {
     const formData = await request.formData()
     const files = formData.getAll('files') as File[]
@@ -16,32 +27,29 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Criar pasta public/fonts se não existir
-    const fontsDir = join(process.cwd(), 'public/fonts')
-    mkdirSync(fontsDir, { recursive: true })
-
     let uploadedCount = 0
-    const allowedExtensions = ['.ttf', '.woff', '.woff2', '.otf']
 
     for (const file of files) {
-      // Validar extensão
       const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase()
-      if (!allowedExtensions.includes(ext)) {
-        continue
-      }
+      if (!ALLOWED_EXTENSIONS.includes(ext)) continue
+      if (file.size > MAX_FILE_SIZE) continue
 
-      // Validar tamanho (máx 5MB por arquivo)
-      if (file.size > 5 * 1024 * 1024) {
-        continue
-      }
-
-      const bytes = await file.arrayBuffer()
-      const buffer = Buffer.from(bytes)
-
-      // Sanitizar nome do arquivo (evitar path traversal)
+      // Sanitiza o nome (evita path traversal e caracteres problematicos no bucket)
       const sanitizedName = file.name.replace(/[^\w.-]/g, '_')
-      const filePath = join(fontsDir, sanitizedName)
-      writeFileSync(filePath, buffer)
+      const buffer = await file.arrayBuffer()
+
+      const { error } = await supabase.storage
+        .from('Arquivo-Artes')
+        .upload(`fonts/${sanitizedName}`, buffer, {
+          contentType: file.type || 'font/ttf',
+          upsert: true,
+        })
+
+      if (error) {
+        console.error(`Falha no upload de ${file.name}:`, error)
+        continue
+      }
+
       uploadedCount++
     }
 

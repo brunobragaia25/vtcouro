@@ -2,11 +2,25 @@
 
 import { useState, useEffect } from 'react'
 
+// As fontes agora ficam no Supabase Storage (bucket Arquivo-Artes, prefixo
+// fonts/), nao mais em public/fonts - o filesystem da Vercel e somente
+// leitura em runtime, entao um upload salvo localmente nunca persistia.
+function fontUrl(filename: string): string {
+  return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/Arquivo-Artes/fonts/${filename}`
+}
+
 export default function FontsPage() {
   const [files, setFiles] = useState<File[]>([])
   const [uploading, setUploading] = useState(false)
   const [message, setMessage] = useState('')
   const [fontsList, setFontsList] = useState<string[]>([])
+  const [copiedFont, setCopiedFont] = useState<string | null>(null)
+
+  const copyUrl = async (font: string) => {
+    await navigator.clipboard.writeText(fontUrl(font))
+    setCopiedFont(font)
+    setTimeout(() => setCopiedFont(null), 2000)
+  }
 
   useEffect(() => {
     fetchFonts()
@@ -183,21 +197,29 @@ export default function FontsPage() {
                     key={idx}
                     className="flex items-center justify-between p-4 bg-gray-50 rounded-[16px] hover:bg-gray-100 transition"
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
                       <span className="text-2xl">📄</span>
-                      <div>
+                      <div className="min-w-0">
                         <p className="font-medium text-gray-800">{font}</p>
-                        <p className="text-xs text-gray-500">
-                          public/fonts/{font}
+                        <p className="text-xs text-gray-500 truncate">
+                          {fontUrl(font)}
                         </p>
                       </div>
                     </div>
-                    <button
-                      onClick={() => handleDelete(font)}
-                      className="px-4 py-2 text-red-600 hover:bg-red-50 rounded-[12px] transition font-medium text-sm"
-                    >
-                      Deletar
-                    </button>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <button
+                        onClick={() => copyUrl(font)}
+                        className="px-4 py-2 text-gray-600 hover:bg-gray-200 rounded-[12px] transition font-medium text-sm"
+                      >
+                        {copiedFont === font ? 'Copiado!' : 'Copiar URL'}
+                      </button>
+                      <button
+                        onClick={() => handleDelete(font)}
+                        className="px-4 py-2 text-red-600 hover:bg-red-50 rounded-[12px] transition font-medium text-sm"
+                      >
+                        Deletar
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -212,10 +234,10 @@ export default function FontsPage() {
                 <strong>1. Faça upload:</strong> Selecione os arquivos de fonte acima
               </li>
               <li>
-                <strong>2. Configure:</strong> As fontes serão salvas em <code className="bg-white px-2 py-1 rounded">public/fonts/</code>
+                <strong>2. Copie a URL:</strong> Cada fonte enviada fica hospedada no Supabase Storage — use o botão &quot;Copiar URL&quot; na lista acima
               </li>
               <li>
-                <strong>3. Registre no CSS:</strong> Adicione em <code className="bg-white px-2 py-1 rounded">src/styles/globals.css</code>
+                <strong>3. Registre no CSS:</strong> Adicione em <code className="bg-white px-2 py-1 rounded">src/styles/globals.css</code>, usando a URL copiada
               </li>
               <li>
                 <strong>4. Use no Tailwind:</strong> Configure em <code className="bg-white px-2 py-1 rounded">tailwind.config.ts</code>
@@ -227,7 +249,7 @@ export default function FontsPage() {
               <pre className="bg-gray-100 p-3 rounded text-xs overflow-x-auto">
 {`@font-face {
   font-family: 'DM Sans';
-  src: url('/fonts/dm-sans.ttf') format('truetype');
+  src: url('${fontUrl('dm-sans.ttf')}') format('truetype');
   font-weight: 400;
 }`}
               </pre>
