@@ -1,10 +1,21 @@
 export const dynamic = 'force-dynamic'
 
-import { writeFileSync, mkdirSync } from 'fs'
-import { join } from 'path'
 import { NextRequest, NextResponse } from 'next/server'
+import { requireAdmin } from '@/lib/adminAuth'
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
+
+const ALLOWED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
+const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 
 export async function POST(request: NextRequest) {
+  const authError = await requireAdmin(request)
+  if (authError) return authError
+
   try {
     const formData = await request.formData()
     const files = formData.getAll('files') as File[]
@@ -16,44 +27,40 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Criar pasta public/images/products se não existir
-    const productsDir = join(process.cwd(), 'public/images/products')
-    mkdirSync(productsDir, { recursive: true })
-
     let uploadedCount = 0
     const uploadedUrls: string[] = []
-    const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
-    const maxFileSize = 5 * 1024 * 1024 // 5MB
 
     for (const file of files) {
-      // Validar extensão
       const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase()
-      if (!allowedExtensions.includes(ext)) {
+      if (!ALLOWED_EXTENSIONS.includes(ext)) {
         console.error(`Arquivo ${file.name} tem extensão não permitida: ${ext}`)
         continue
       }
 
-      // Validar tamanho
-      if (file.size > maxFileSize) {
+      if (file.size > MAX_FILE_SIZE) {
         console.error(`Arquivo ${file.name} excede o tamanho máximo de 5MB`)
         continue
       }
 
-      // Gerar nome único para o arquivo
       const timestamp = Date.now()
       const randomString = Math.random().toString(36).substring(2, 8)
       const originalName = file.name.substring(0, file.name.lastIndexOf('.'))
       const newFileName = `${originalName}-${timestamp}-${randomString}${ext}`
 
-      const bytes = await file.arrayBuffer()
-      const buffer = Buffer.from(bytes)
+      const buffer = await file.arrayBuffer()
 
-      // Salvar arquivo
-      const filePath = join(productsDir, newFileName)
-      writeFileSync(filePath, buffer)
+      const { error } = await supabase.storage
+        .from('Arquivo-Artes')
+        .upload(`products/${newFileName}`, buffer, { contentType: file.type })
 
+      if (error) {
+        console.error(`Falha no upload de ${file.name}:`, error)
+        continue
+      }
+
+      const { data } = supabase.storage.from('Arquivo-Artes').getPublicUrl(`products/${newFileName}`)
+      uploadedUrls.push(data.publicUrl)
       uploadedCount++
-      uploadedUrls.push(`/images/products/${newFileName}`)
     }
 
     if (uploadedCount === 0) {
