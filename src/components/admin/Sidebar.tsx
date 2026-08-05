@@ -11,6 +11,7 @@ import {
   BarChart3,
   ShoppingBag,
   Image,
+  Type,
   LogOut,
 } from 'lucide-react';
 import clsx from 'clsx';
@@ -55,6 +56,11 @@ const menuItems = [
     name: 'Relatórios',
     href: '/admin/relatorios',
     icon: BarChart3,
+  },
+  {
+    name: 'Fontes',
+    href: '/admin/fonts',
+    icon: Type,
   },
 ];
 
