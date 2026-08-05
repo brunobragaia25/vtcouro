@@ -30,7 +30,7 @@ export async function PUT(
 ) {
   try {
     const body = await request.json();
-    const { name, slug, sku, categoryId, subcategoryId, description, minQuantity, customization, care, imageUrl, isActive, isFeatured, isNew, orderIndex, featuredOrder, newOrder } = body;
+    const { name, slug, sku, categoryId, subcategoryId, description, minQuantity, availableColors, specifications, customization, care, images, imageUrl, isActive, isFeatured, isNew, orderIndex, featuredOrder, newOrder } = body;
 
     const updateData: any = {
       name,
@@ -39,8 +39,11 @@ export async function PUT(
       categoryId,
       subcategoryId: subcategoryId || null,
       description,
+      availableColors: availableColors || ['Preto', 'Marrom'],
+      specifications: specifications || {},
       customization,
       care,
+      images: images || [],
       imageUrl,
       isActive: isActive !== false,
       isFeatured: isFeatured || false,
