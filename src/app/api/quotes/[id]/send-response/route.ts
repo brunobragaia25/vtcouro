@@ -5,7 +5,7 @@ import { requireAdmin } from '@/lib/adminAuth';
 import { escapeHtml } from '@/lib/html';
 import { Resend } from 'resend';
 import { prisma } from '@/lib/prisma';
-import { FROM_EMAIL } from '@/lib/seo';
+import { FROM_EMAIL, ORGANIZATION } from '@/lib/seo';
 
 export async function POST(
   request: NextRequest,
@@ -42,6 +42,21 @@ export async function POST(
     if (!quote) {
       return NextResponse.json({ error: 'Quote not found' }, { status: 404 });
     }
+
+    const emailText = [
+      `Olá ${quote.name},`,
+      '',
+      'Recebemos sua solicitação e preparamos uma resposta para você:',
+      '',
+      `Protocolo: #${quote.protocolNumber}`,
+      '',
+      'Resposta:',
+      response,
+      '',
+      'Qualquer dúvida, entre em contato conosco:',
+      ORGANIZATION.email,
+      '(11) 2636-1112',
+    ].join('\n');
 
     const emailHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -94,8 +109,10 @@ export async function POST(
     const emailResponse = await resend.emails.send({
       from: FROM_EMAIL,
       to: quote.email,
+      replyTo: ORGANIZATION.email,
       subject: `VTCouro - Resposta ao Orçamento #${quote.protocolNumber}`,
       html: emailHtml,
+      text: emailText,
     });
 
     if (emailResponse.error) {

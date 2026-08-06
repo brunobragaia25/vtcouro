@@ -5,7 +5,7 @@ import { requireAdmin } from '@/lib/adminAuth';
 import { escapeHtml } from '@/lib/html';
 import { Resend } from 'resend';
 import { prisma } from '@/lib/prisma';
-import { FROM_EMAIL } from '@/lib/seo';
+import { FROM_EMAIL, ORGANIZATION } from '@/lib/seo';
 
 const statusLabels = {
   pendente: 'Pendente',
@@ -41,6 +41,21 @@ export async function POST(
     }
 
     const statusLabel = statusLabels[order.status as keyof typeof statusLabels];
+
+    const emailText = [
+      `Olá ${order.quote.name},`,
+      '',
+      'O status do seu pedido foi atualizado.',
+      '',
+      `Número do Pedido: #${order.orderNumber}`,
+      `Status atual: ${statusLabel}`,
+      order.totalValue ? `Valor total: R$ ${order.totalValue.toFixed(2).replace('.', ',')}` : '',
+      order.notes ? `Observações: ${order.notes}` : '',
+      '',
+      'Qualquer dúvida, entre em contato conosco:',
+      ORGANIZATION.email,
+      '(11) 2636-1112',
+    ].filter(Boolean).join('\n');
 
     const emailHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -119,8 +134,10 @@ export async function POST(
     const response = await resend.emails.send({
       from: FROM_EMAIL,
       to: order.quote.email,
+      replyTo: ORGANIZATION.email,
       subject: `VTCouro - Pedido #${order.orderNumber} — Status: ${statusLabel}`,
       html: emailHtml,
+      text: emailText,
     });
 
     if (response.error) {

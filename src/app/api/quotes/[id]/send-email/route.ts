@@ -5,7 +5,7 @@ import { requireAdmin } from '@/lib/adminAuth';
 import { escapeHtml } from '@/lib/html';
 import { Resend } from 'resend';
 import { prisma } from '@/lib/prisma';
-import { FROM_EMAIL } from '@/lib/seo';
+import { FROM_EMAIL, ORGANIZATION, absoluteUrl } from '@/lib/seo';
 
 export async function POST(
   request: NextRequest,
@@ -47,6 +47,30 @@ export async function POST(
     `
       )
       .join('');
+
+    const emailText = [
+      `Olá ${quote.name},`,
+      '',
+      'Seu orçamento foi recebido e está em processamento.',
+      '',
+      `Protocolo: #${quote.protocolNumber}`,
+      `Empresa: ${quote.company}`,
+      quote.email,
+      quote.phone,
+      '',
+      'Itens:',
+      ...quote.items.map(item => `- ${item.product?.name}${item.color ? ` (${item.color})` : ''} - ${item.quantity} un. - arte ${item.artFileUrl ? 'enviada' : 'pendente'}`),
+      quote.notes ? `\nObservações: ${quote.notes}` : '',
+      '\nPróximos passos:',
+      '1. Revise os detalhes do seu orçamento',
+      '2. Envie os arquivos de arte (se necessário)',
+      '3. Aguarde nossa resposta com a cotação final',
+      `\nAcompanhar: ${absoluteUrl('/orcamento')}`,
+      '',
+      'Qualquer dúvida, entre em contato conosco:',
+      ORGANIZATION.email,
+      '(11) 2636-1112',
+    ].filter(Boolean).join('\n');
 
     const emailHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -114,7 +138,7 @@ export async function POST(
               2. Envie os arquivos de arte (se necessário)<br/>
               3. Aguarde nossa resposta com a cotação final
             </p>
-            <a href="https://vtcouro.com.br/orcamentos" style="display: inline-block; padding: 12px 24px; background-color: white; color: #4b1c09; text-decoration: none; border-radius: 6px; font-weight: bold;">
+            <a href="${absoluteUrl('/orcamento')}" style="display: inline-block; padding: 12px 24px; background-color: white; color: #4b1c09; text-decoration: none; border-radius: 6px; font-weight: bold;">
               Acompanhar Orçamento
             </a>
           </div>
@@ -139,8 +163,10 @@ export async function POST(
     const response = await resend.emails.send({
       from: FROM_EMAIL,
       to: quote.email,
+      replyTo: ORGANIZATION.email,
       subject: `VTCouro - Orçamento Recebido #${quote.protocolNumber}`,
       html: emailHtml,
+      text: emailText,
     });
 
     if (response.error) {

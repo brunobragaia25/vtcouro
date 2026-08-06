@@ -107,10 +107,25 @@ export async function POST(request: NextRequest) {
         .map(item => `<li>${escapeHtml(item.product?.name)}${item.color ? ` (${escapeHtml(item.color)})` : ''} - ${item.quantity} un.</li>`)
         .join('');
 
+      const notificationText = [
+        `Novo Orçamento #${quote.protocolNumber}`,
+        '',
+        `Cliente: ${quote.name}`,
+        `Empresa: ${quote.company || 'Sem empresa'}`,
+        '',
+        `E-mail: ${quote.email}`,
+        `Telefone: ${quote.phone || 'Sem telefone'}`,
+        '',
+        `Itens (${quote.items.length}):`,
+        ...quote.items.map(item => `- ${item.product?.name}${item.color ? ` (${item.color})` : ''} - ${item.quantity} un.`),
+        quote.notes ? `\nObservações: "${quote.notes}"` : '',
+        `\nAcessar admin: ${absoluteUrl('/admin/orcamentos')}`,
+      ].filter(Boolean).join('\n');
+
       const notificationHtml = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="background-color: #4b1c09; color: white; padding: 30px; text-align: center;">
-            <h1 style="margin: 0; font-size: 28px;">🎉 Novo Orçamento</h1>
+            <h1 style="margin: 0; font-size: 28px;">Novo Orçamento</h1>
           </div>
 
           <div style="padding: 30px; background-color: #f9f9f9;">
@@ -173,8 +188,10 @@ export async function POST(request: NextRequest) {
         .send({
           from: FROM_EMAIL,
           to: ORGANIZATION.email,
+          replyTo: quote.email,
           subject: `Novo Orçamento - #${quote.protocolNumber} de ${quote.name}`,
           html: notificationHtml,
+          text: notificationText,
         })
         .catch(err => ({ error: err, data: null }));
       if (notificationResult.error) {
@@ -186,6 +203,21 @@ export async function POST(request: NextRequest) {
       const confirmationItemsHtml = quote.items
         .map(item => `<li>${escapeHtml(item.product?.name)}${item.color ? ` (${escapeHtml(item.color)})` : ''} - ${item.quantity} un.</li>`)
         .join('');
+
+      const confirmationText = [
+        `Olá ${quote.name},`,
+        '',
+        'Recebemos sua solicitação de orçamento! Nossa equipe entrará em contato em até 24 horas úteis com os valores detalhados.',
+        '',
+        `Protocolo: #${quote.protocolNumber}`,
+        '',
+        `Itens (${quote.items.length}):`,
+        ...quote.items.map(item => `- ${item.product?.name}${item.color ? ` (${item.color})` : ''} - ${item.quantity} un.`),
+        '',
+        'Qualquer dúvida, entre em contato conosco:',
+        ORGANIZATION.email,
+        '(11) 2636-1112',
+      ].join('\n');
 
       const confirmationHtml = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -239,8 +271,10 @@ export async function POST(request: NextRequest) {
         .send({
           from: FROM_EMAIL,
           to: quote.email,
+          replyTo: ORGANIZATION.email,
           subject: `Recebemos seu orçamento - Protocolo #${quote.protocolNumber}`,
           html: confirmationHtml,
+          text: confirmationText,
         })
         .catch(err => ({ error: err, data: null }));
       if (confirmationResult.error) {
