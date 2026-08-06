@@ -172,7 +172,7 @@ export async function POST(request: NextRequest) {
       const notificationResult = await resend.emails
         .send({
           from: FROM_EMAIL,
-          to: 'bragaiasouza@gmail.com',
+          to: ORGANIZATION.email,
           subject: `Novo Orçamento - #${quote.protocolNumber} de ${quote.name}`,
           html: notificationHtml,
         })
