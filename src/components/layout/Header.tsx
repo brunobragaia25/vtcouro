@@ -84,8 +84,12 @@ export function Header() {
               (11) 2636-1112
             </a>
             <div className="w-px h-3 bg-white hidden md:block"></div>
-            <a href="mailto:vendas@vtcouro.com.br" className="font-medium text-white text-[12px] hidden md:block">
-              vendas@vtcouro.com.br
+            <a href="tel:(11)94138-2445" className="font-medium text-white text-[12px]">
+              (11) 94138-2445
+            </a>
+            <div className="w-px h-3 bg-white hidden md:block"></div>
+            <a href="mailto:vtcouro@vtcouro.com.br" className="font-medium text-white text-[12px] hidden md:block">
+              vtcouro@vtcouro.com.br
             </a>
           </div>
         </div>
@@ -334,7 +338,8 @@ export function Header() {
             {/* Bottom contact info */}
             <div className="flex flex-col gap-1 pt-6">
               <a href="tel:(11)2636-1112" className="text-sm text-gray-500">(11) 2636-1112</a>
-              <a href="mailto:vendas@vtcouro.com.br" className="text-sm text-gray-500">vendas@vtcouro.com.br</a>
+              <a href="tel:(11)94138-2445" className="text-sm text-gray-500">(11) 94138-2445</a>
+              <a href="mailto:vtcouro@vtcouro.com.br" className="text-sm text-gray-500">vtcouro@vtcouro.com.br</a>
             </div>
           </div>
         </div>

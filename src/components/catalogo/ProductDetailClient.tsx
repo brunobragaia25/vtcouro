@@ -316,8 +316,8 @@ export default function ProductDetailClient({
                   <img src="/images/Bus.svg" alt="Entrega" className="absolute inset-0 m-auto w-8 h-8" />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <p className="text-[#1f1f1f] text-base font-semibold">Entrega para todo o Brasil</p>
-                  <p className="text-[#1f1f1f] text-xs font-normal">Prazo de produção: A combinar</p>
+                  <p className="text-[#1f1f1f] text-base font-semibold">Prazo de produção e frete</p>
+                  <p className="text-[#1f1f1f] text-xs font-normal">A combinar</p>
                 </div>
               </div>
             </div>

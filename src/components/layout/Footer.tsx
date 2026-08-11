@@ -104,7 +104,7 @@ export function Footer() {
                   >
                     (11) 94138-2445
                   </a>
-                  <a href="mailto:vendas@vtcouro.com.br" className="block text-[#1f1f1f] hover:text-[#8B5240] transition">vendas@vtcouro.com.br</a>
+                  <a href="mailto:vtcouro@vtcouro.com.br" className="block text-[#1f1f1f] hover:text-[#8B5240] transition">vtcouro@vtcouro.com.br</a>
                 </div>
               </div>
 

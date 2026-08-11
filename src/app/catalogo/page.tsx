@@ -1,6 +1,6 @@
 ﻿'use client'
 
-import { useState, useMemo, Suspense } from 'react'
+import { useState, useMemo, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
@@ -49,6 +49,19 @@ function CatalogPageContent() {
   // categorias, subcategorias, produtos, colecoes) antes do scroll da grade
   // deixava a pagina cansativa de rolar num aparelho pequeno.
   const [showMobileFilters, setShowMobileFilters] = useState(false)
+
+  // Clicar em outro link de categoria no menu (ex: Linha Viagem -> Linha
+  // Propagandista) so troca a query string na mesma rota /catalogo, sem
+  // remontar o componente - o useState acima so le a URL uma vez, entao o
+  // filtro ficava travado na primeira categoria clicada. Sincroniza sempre
+  // que a URL mudar.
+  useEffect(() => {
+    setSelectedCategories(categoryFromUrl ? [categoryFromUrl] : [])
+    setSelectedSubcategories(subcategoryFromUrl ? [subcategoryFromUrl] : [])
+    setSelectedProducts([])
+    setCurrentPage(1)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categoryFromUrl, subcategoryFromUrl])
 
   const productsPerPage = 12
 
