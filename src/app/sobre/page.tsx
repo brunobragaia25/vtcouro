@@ -32,7 +32,13 @@ export default function SobrePage() {
             <p className="flex-1 text-[#1f1f1f] font-normal text-base md:text-lg xl:text-[20px]" style={{ lineHeight: '40px' }}>
               Há 27 anos transformamos couro nacional em peças que carregam a identidade de marcas brasileiras. Tradição artesanal, produção própria, e o cuidado de quem ama o que faz.
             </p>
-            <div className="flex-1 h-[280px] md:h-[400px] xl:h-[480px] bg-[#d9d9d9] rounded-[20px] md:rounded-[28px] flex-shrink-0" />
+            <div className="flex-1 h-[280px] md:h-[400px] xl:h-[480px] rounded-[20px] md:rounded-[28px] flex-shrink-0 overflow-hidden">
+              <img
+                src="/images/foto-quemsomos-01.jpeg"
+                alt="Produção artesanal e showroom VTCouro"
+                className="w-full h-full object-cover"
+              />
+            </div>
           </div>
         </section>
 
@@ -60,7 +66,13 @@ export default function SobrePage() {
         {/* Nossa História */}
         <section className="w-full bg-white flex justify-center px-5 py-16 md:py-20">
           <div className="max-w-container w-full flex flex-col gap-10 md:flex-row md:gap-16 md:items-center">
-            <div className="flex-1 self-stretch bg-[#d9d9d9] rounded-[28px] md:rounded-[40px] flex-shrink-0 min-h-[320px]" />
+            <div className="flex-1 self-stretch rounded-[28px] md:rounded-[40px] flex-shrink-0 min-h-[320px] overflow-hidden">
+              <img
+                src="/images/foto-quemsomos-02.jpeg"
+                alt="Vera Sena e Rosana Cossielo, fundadoras da VTCouro"
+                className="w-full h-full object-cover"
+              />
+            </div>
             <div className="flex-1 flex flex-col gap-10">
               <div className="flex flex-col gap-7">
                 <p className="text-[#d2741f] text-sm font-bold tracking-[2.4px] uppercase">
