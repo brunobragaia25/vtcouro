@@ -66,7 +66,7 @@ export default function SobrePage() {
         {/* Nossa História */}
         <section className="w-full bg-white flex justify-center px-5 py-16 md:py-20">
           <div className="max-w-container w-full flex flex-col gap-10 md:flex-row md:gap-16 md:items-center">
-            <div className="flex-1 self-stretch rounded-[28px] md:rounded-[40px] flex-shrink-0 min-h-[320px] overflow-hidden">
+            <div className="flex-1 h-[280px] md:h-[400px] xl:h-[480px] rounded-[28px] md:rounded-[40px] flex-shrink-0 overflow-hidden">
               <img
                 src="/images/foto-quemsomos-02.jpeg"
                 alt="Vera Sena e Rosana Cossielo, fundadoras da VTCouro"
