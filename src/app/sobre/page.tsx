@@ -66,9 +66,13 @@ export default function SobrePage() {
         {/* Nossa História */}
         <section className="w-full bg-white flex justify-center px-5 py-16 md:py-20">
           <div className="max-w-container w-full flex flex-col gap-10 md:flex-row md:gap-16 md:items-center">
-            <div className="flex-1 h-[280px] md:h-[400px] xl:h-[480px] rounded-[28px] md:rounded-[40px] flex-shrink-0 overflow-hidden">
+            {/* aspect-ratio bate com a proporcao real da foto (1397x1488):
+                encaixa sem cortar em qualquer altura da coluna de texto ao
+                lado, em vez de depender de uma altura fixa que so serve
+                para a proporcao da foto atual. */}
+            <div className="flex-1 w-full aspect-[1397/1488] rounded-[28px] md:rounded-[40px] flex-shrink-0 overflow-hidden">
               <img
-                src="/images/foto-quemsomos-02.jpeg"
+                src="/images/foto-quemsomos-02.png"
                 alt="Vera Sena e Rosana Cossielo, fundadoras da VTCouro"
                 className="w-full h-full object-cover"
               />
