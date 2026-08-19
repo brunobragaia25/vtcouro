@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import { DM_Sans, Playfair_Display } from 'next/font/google'
 import '../styles/globals.css'
 import { QueryProvider } from '@/providers/QueryProvider'
@@ -106,6 +107,18 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={`${dmSans.variable} ${playfair.variable}`}>
       <body className={dmSans.className}>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=AW-18397062828"
+          strategy="afterInteractive"
+        />
+        <Script id="google-ads-gtag" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-18397062828');
+          `}
+        </Script>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
