@@ -5,6 +5,7 @@ import { QueryProvider } from '@/providers/QueryProvider'
 import { ToastProvider } from '@/contexts/ToastContext'
 import { WhatsAppButton } from '@/components/ui/WhatsAppButton'
 import { SiteAnalytics } from '@/components/ui/SiteAnalytics'
+import { AdsAttribution } from '@/components/ui/AdsAttribution'
 import { OG_IMAGE, ORGANIZATION, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from '@/lib/seo'
 
 const dmSans = DM_Sans({
@@ -118,6 +119,7 @@ export default function RootLayout({
           </ToastProvider>
         </QueryProvider>
         <SiteAnalytics />
+        <AdsAttribution />
       </body>
     </html>
   )
