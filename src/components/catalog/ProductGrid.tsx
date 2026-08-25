@@ -13,15 +13,21 @@ interface Product {
   isFeatured?: boolean
   isNew?: boolean
   category?: { name: string; slug: string }
+  additionalCategories?: { name: string; slug: string }[]
   liked?: boolean
 }
 
 interface ProductGridProps {
   products: Product[]
   onToggleLike: (productId: string) => void
+  // Categorias atualmente filtradas no catalogo: usado so para decidir qual
+  // categoria mostrar no card quando o produto tem mais de uma (a que bate
+  // com o filtro ativo, em vez de sempre a principal - senao um produto
+  // filtrado por "Propagandista" aparecia rotulado como "Corporativa").
+  activeCategorySlugs?: string[]
 }
 
-export function ProductGrid({ products, onToggleLike }: ProductGridProps) {
+export function ProductGrid({ products, onToggleLike, activeCategorySlugs = [] }: ProductGridProps) {
   if (products.length === 0) {
     return (
       <div className="text-center py-12">
@@ -32,7 +38,13 @@ export function ProductGrid({ products, onToggleLike }: ProductGridProps) {
 
   return (
     <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-      {products.map((product) => (
+      {products.map((product) => {
+        const allCategories = [product.category, ...(product.additionalCategories || [])].filter(
+          (c): c is { name: string; slug: string } => Boolean(c)
+        )
+        const displayCategory =
+          allCategories.find((c) => activeCategorySlugs.includes(c.slug)) || product.category
+        return (
         <Link
           key={product.id}
           href={`/catalogo/${product.category?.slug || 'produtos'}/${product.slug}`}
@@ -49,7 +61,7 @@ export function ProductGrid({ products, onToggleLike }: ProductGridProps) {
             ) : (
               <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
                 <span className="text-gray-400 uppercase text-sm tracking-wider">
-                  {product.category?.name}
+                  {displayCategory?.name}
                 </span>
               </div>
             )}
@@ -118,7 +130,8 @@ export function ProductGrid({ products, onToggleLike }: ProductGridProps) {
             </div>
           </div>
         </Link>
-      ))}
+        )
+      })}
     </div>
   )
 }

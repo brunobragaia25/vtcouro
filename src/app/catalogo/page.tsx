@@ -364,6 +364,7 @@ function CatalogPageContent() {
               <ProductGrid
                 products={paginatedProducts}
                 onToggleLike={(productId) => handleToggleFavorite(productId.toString())}
+                activeCategorySlugs={selectedCategories}
               />
             ) : (
               <div className="text-center py-12">

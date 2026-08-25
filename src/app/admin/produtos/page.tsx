@@ -111,7 +111,10 @@ export default function AdminProdutos() {
     {
       key: 'category',
       label: 'CATEGORIA',
-      render: (value: any) => value?.name || '-'
+      render: (value: any, row: any) => {
+        const names = [value?.name, ...(row.additionalCategories || []).map((c: any) => c.name)].filter(Boolean);
+        return names.length > 0 ? names.join(', ') : '-';
+      }
     },
     {
       key: 'isActive',
