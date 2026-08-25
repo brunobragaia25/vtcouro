@@ -105,7 +105,7 @@ export function ProductGrid({ products, onToggleLike, activeCategorySlugs = [] }
             {/* Category & Title */}
             <div className="space-y-3">
               <p className="text-xs font-medium text-[#d2741f] tracking-widest uppercase">
-                {product.category?.name}
+                {displayCategory?.name}
               </p>
               <h3 className="text-xl font-semibold text-gray-900">
                 {product.name}
