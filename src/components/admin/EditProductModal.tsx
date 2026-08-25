@@ -24,6 +24,7 @@ export default function EditProductModal({
     sku: '',
     categoryId: '',
     subcategoryId: '',
+    additionalCategoryIds: [] as string[],
     description: '',
     minQuantity: 50,
     availableColors: ['Preto', 'Marrom'],
@@ -61,6 +62,7 @@ export default function EditProductModal({
               sku: product.sku || '',
               categoryId: product.categoryId || '',
               subcategoryId: product.subcategoryId || '',
+              additionalCategoryIds: (product.additionalCategories || []).map((c: any) => c.id),
               description: product.description || '',
               minQuantity: product.minQuantity || 50,
               availableColors: product.availableColors || ['Preto', 'Marrom'],
@@ -83,6 +85,7 @@ export default function EditProductModal({
               sku: '',
               categoryId: '',
               subcategoryId: '',
+              additionalCategoryIds: [],
               description: '',
               minQuantity: 50,
               availableColors: ['Preto', 'Marrom'],
@@ -122,7 +125,11 @@ export default function EditProductModal({
 
     // Reset subcategory when the user manually switches category
     if (prevCategoryId.current !== null && prevCategoryId.current !== formData.categoryId) {
-      setFormData(prev => ({ ...prev, subcategoryId: '' }));
+      setFormData(prev => ({
+        ...prev,
+        subcategoryId: '',
+        additionalCategoryIds: prev.additionalCategoryIds.filter((id: string) => id !== formData.categoryId),
+      }));
     }
     prevCategoryId.current = formData.categoryId;
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -188,6 +195,15 @@ export default function EditProductModal({
       return { ...prev, availableColors: colors }
     })
   }
+
+  const toggleAdditionalCategory = (categoryId: string) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      additionalCategoryIds: prev.additionalCategoryIds.includes(categoryId)
+        ? prev.additionalCategoryIds.filter((id: string) => id !== categoryId)
+        : [...prev.additionalCategoryIds, categoryId],
+    }));
+  };
 
   const handleImagesChange = (images: string[]) => {
     setFormData((prev: any) => ({
@@ -308,6 +324,42 @@ export default function EditProductModal({
             </select>
           </div>
           </div>
+
+          {categories.length > 0 && (
+            <div className="mt-3">
+              <label className="admin-label">
+                Categorias extras
+              </label>
+              <p className="text-xs text-leather-400 mb-2">
+                O produto tambem aparece nessas categorias no catalogo, alem da principal — sem precisar duplicar o cadastro.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {categories
+                  .filter((cat) => cat.id !== formData.categoryId)
+                  .map((cat) => {
+                    const checked = formData.additionalCategoryIds.includes(cat.id);
+                    return (
+                      <label
+                        key={cat.id}
+                        className={`flex items-center gap-2 px-3 py-1.5 rounded-full border cursor-pointer text-sm transition ${
+                          checked
+                            ? 'bg-leather-600 border-leather-600 text-white'
+                            : 'border-leather-200 text-leather-700 hover:bg-leather-50'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={() => toggleAdditionalCategory(cat.id)}
+                          className="hidden"
+                        />
+                        {cat.name}
+                      </label>
+                    );
+                  })}
+              </div>
+            </div>
+          )}
 
           <div className="mt-3">
             <label className="admin-label">

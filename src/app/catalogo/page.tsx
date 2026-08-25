@@ -70,19 +70,21 @@ function CatalogPageContent() {
     const cats = new Map<string, { id: string; name: string; slug: string; count: number }>()
 
     apiProducts.forEach((product: any) => {
-      if (product.category?.slug) {
-        const key = product.category.slug
+      const productCategories = [product.category, ...(product.additionalCategories || [])]
+      productCategories.forEach((category: any) => {
+        if (!category?.slug) return
+        const key = category.slug
         if (!cats.has(key)) {
           cats.set(key, {
-            id: product.category.id,
-            name: product.category.name,
-            slug: product.category.slug,
+            id: category.id,
+            name: category.name,
+            slug: category.slug,
             count: 0,
           })
         }
         const cat = cats.get(key)
         if (cat) cat.count++
-      }
+      })
     })
 
     return Array.from(cats.values())
@@ -139,8 +141,12 @@ function CatalogPageContent() {
     return apiProducts.filter((product: any) => {
       const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            product.description?.toLowerCase().includes(searchTerm.toLowerCase())
+      const productCategorySlugs = [
+        product.category?.slug,
+        ...(product.additionalCategories || []).map((c: any) => c.slug),
+      ].filter(Boolean)
       const matchesCategory = selectedCategories.length === 0 ||
-                             selectedCategories.includes(product.category?.slug || '')
+                             selectedCategories.some((slug) => productCategorySlugs.includes(slug))
       const matchesSubcategory = selectedSubcategories.length === 0 ||
                              selectedSubcategories.includes(product.subcategory?.id || '')
       const matchesProduct = selectedProducts.length === 0 ||

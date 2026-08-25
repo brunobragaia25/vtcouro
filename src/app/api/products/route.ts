@@ -7,7 +7,7 @@ import { requireAdmin } from '@/lib/adminAuth';
 export async function GET() {
   try {
     const products = await prisma.product.findMany({
-      include: { category: true, subcategory: true },
+      include: { category: true, subcategory: true, additionalCategories: true },
       orderBy: { createdAt: 'desc' },
     });
     return NextResponse.json(products);
@@ -19,7 +19,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, slug, sku, categoryId, subcategoryId, description, minQuantity, availableColors, specifications, customization, care, images, imageUrl, isActive, isFeatured, isNew } = body;
+    const { name, slug, sku, categoryId, subcategoryId, additionalCategoryIds, description, minQuantity, availableColors, specifications, customization, care, images, imageUrl, isActive, isFeatured, isNew } = body;
 
     const product = await prisma.product.create({
       data: {
@@ -39,8 +39,11 @@ export async function POST(request: NextRequest) {
         isActive: isActive !== false,
         isFeatured: isFeatured || false,
         isNew: isNew || false,
+        additionalCategories: {
+          connect: (additionalCategoryIds || []).map((id: string) => ({ id })),
+        },
       },
-      include: { category: true, subcategory: true },
+      include: { category: true, subcategory: true, additionalCategories: true },
     });
 
     return NextResponse.json(product, { status: 201 });

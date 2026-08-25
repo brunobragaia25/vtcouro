@@ -24,6 +24,9 @@ model Category {
 
   products Product[]
   subcategories Subcategory[]
+  // Produtos que tem essa categoria como extra (alem da principal), para
+  // aparecer em mais de um lugar do catalogo sem precisar duplicar o produto.
+  extraProducts Product[] @relation("ProductExtraCategories")
 
   @@map("categories")
 }
@@ -73,6 +76,9 @@ model Product {
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   subcategory Subcategory? @relation(fields: [subcategoryId], references: [id], onDelete: SetNull)
   quoteItems QuoteItem[]
+  // Categorias extras alem da principal (categoryId): permite o produto
+  // aparecer em mais de uma categoria do catalogo sem duplicar o cadastro.
+  additionalCategories Category[] @relation("ProductExtraCategories")
 
   @@map("products")
 }
