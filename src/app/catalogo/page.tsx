@@ -12,6 +12,7 @@ import { useFavorites } from '@/hooks/useFavorites'
 import { useToast } from '@/contexts/ToastContext'
 import { ProductGridSkeleton } from '@/components/ui/Skeleton'
 import Link from 'next/link'
+import Image from 'next/image'
 
 const iconHealth = '/images/Health.svg'
 
@@ -302,9 +303,11 @@ function CatalogPageContent() {
                       className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 transition text-sm"
                     >
                       {product.imageUrl && (
-                        <img
+                        <Image
                           src={product.imageUrl}
                           alt={product.name}
+                          width={32}
+                          height={32}
                           className="w-8 h-8 object-cover rounded"
                         />
                       )}

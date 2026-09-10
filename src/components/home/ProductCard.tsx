@@ -1,5 +1,7 @@
 'use client'
 
+import Image from 'next/image'
+
 interface ProductCardProps {
   category: string
   name: string
@@ -23,7 +25,13 @@ export function ProductCard({
     <div className="bg-white rounded-[28px] overflow-hidden flex flex-col w-full max-w-sm hover:shadow-lg transition">
       {/* Image Container */}
       <div className="relative h-80 bg-gray-100 overflow-hidden rounded-[20px] m-3">
-        <img src={image} alt={name} className="w-full h-full object-cover" />
+        <Image
+          src={image}
+          alt={name}
+          fill
+          sizes="(min-width: 768px) 384px, 100vw"
+          className="object-cover"
+        />
 
         {/* Featured Badge */}
         <div className="absolute top-5 left-5 bg-[#d2741f] text-white px-3 py-2 rounded-full text-xs font-extrabold tracking-wider uppercase">

@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { ChevronRight } from 'lucide-react'
 
 interface Product {
@@ -53,10 +54,12 @@ export function ProductGrid({ products, onToggleLike, activeCategorySlugs = [] }
           {/* Image */}
           <div className="relative h-56 md:h-72 xl:h-80 bg-gray-100 overflow-hidden flex items-center justify-center">
             {product.imageUrl ? (
-              <img
+              <Image
                 src={product.imageUrl}
                 alt={product.name}
-                className="w-full h-full object-cover"
+                fill
+                sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
+                className="object-cover"
               />
             ) : (
               <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">

@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import React, { useState, useMemo } from 'react';
+import Image from 'next/image';
 import { Plus, Edit2, Eye, Trash2, Copy } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import SearchBar from '@/components/admin/SearchBar';
@@ -91,7 +92,7 @@ export default function AdminProdutos() {
       render: (value: string, row: any) => (
         <div className="flex items-center gap-3">
           {row.imageUrl ? (
-            <img src={row.imageUrl} alt={value} className="w-8 h-8 rounded object-cover flex-shrink-0" />
+            <Image src={row.imageUrl} alt={value} width={32} height={32} className="w-8 h-8 rounded object-cover flex-shrink-0" />
           ) : (
             <div className="w-8 h-8 bg-amber-100 rounded flex-shrink-0"></div>
           )}
