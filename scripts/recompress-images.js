@@ -5,6 +5,7 @@
 //   node scripts/recompress-images.js --dry-run        -> so mostra o que faria
 //   node scripts/recompress-images.js --png --limit=2  -> processa 2 PNGs de verdade
 //   node scripts/recompress-images.js                  -> processa todos os pendentes
+//   node scripts/recompress-images.js --fix-cache      -> so reaplica o cache-control
 //
 // Reexecutar e seguro: arquivos ja processados sao pulados via
 // scripts/.recompress-state.json, entao da para ir em lotes e conferir o
@@ -70,7 +71,37 @@ async function usedFileNames() {
 
 const kb = (n) => (n / 1024).toFixed(0) + ' KB'
 
+// Os primeiros arquivos foram gravados com upload({upsert:true}), que nao
+// aplica o cacheControl novo. Aqui so reescrevemos os bytes que ja estao
+// la com o header correto - sem passar pelo sharp de novo, para nao
+// recomprimir um webp em cima de outro e perder qualidade.
+async function fixCacheHeaders() {
+  const paths = Object.keys(state.done).filter((p) => state.done[p] !== 'skipped')
+  console.log(`Corrigindo cache-control de ${paths.length} arquivos ja processados\n`)
+  for (const p of paths) {
+    try {
+      const { data: blob, error } = await supa.storage.from(BUCKET).download(p)
+      if (error) throw error
+      const buf = Buffer.from(await blob.arrayBuffer())
+      const contentType = (state.done[p] && state.done[p].contentType) || 'image/webp'
+      const { error: upErr } = await supa.storage
+        .from(BUCKET)
+        .update(p, buf, { contentType, cacheControl: ONE_YEAR })
+      if (upErr) throw upErr
+      console.log(`  ok  ${p}`)
+    } catch (e) {
+      console.log(`  ERRO ${p}: ${e.message}`)
+    }
+  }
+}
+
 async function main() {
+  if (process.argv.includes('--fix-cache')) {
+    await fixCacheHeaders()
+    await prisma.$disconnect()
+    return
+  }
+
   const used = await usedFileNames()
   const targets = []
 
@@ -149,9 +180,12 @@ async function main() {
       const { error: cpErr } = await supa.storage.from(BUCKET).copy(t.path, backupPath)
       if (cpErr && !String(cpErr.message || '').toLowerCase().includes('exists')) throw cpErr
 
+      // update() e nao upload({upsert:true}): no upsert o Supabase mantem o
+      // cacheControl antigo (max-age=3600) mesmo passando um novo, e o
+      // cache longo e metade do ganho aqui.
       const { error: upErr } = await supa.storage
         .from(BUCKET)
-        .upload(t.path, output, { contentType, cacheControl: ONE_YEAR, upsert: true })
+        .update(t.path, output, { contentType, cacheControl: ONE_YEAR })
       if (upErr) throw upErr
 
       state.done[t.path] = { before: input.length, after: output.length, contentType }
