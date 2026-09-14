@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -18,10 +19,12 @@ function CategoryCardContent({ cat }: { cat: Category }) {
     <>
       {/* Imagem ou placeholder */}
       {cat.imageUrl ? (
-        <img
+        <Image
           src={cat.imageUrl}
           alt={cat.name}
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+          fill
+          sizes="(min-width: 768px) 33vw, 80vw"
+          className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
         />
       ) : (
         <div className="absolute inset-0 flex items-center justify-center">

@@ -1,6 +1,7 @@
 ﻿'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { Search, MessageCircle, ChevronDown } from 'lucide-react'
 import { whatsappUrl } from '@/lib/seo'
 
@@ -352,9 +353,11 @@ export function ProductFilters({
                       )}
                     </div>
                     {product.imageUrl && (
-                      <img
+                      <Image
                         src={product.imageUrl}
                         alt={product.name}
+                        width={32}
+                        height={32}
                         className="w-8 h-8 object-cover rounded flex-shrink-0"
                       />
                     )}

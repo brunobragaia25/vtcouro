@@ -1,6 +1,7 @@
 ﻿'use client'
 
 import { useRef, useState, useMemo } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useProducts } from '@/hooks/useProducts'
 import { useFavorites } from '@/hooks/useFavorites'
@@ -51,10 +52,12 @@ function ProductCard({
       {/* Product Image */}
       <div className="relative rounded-[20px] bg-[#f0f0f0] overflow-hidden flex items-start justify-between p-5 group h-[220px] md:h-[270px] xl:h-[320px]">
         {image ? (
-          <img
+          <Image
             src={image}
             alt={name}
-            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            fill
+            sizes="(min-width: 1280px) 420px, (min-width: 768px) 340px, 280px"
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
           <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">

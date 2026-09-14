@@ -1,6 +1,7 @@
 ﻿'use client'
 
 import { useState, useMemo, useEffect, Suspense } from 'react'
+import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
@@ -372,9 +373,11 @@ function OrcamentoPageContent() {
                         <div className="flex flex-col gap-5 mb-7 pb-7 border-b border-[#c8c8c8] md:flex-row md:gap-10">
                           <div className="w-full h-48 md:w-40 md:h-40 bg-[#d9d9d9] rounded-3xl flex-shrink-0 overflow-hidden flex items-center justify-center">
                             {item.imageUrl ? (
-                              <img
+                              <Image
                                 src={item.imageUrl}
                                 alt={item.name}
+                                width={160}
+                                height={160}
                                 className="w-full h-full object-cover"
                               />
                             ) : (
@@ -965,9 +968,11 @@ function OrcamentoPageContent() {
                         className="w-full flex items-center gap-4 p-4 border border-[#c8c8c8] rounded-lg hover:border-[#d2741f] hover:bg-[#fff5ec] transition text-left"
                       >
                         {product.imageUrl && (
-                          <img
+                          <Image
                             src={product.imageUrl}
                             alt={product.name}
+                            width={64}
+                            height={64}
                             className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
                           />
                         )}

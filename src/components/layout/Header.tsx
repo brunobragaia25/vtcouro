@@ -202,9 +202,11 @@ export function Header() {
                             className="flex items-center gap-3 p-3 hover:bg-gray-50 transition"
                           >
                             {product.imageUrl && (
-                              <img
+                              <Image
                                 src={product.imageUrl}
                                 alt={product.name}
+                                width={48}
+                                height={48}
                                 className="w-12 h-12 object-cover rounded-lg flex-shrink-0"
                               />
                             )}

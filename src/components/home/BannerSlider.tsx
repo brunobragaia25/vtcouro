@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 
 interface Banner {
@@ -13,12 +14,25 @@ interface Banner {
 export function BannerSlider() {
   const [banners, setBanners] = useState<Banner[]>([])
   const [current, setCurrent] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     fetch('/api/banners')
       .then((r) => r.json())
       .then((data) => setBanners(Array.isArray(data) ? data : []))
       .catch(() => {})
+  }, [])
+
+  // Desktop e mobile sao imagens diferentes, entao nao da para resolver com
+  // `sizes`. Antes as duas iam para o HTML e uma ficava escondida via CSS -
+  // mas imagem escondida por CSS e baixada do mesmo jeito, ou seja, todo
+  // visitante puxava o dobro de banners que via.
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)')
+    const sync = () => setIsMobile(mq.matches)
+    sync()
+    mq.addEventListener('change', sync)
+    return () => mq.removeEventListener('change', sync)
   }, [])
 
   const next = useCallback(() => {
@@ -41,31 +55,39 @@ export function BannerSlider() {
 
   const banner = banners[current]
 
+  // So o slide atual e os vizinhos ficam montados. Com todos no DOM, cada
+  // visita a home baixava os banners inteiros de uma vez - de longe o maior
+  // consumo de egress do site. Os vizinhos entram para a transicao nao
+  // piscar ao trocar de slide.
+  const isNear = (i: number) => {
+    if (banners.length <= 1) return true
+    const d = Math.abs(i - current)
+    return d <= 1 || d === banners.length - 1
+  }
+
   const slides = (
     <>
-      {banners.map((b, i) => (
-        <div
-          key={b.id}
-          className={`absolute inset-0 transition-opacity duration-700 ${
-            i === current ? 'opacity-100' : 'opacity-0'
-          }`}
-        >
-          {/* Desktop */}
-          <img
-            src={b.imageUrl}
-            alt={`Banner ${i + 1}`}
-            className={`w-full h-full object-cover ${b.mobileImageUrl ? 'hidden md:block' : 'block'}`}
-          />
-          {/* Mobile */}
-          {b.mobileImageUrl && (
-            <img
-              src={b.mobileImageUrl}
+      {banners.map((b, i) => {
+        if (!isNear(i)) return null
+        const src = isMobile && b.mobileImageUrl ? b.mobileImageUrl : b.imageUrl
+        return (
+          <div
+            key={b.id}
+            className={`absolute inset-0 transition-opacity duration-700 ${
+              i === current ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <Image
+              src={src}
               alt={`Banner ${i + 1}`}
-              className="w-full h-full object-cover block md:hidden"
+              fill
+              sizes="100vw"
+              priority={i === 0}
+              className="object-cover"
             />
-          )}
-        </div>
-      ))}
+          </div>
+        )
+      })}
     </>
   )
 
