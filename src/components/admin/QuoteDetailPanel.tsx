@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { useQueryClient } from '@tanstack/react-query';
 import { Mail, MessageCircle, Download } from 'lucide-react';
 import Modal from './Modal';
@@ -257,9 +258,11 @@ export default function QuoteDetailPanel({
                 <div className="flex items-center gap-3 flex-1">
                   <div className="w-10 h-10 bg-leather-200 rounded flex items-center justify-center flex-shrink-0">
                     {item.product?.imageUrl ? (
-                      <img
+                      <Image
                         src={item.product.imageUrl}
                         alt={item.product.name}
+                        width={40}
+                        height={40}
                         className="w-full h-full object-cover rounded"
                       />
                     ) : (

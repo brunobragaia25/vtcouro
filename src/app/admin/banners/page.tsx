@@ -1,6 +1,7 @@
 ﻿'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import Image from 'next/image'
 import { Plus, Trash2, GripVertical, ExternalLink, Monitor, Smartphone } from 'lucide-react'
 
 interface Banner {
@@ -162,7 +163,7 @@ export default function AdminBanners() {
                 <div className="flex gap-3 shrink-0 flex-wrap">
                   {/* Desktop image */}
                   <div className="flex flex-col items-center gap-1">
-                    <img src={banner.imageUrl} alt="Desktop" className="w-28 h-14 object-cover rounded-lg" />
+                    <Image src={banner.imageUrl} alt="Desktop" width={112} height={56} className="w-28 h-14 object-cover rounded-lg" />
                     <span className="flex items-center gap-1 text-[10px] text-gray-400">
                       <Monitor size={10} /> Desktop
                     </span>
@@ -172,7 +173,7 @@ export default function AdminBanners() {
                   <div className="flex flex-col items-center gap-1">
                     {banner.mobileImageUrl ? (
                       <div className="relative group">
-                        <img src={banner.mobileImageUrl} alt="Mobile" className="w-14 h-14 object-cover rounded-lg" />
+                        <Image src={banner.mobileImageUrl} alt="Mobile" width={56} height={56} className="w-14 h-14 object-cover rounded-lg" />
                         <button
                           onClick={() => removeMobile(banner.id)}
                           className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full text-[10px] items-center justify-center hidden group-hover:flex"

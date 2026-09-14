@@ -1,4 +1,8 @@
-export const dynamic = 'force-dynamic'
+// Sem cache aqui, todo carregamento do catalogo/busca/home batia direto
+// no Postgres e reenviava a lista inteira de produtos. Os dados so mudam
+// quando o admin cria/edita produto (invalida a query no client via
+// React Query), entao um cache curto no servidor e seguro.
+export const revalidate = 300
 
 import { prisma } from '@/lib/prisma';
 import { NextRequest, NextResponse } from 'next/server';

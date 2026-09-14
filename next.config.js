@@ -8,6 +8,10 @@ const supabaseHostname = process.env.NEXT_PUBLIC_SUPABASE_URL
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    // Cache longo para as imagens otimizadas: sem isso o Next revalida
+    // (e rebaixa do Supabase Storage) a cada 60s por padrao, o que
+    // explode o egress do Storage mesmo com poucos produtos.
+    minimumCacheTTL: 31536000,
     remotePatterns: [
       {
         protocol: 'https',

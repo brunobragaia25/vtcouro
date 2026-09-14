@@ -1,8 +1,11 @@
-export const dynamic = 'force-dynamic'
-
 import { prisma } from '@/lib/prisma';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/adminAuth';
+
+// So o GET e cacheavel (POST/PUT continuam sempre dinamicos); e chamado
+// pelo Header em toda pagina, entao cachear por alguns minutos evita
+// bater no Postgres a cada navegacao.
+export const revalidate = 300
 
 export async function GET() {
   try {

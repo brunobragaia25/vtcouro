@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import React, { useState, useRef } from 'react';
+import Image from 'next/image';
 import { Plus, Edit2, Trash2, GripVertical, ImageIcon } from 'lucide-react';
 import EditCategoryModal from '@/components/admin/EditCategoryModal';
 import DeleteConfirmModal from '@/components/admin/DeleteConfirmModal';
@@ -155,7 +156,7 @@ export default function AdminCategorias() {
                     >
                       {category.imageUrl ? (
                         <>
-                          <img src={category.imageUrl} alt={category.name} className="w-full h-full object-cover" />
+                          <Image src={category.imageUrl} alt={category.name} width={64} height={64} className="w-full h-full object-cover" />
                           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                             <ImageIcon size={16} className="text-white" />
                           </div>
