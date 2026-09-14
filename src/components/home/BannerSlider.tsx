@@ -82,6 +82,11 @@ export function BannerSlider() {
               alt={`Banner ${i + 1}`}
               fill
               sizes="100vw"
+              // Banner ocupa a tela inteira e o arquivo de origem ja e um
+              // webp comprimido, entao o q75 padrao comprimia por cima e
+              // sujava a imagem. Subir a qualidade aqui nao afeta o egress
+              // do Supabase - so os bytes que a edge da Vercel entrega.
+              quality={92}
               priority={i === 0}
               className="object-cover"
             />

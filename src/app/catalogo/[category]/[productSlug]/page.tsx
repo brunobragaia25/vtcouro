@@ -33,7 +33,13 @@ async function fetchProduct(slug: string) {
 function productImage(product: { imageUrl: string | null; images: string[] }): string {
   const raw = product.imageUrl || product.images?.[0];
   if (!raw) return OG_IMAGE;
-  return raw.startsWith('http') ? raw : absoluteUrl(raw);
+  const absolute = raw.startsWith('http') ? raw : absoluteUrl(raw);
+  // Apontar direto para o Storage fazia cada preview de link (WhatsApp,
+  // Google, redes) buscar a imagem no Supabase, furando o cache da edge.
+  // Pelo otimizador, o original e buscado uma vez so.
+  return absolute.includes('/storage/v1/object/public/')
+    ? absoluteUrl(`/_next/image?url=${encodeURIComponent(absolute)}&w=1200&q=75`)
+    : absolute;
 }
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
