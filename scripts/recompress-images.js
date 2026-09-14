@@ -95,7 +95,58 @@ async function fixCacheHeaders() {
   }
 }
 
+// Banner e arte com texto e cor chapada, onde artefato de compressao
+// aparece muito mais que em foto de produto. O q82 usado na primeira
+// passada deixou os banners sujos, entao aqui eles sao refeitos a partir
+// do original guardado em _backup-original/ com qualidade bem mais alta.
+// Nao afeta o egress do Supabase: a edge busca o original uma vez so.
+async function redoBanners() {
+  const { data, error } = await supa.storage
+    .from(BUCKET)
+    .list(`${BACKUP_PREFIX}/banners`, { limit: 1000 })
+  if (error) throw error
+
+  console.log(`Refazendo ${data.length} banners em alta qualidade\n`)
+  let before = 0
+  let after = 0
+
+  for (const f of data) {
+    const target = `banners/${f.name}`
+    try {
+      const { data: blob, error: dlErr } = await supa.storage
+        .from(BUCKET)
+        .download(`${BACKUP_PREFIX}/${target}`)
+      if (dlErr) throw dlErr
+      const input = Buffer.from(await blob.arrayBuffer())
+
+      const output = await sharp(input)
+        .rotate()
+        .resize({ width: 2560, withoutEnlargement: true })
+        .webp({ quality: 95, effort: 6 })
+        .toBuffer()
+
+      const { error: upErr } = await supa.storage
+        .from(BUCKET)
+        .update(target, output, { contentType: 'image/webp', cacheControl: ONE_YEAR })
+      if (upErr) throw upErr
+
+      before += input.length
+      after += output.length
+      console.log(`  ${f.name.slice(0, 34).padEnd(34)} ${kb(input.length).padStart(8)} -> ${kb(output.length)}`)
+    } catch (e) {
+      console.log(`  ERRO ${target}: ${e.message}`)
+    }
+  }
+  console.log(`\nTOTAL: ${(before / 1048576).toFixed(1)} MB -> ${(after / 1048576).toFixed(1)} MB`)
+}
+
 async function main() {
+  if (process.argv.includes('--redo-banners')) {
+    await redoBanners()
+    await prisma.$disconnect()
+    return
+  }
+
   if (process.argv.includes('--fix-cache')) {
     await fixCacheHeaders()
     await prisma.$disconnect()
