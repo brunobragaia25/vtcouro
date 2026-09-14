@@ -75,6 +75,9 @@ export async function POST(request: NextRequest) {
       .from('Arquivo-Artes')
       .upload(`quotes/${fileName}`, buffer, {
         contentType: file.type,
+        // Nome ja inclui timestamp, entao o conteudo e imutavel - sem isso
+        // vale o default de 1h do Supabase e o arquivo e rebaixado a toa.
+        cacheControl: '31536000',
       });
 
     if (error) {

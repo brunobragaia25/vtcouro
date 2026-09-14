@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin } from '@/lib/adminAuth'
 import { createClient } from '@supabase/supabase-js'
+import { optimizeImage, webpFileName, UPLOAD_OPTIONS } from '@/lib/imageUpload'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -28,12 +29,12 @@ export async function POST(request: NextRequest) {
   if (file.size > MAX_FILE_SIZE)
     return NextResponse.json({ error: 'Arquivo excede 5MB' }, { status: 400 })
 
-  const fileName = `category-${Date.now()}-${Math.random().toString(36).slice(2, 8)}${ext}`
-  const buffer = await file.arrayBuffer()
+  const fileName = webpFileName('category')
+  const buffer = await optimizeImage(file)
 
   const { error } = await supabase.storage
     .from('Arquivo-Artes')
-    .upload(`categories/${fileName}`, buffer, { contentType: file.type })
+    .upload(`categories/${fileName}`, buffer, UPLOAD_OPTIONS)
 
   if (error) {
     console.error('Upload error:', error)

@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin } from '@/lib/adminAuth'
 import { createClient } from '@supabase/supabase-js'
+import { optimizeImage, webpFileName, UPLOAD_OPTIONS } from '@/lib/imageUpload'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -42,16 +43,14 @@ export async function POST(request: NextRequest) {
         continue
       }
 
-      const timestamp = Date.now()
-      const randomString = Math.random().toString(36).substring(2, 8)
       const originalName = file.name.substring(0, file.name.lastIndexOf('.'))
-      const newFileName = `${originalName}-${timestamp}-${randomString}${ext}`
+      const newFileName = webpFileName(originalName)
 
-      const buffer = await file.arrayBuffer()
+      const buffer = await optimizeImage(file)
 
       const { error } = await supabase.storage
         .from('Arquivo-Artes')
-        .upload(`products/${newFileName}`, buffer, { contentType: file.type })
+        .upload(`products/${newFileName}`, buffer, UPLOAD_OPTIONS)
 
       if (error) {
         console.error(`Falha no upload de ${file.name}:`, error)
