@@ -3,7 +3,13 @@ export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin } from '@/lib/adminAuth'
 import { createClient } from '@supabase/supabase-js'
-import { optimizeImage, webpFileName, UPLOAD_OPTIONS } from '@/lib/imageUpload'
+import {
+  optimizeImage,
+  webpFileName,
+  UPLOAD_OPTIONS,
+  MAX_IMAGE_UPLOAD_BYTES,
+  MAX_IMAGE_UPLOAD_LABEL,
+} from '@/lib/imageUpload'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -11,7 +17,6 @@ const supabase = createClient(
 )
 
 const ALLOWED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.webp']
-const MAX_FILE_SIZE = 5 * 1024 * 1024
 
 export async function POST(request: NextRequest) {
   const authError = await requireAdmin(request)
@@ -26,8 +31,11 @@ export async function POST(request: NextRequest) {
   if (!ALLOWED_EXTENSIONS.includes(ext))
     return NextResponse.json({ error: 'Tipo de arquivo não permitido' }, { status: 400 })
 
-  if (file.size > MAX_FILE_SIZE)
-    return NextResponse.json({ error: 'Arquivo excede 5MB' }, { status: 400 })
+  if (file.size > MAX_IMAGE_UPLOAD_BYTES)
+    return NextResponse.json(
+      { error: `Arquivo excede ${MAX_IMAGE_UPLOAD_LABEL}` },
+      { status: 400 }
+    )
 
   const fileName = webpFileName('banner')
   const buffer = await optimizeImage(file)

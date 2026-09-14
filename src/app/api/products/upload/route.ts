@@ -3,7 +3,13 @@ export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin } from '@/lib/adminAuth'
 import { createClient } from '@supabase/supabase-js'
-import { optimizeImage, webpFileName, UPLOAD_OPTIONS } from '@/lib/imageUpload'
+import {
+  optimizeImage,
+  webpFileName,
+  UPLOAD_OPTIONS,
+  MAX_IMAGE_UPLOAD_BYTES,
+  MAX_IMAGE_UPLOAD_LABEL,
+} from '@/lib/imageUpload'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -11,7 +17,6 @@ const supabase = createClient(
 )
 
 const ALLOWED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
-const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 
 export async function POST(request: NextRequest) {
   const authError = await requireAdmin(request)
@@ -38,8 +43,8 @@ export async function POST(request: NextRequest) {
         continue
       }
 
-      if (file.size > MAX_FILE_SIZE) {
-        console.error(`Arquivo ${file.name} excede o tamanho máximo de 5MB`)
+      if (file.size > MAX_IMAGE_UPLOAD_BYTES) {
+        console.error(`Arquivo ${file.name} excede o tamanho máximo de ${MAX_IMAGE_UPLOAD_LABEL}`)
         continue
       }
 

@@ -11,6 +11,12 @@ const MAX_WIDTH = 2000
 const WEBP_QUALITY = 82
 const ONE_YEAR_SECONDS = '31536000'
 
+// O limite existe so para barrar arquivo absurdo - o que chega no Storage
+// e sempre a versao ja comprimida, entao nao precisa ser apertado. Com
+// 5MB uma foto normal de celular/camera era recusada a toa.
+export const MAX_IMAGE_UPLOAD_BYTES = 15 * 1024 * 1024
+export const MAX_IMAGE_UPLOAD_LABEL = '15MB'
+
 export async function optimizeImage(file: File): Promise<Buffer> {
   const input = Buffer.from(await file.arrayBuffer())
 

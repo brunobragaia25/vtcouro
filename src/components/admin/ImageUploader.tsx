@@ -99,7 +99,8 @@ export default function ImageUploader({
               Clique para selecionar imagens
             </span>
             <span className="text-xs text-gray-500">
-              PNG, JPG, GIF ou WebP. Máx 5MB por arquivo.
+              PNG, JPG, GIF ou WebP. Máx 15MB por arquivo — as imagens são
+              comprimidas automaticamente no envio.
             </span>
             <input
               type="file"
