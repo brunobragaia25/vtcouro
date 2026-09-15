@@ -52,7 +52,7 @@ export function ProductGrid({ products, onToggleLike, activeCategorySlugs = [] }
           className="group bg-white rounded-2xl overflow-hidden flex flex-col hover:shadow-lg transition-shadow"
         >
           {/* Image */}
-          <div className="relative h-56 md:h-72 xl:h-80 bg-gray-100 overflow-hidden flex items-center justify-center">
+          <div className="relative h-80 bg-gray-100 overflow-hidden flex items-center justify-center">
             {product.imageUrl ? (
               <Image
                 src={product.imageUrl}
