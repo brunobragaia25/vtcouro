@@ -41,12 +41,15 @@ const nextConfig = {
       // O site antigo (CMS PHP) ainda esta indexado no Google com URLs
       // /index.php/... que hoje nao existem mais - um 404 nao avisa o
       // Google que a pagina sumiu de vez, entao ele demora a atualizar o
-      // indice. Um 301 para o catalogo e o sinal mais forte, alem de nao
-      // deixar quem clicar num link antigo (ex: resultado de busca) cair
-      // numa pagina quebrada.
+      // indice. Um 301 e o sinal mais forte, alem de nao deixar quem
+      // clicar num link antigo (ex: resultado de busca, como "bolsa de
+      // propagandista") cair numa pagina quebrada. Vai para a home, nao
+      // para o catalogo aberto: no catalogo os produtos aparecem todos
+      // juntos sem separacao por categoria, e a home tem os cards de
+      // categoria que levam o comprador mais rapido ao que procura.
       {
         source: '/index.php/:path*',
-        destination: '/catalogo',
+        destination: '/',
         permanent: true,
       },
     ]
