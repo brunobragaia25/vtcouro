@@ -131,7 +131,14 @@ export function ProductFilters({
           }
           to {
             opacity: 1;
-            max-height: 600px;
+            /* A secao de Categorias nao tem rolagem propria: com varias
+               categorias abertas ao mesmo tempo (cada uma com suas
+               subcategorias), a altura real passa fácil de 600px e o
+               conteudo excedente ficava cortado sem aviso nenhum, sem
+               barra de rolagem, so sumindo. O limite so existe para a
+               animacao funcionar - usamos um valor bem acima de qualquer
+               conteudo real possivel. */
+            max-height: 5000px;
             margin-bottom: 0.5rem;
             overflow: hidden;
           }
@@ -140,7 +147,7 @@ export function ProductFilters({
         @keyframes slideUp {
           from {
             opacity: 1;
-            max-height: 600px;
+            max-height: 5000px;
             margin-bottom: 0.5rem;
             overflow: hidden;
           }
