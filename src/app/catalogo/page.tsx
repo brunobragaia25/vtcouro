@@ -66,6 +66,10 @@ function CatalogPageContent() {
 
   const productsPerPage = 12
 
+  // Categorias (principal + adicionais) que um produto pertence
+  const productCategorySlugsOf = (product: any): string[] =>
+    [product.category?.slug, ...(product.additionalCategories || []).map((c: any) => c.slug)].filter(Boolean)
+
   // Get unique categories from products
   const categories = useMemo(() => {
     const cats = new Map<string, { id: string; name: string; slug: string; count: number }>()
@@ -91,24 +95,33 @@ function CatalogPageContent() {
     return Array.from(cats.values())
   }, [apiProducts])
 
-  // Get unique subcategories from products
+  // Subcategorias por categoria exibida: cada subcategoria e cadastrada
+  // presa a UMA categoria dona (ex: "Mochila" da Linha Corporativa e
+  // "Mochila" da Linha Propagandista sao registros diferentes). Um produto
+  // so tem uma subcategoriaId, herdada da sua categoria principal - entao
+  // se ele tambem for marcado numa categoria adicional (ex: Propagandista),
+  // a contagem por id ficava sem esse produto mesmo ele aparecendo
+  // normalmente na listagem daquela categoria. Aqui a contagem segue a
+  // mesma regra da listagem: agrupa por (categoria a que o produto
+  // pertence, nome da subcategoria), nao pelo id da subcategoria.
   const subcategoriesData = useMemo(() => {
     const subs = new Map<string, { id: string; name: string; categorySlug: string; count: number }>()
 
     apiProducts.forEach((product: any) => {
-      if (product.subcategory?.id) {
-        const key = product.subcategory.id
+      if (!product.subcategory?.name) return
+      productCategorySlugsOf(product).forEach((slug) => {
+        const key = `${slug}::${product.subcategory.name}`
         if (!subs.has(key)) {
           subs.set(key, {
-            id: product.subcategory.id,
+            id: key,
             name: product.subcategory.name,
-            categorySlug: product.category?.slug || '',
+            categorySlug: slug,
             count: 0,
           })
         }
         const sub = subs.get(key)
         if (sub) sub.count++
-      }
+      })
     })
 
     return Array.from(subs.values())
@@ -142,14 +155,14 @@ function CatalogPageContent() {
     return apiProducts.filter((product: any) => {
       const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            product.description?.toLowerCase().includes(searchTerm.toLowerCase())
-      const productCategorySlugs = [
-        product.category?.slug,
-        ...(product.additionalCategories || []).map((c: any) => c.slug),
-      ].filter(Boolean)
+      const productCategorySlugs = productCategorySlugsOf(product)
       const matchesCategory = selectedCategories.length === 0 ||
                              selectedCategories.some((slug) => productCategorySlugs.includes(slug))
+      const productSubcategoryKeys = product.subcategory?.name
+        ? productCategorySlugs.map((slug) => `${slug}::${product.subcategory.name}`)
+        : []
       const matchesSubcategory = selectedSubcategories.length === 0 ||
-                             selectedSubcategories.includes(product.subcategory?.id || '')
+                             selectedSubcategories.some((key) => productSubcategoryKeys.includes(key))
       const matchesProduct = selectedProducts.length === 0 ||
                             selectedProducts.includes(product.id)
       const matchesCollection = selectedCollections.length === 0 || (
