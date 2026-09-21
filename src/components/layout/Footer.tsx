@@ -65,7 +65,7 @@ export function Footer() {
                   {subcategoriesByCategoryId[category.id]?.map((sub: any) => (
                     <li key={sub.id}>
                       <a
-                        href={`/catalogo?category=${category.slug}&subcategory=${sub.id}`}
+                        href={`/catalogo?category=${category.slug}&subcategory=${encodeURIComponent(`${category.slug}::${sub.name}`)}`}
                         className="text-[#1f1f1f] hover:text-[#8B5240] transition"
                       >
                         {sub.name}
