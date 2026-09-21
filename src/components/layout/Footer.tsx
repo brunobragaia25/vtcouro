@@ -1,18 +1,40 @@
 ﻿'use client'
 
+import { useMemo } from 'react'
 import { FaInstagram, FaLinkedin } from 'react-icons/fa'
 import { useCategories } from '@/hooks/useCategories'
-import { useSubcategories } from '@/hooks/useSubcategories'
+import { useProducts } from '@/hooks/useProducts'
 import { whatsappUrl } from '@/lib/seo'
 
 export function Footer() {
   const { data: categories = [] } = useCategories()
-  const { data: allSubcategories = [] } = useSubcategories()
+  // useProducts() ja e chamado pelo Header em toda pagina, entao isso nao
+  // gera uma requisicao extra (mesma queryKey, cache do React Query).
+  const { data: apiProducts = [] } = useProducts()
 
-  const subcategoriesByCategoryId = categories.reduce((acc: Record<string, any[]>, category: any) => {
-    acc[category.id] = allSubcategories.filter((sub: any) => sub.categoryId === category.id)
-    return acc
-  }, {} as Record<string, any[]>)
+  // Mesma regra usada no filtro do catalogo (src/app/catalogo/page.tsx):
+  // agrupa por categoria a que o produto pertence (principal OU
+  // adicional) + nome da subcategoria, em vez de listar as subcategorias
+  // cadastradas no banco para aquela categoria. A lista cadastrada podia
+  // ter subcategoria sem nenhum produto (link morto, ex: "Porta Tablet")
+  // e ficava sem as que so chegam ali via categoria adicional (ex:
+  // "Bolsa de Apoio" aparecendo em Linha Corporativa).
+  const subcategoriesByCategorySlug = useMemo(() => {
+    const map: Record<string, Set<string>> = {}
+    apiProducts.forEach((product: any) => {
+      if (!product.subcategory?.name) return
+      const slugs = [product.category?.slug, ...(product.additionalCategories || []).map((c: any) => c.slug)].filter(Boolean)
+      slugs.forEach((slug: string) => {
+        if (!map[slug]) map[slug] = new Set()
+        map[slug].add(product.subcategory.name)
+      })
+    })
+    const sorted: Record<string, string[]> = {}
+    Object.keys(map).forEach((slug) => {
+      sorted[slug] = Array.from(map[slug]).sort((a, b) => a.localeCompare(b))
+    })
+    return sorted
+  }, [apiProducts])
 
   return (
     <footer className="w-full bg-[#FFEEDE] text-[#1f1f1f] flex justify-center">
@@ -62,13 +84,13 @@ export function Footer() {
                   {category.name}
                 </h4>
                 <ul className="space-y-3 text-sm">
-                  {subcategoriesByCategoryId[category.id]?.map((sub: any) => (
-                    <li key={sub.id}>
+                  {subcategoriesByCategorySlug[category.slug]?.map((subName: string) => (
+                    <li key={subName}>
                       <a
-                        href={`/catalogo?category=${category.slug}&subcategory=${encodeURIComponent(`${category.slug}::${sub.name}`)}`}
+                        href={`/catalogo?category=${category.slug}&subcategory=${encodeURIComponent(`${category.slug}::${subName}`)}`}
                         className="text-[#1f1f1f] hover:text-[#8B5240] transition"
                       >
-                        {sub.name}
+                        {subName}
                       </a>
                     </li>
                   ))}
