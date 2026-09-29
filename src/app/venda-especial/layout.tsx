@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Queima de Estoque',
+  title: 'Venda Especial',
   description:
     'Produtos em couro da VTCouro com estoque limitado. Escolha as peças e feche pelo WhatsApp.',
-  alternates: { canonical: '/queima-de-estoque' },
+  alternates: { canonical: '/venda-especial' },
 };
 
-export default function QueimaDeEstoqueLayout({ children }: { children: React.ReactNode }) {
+export default function VendaEspecialLayout({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }

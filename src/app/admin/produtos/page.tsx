@@ -51,7 +51,7 @@ function StockCell({ row, onSave }: { row: any; onSave: (overrides: Record<strin
         type="checkbox"
         checked={!!row.isStockSale}
         onChange={(e) => onSave({ isStockSale: e.target.checked })}
-        title="Queima de estoque"
+        title="Venda especial"
         className="admin-checkbox"
       />
       {row.isStockSale ? (
@@ -181,7 +181,7 @@ export default function AdminProdutos() {
     },
     {
       key: 'stockQuantity',
-      label: 'QUEIMA / ESTOQUE',
+      label: 'VENDA ESPECIAL / ESTOQUE',
       render: (_: number, row: any) => (
         <StockCell
           key={`${row.id}-${row.isStockSale}-${row.stockQuantity}`}

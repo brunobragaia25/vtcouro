@@ -205,15 +205,15 @@ export default function ProductDetailClient({
               {product.description}
             </p>
 
-            {/* Queima de Estoque */}
+            {/* Venda Especial */}
             {product.isStockSale && product.stockQuantity > 0 && (
               <Link
-                href="/queima-de-estoque"
+                href="/venda-especial"
                 className="bg-[#fdecea] border border-[#f5b5b0] rounded-2xl p-5 flex items-center justify-between gap-4 hover:bg-[#fbdedb] transition-colors"
               >
                 <div>
                   <p className="text-xs font-extrabold text-[#b3261e] tracking-widest uppercase">
-                    Queima de Estoque
+                    Venda Especial
                   </p>
                   <p className="text-base font-semibold text-gray-900">
                     {product.stockQuantity} unidades disponíveis — fechamento pelo WhatsApp

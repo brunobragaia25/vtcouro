@@ -115,7 +115,7 @@ function StockCard({
   )
 }
 
-export default function QueimaDeEstoquePage() {
+export default function VendaEspecialPage() {
   const { data: products = [], isLoading } = useProducts()
   const { addToast } = useToast()
   const [cart, setCart] = useState<StockCartItem[]>([])
@@ -135,7 +135,7 @@ export default function QueimaDeEstoquePage() {
     [products]
   )
 
-  // Descarta do carrinho itens que sairam da queima ou passam do estoque atual.
+  // Descarta do carrinho itens que sairam da venda especial ou passam do estoque atual.
   const validCart = useMemo(() => {
     if (isLoading) return cart
     return cart
@@ -172,7 +172,7 @@ export default function QueimaDeEstoquePage() {
   const totalUnits = validCart.reduce((sum, i) => sum + i.quantity, 0)
 
   const message = [
-    'Olá! Tenho interesse na Queima de Estoque da VTCouro:',
+    'Olá! Tenho interesse na Venda Especial da VTCouro:',
     '',
     ...validCart.map((i) => `• ${i.quantity}x ${i.name}${i.sku ? ` (SKU ${i.sku})` : ''} - ${parseColorEntry(i.color).name}`),
     '',
@@ -188,7 +188,7 @@ export default function QueimaDeEstoquePage() {
           <p className="text-xs font-extrabold text-[#b3261e] tracking-widest uppercase mb-2">
             Estoque limitado
           </p>
-          <h1 className="text-3xl md:text-4xl font-semibold text-[#4b1c09]">Queima de Estoque</h1>
+          <h1 className="text-3xl md:text-4xl font-semibold text-[#4b1c09]">Venda Especial</h1>
           <p className="text-gray-700 mt-3 max-w-2xl">
             Escolha as peças e as quantidades. O fechamento é feito direto pelo WhatsApp, com a
             nossa equipe.
@@ -204,7 +204,7 @@ export default function QueimaDeEstoquePage() {
               <ProductGridSkeleton />
             ) : stockProducts.length === 0 ? (
               <div className="text-center py-16">
-                <p className="text-gray-600">Nenhum produto em queima de estoque no momento.</p>
+                <p className="text-gray-600">Nenhum produto na venda especial no momento.</p>
                 <Link href="/catalogo" className="text-[#d2741f] font-medium mt-3 inline-block">
                   Ver catálogo
                 </Link>

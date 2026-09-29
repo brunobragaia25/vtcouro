@@ -52,6 +52,12 @@ const nextConfig = {
         destination: '/',
         permanent: true,
       },
+      // Nome anterior da pagina de venda especial.
+      {
+        source: '/queima-de-estoque',
+        destination: '/venda-especial',
+        permanent: true,
+      },
     ]
   },
 }

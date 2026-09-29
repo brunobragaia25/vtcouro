@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { ArrowRight, Flame, MessageCircle } from 'lucide-react'
 import { useProducts } from '@/hooks/useProducts'
 
-// Banner da Queima de Estoque na home. Some sozinho quando nao ha nenhum
+// Banner da Venda Especial na home. Some sozinho quando nao ha nenhum
 // produto marcado com estoque, entao nao precisa ser desligado a mao.
 export function StockSaleBanner() {
   const { data: products = [] } = useProducts()
@@ -34,9 +34,9 @@ export function StockSaleBanner() {
               </span>
 
               <h2 className="font-serif text-5xl font-semibold leading-[1.02] text-white md:text-6xl xl:text-8xl">
-                Queima de
+                Venda
                 <br />
-                <span className="text-[#ffb36b]">Estoque</span>
+                <span className="text-[#ffb36b]">Especial</span>
               </h2>
 
               <p className="max-w-lg text-base text-white/90 md:text-lg">
@@ -60,7 +60,7 @@ export function StockSaleBanner() {
 
               <div className="flex flex-col items-start gap-3 pt-2 sm:flex-row sm:items-center sm:gap-5">
                 <Link
-                  href="/queima-de-estoque"
+                  href="/venda-especial"
                   className="group inline-flex w-full items-center justify-center gap-2 rounded-[12px] bg-white px-8 py-4 font-semibold text-[#8f1b14] shadow-lg transition hover:bg-[#fff5ec] sm:w-auto"
                 >
                   Ver as ofertas
@@ -75,8 +75,8 @@ export function StockSaleBanner() {
 
             {/* Lado direito: tres chamas, com a vitrine de produtos na frente quando ha fotos */}
             <Link
-              href="/queima-de-estoque"
-              aria-label="Ver produtos da queima de estoque"
+              href="/venda-especial"
+              aria-label="Ver produtos da venda especial"
               className="relative hidden h-[380px] items-center justify-center md:flex xl:h-[460px]"
             >
               <div className="absolute h-80 w-80 rounded-full bg-[#ff9a3c]/30 blur-3xl xl:h-[26rem] xl:w-[26rem]" />

@@ -517,7 +517,7 @@ export default function EditProductModal({
               onChange={(e) => setFormData(prev => ({ ...prev, isStockSale: e.target.checked }))}
               className="admin-checkbox"
             />
-            <span className="text-sm font-medium text-leather-700">Queima de Estoque</span>
+            <span className="text-sm font-medium text-leather-700">Venda Especial</span>
           </label>
 
           {formData.isStockSale && (

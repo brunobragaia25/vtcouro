@@ -123,9 +123,9 @@ export function Header() {
                 </Link>
               ))}
               {hasStockSale && (
-                <Link href="/queima-de-estoque" className="flex items-center gap-1 text-[#b3261e] font-semibold hover:text-red-800 transition">
+                <Link href="/venda-especial" className="flex items-center gap-1 text-[#b3261e] font-semibold hover:text-red-800 transition">
                   <Flame size={16} className="fill-[#ff9a3c] text-[#b3261e]" />
-                  Queima de Estoque
+                  Venda Especial
                 </Link>
               )}
               <Link href="/sobre" className="hover:text-orange-700 transition">Sobre nós</Link>
@@ -330,7 +330,7 @@ export function Header() {
                     href: `/catalogo?category=${category.slug}`,
                     label: category.name,
                   })),
-                  ...(hasStockSale ? [{ href: '/queima-de-estoque', label: 'Queima de Estoque', fire: true }] : []),
+                  ...(hasStockSale ? [{ href: '/venda-especial', label: 'Venda Especial', fire: true }] : []),
                   { href: '/sobre', label: 'Sobre nós' },
                 ].map((item) => (
                   <Link

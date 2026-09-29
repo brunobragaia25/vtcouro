@@ -1,4 +1,4 @@
-// Carrinho da Queima de Estoque. Separado do 'orcamento_cart' porque o
+// Carrinho da Venda Especial. Separado do 'orcamento_cart' porque o
 // fechamento aqui e pelo WhatsApp, sem passar pelo formulario de orcamento.
 export interface StockCartItem {
   productId: string
