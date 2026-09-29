@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useEffect, useMemo } from 'react'
 import { usePathname } from 'next/navigation'
-import { X, Search, Menu } from 'lucide-react'
+import { X, Search, Menu, Flame } from 'lucide-react'
 import { useProducts } from '@/hooks/useProducts'
 import { useFavorites } from '@/hooks/useFavorites'
 import { useCategories } from '@/hooks/useCategories'
@@ -24,6 +24,7 @@ export function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const { data: products = [] } = useProducts()
   const { data: categories = [] } = useCategories()
+  const hasStockSale = products.some((p: any) => p.isActive && p.isStockSale && p.stockQuantity > 0)
   const { count: favCount } = useFavorites(products.map((p: any) => p.id))
 
   const handleToggleSearch = (shouldOpen: boolean) => {
@@ -121,6 +122,12 @@ export function Header() {
                   {category.name}
                 </Link>
               ))}
+              {hasStockSale && (
+                <Link href="/queima-de-estoque" className="flex items-center gap-1 text-[#b3261e] font-semibold hover:text-red-800 transition">
+                  <Flame size={16} className="fill-[#ff9a3c] text-[#b3261e]" />
+                  Queima de Estoque
+                </Link>
+              )}
               <Link href="/sobre" className="hover:text-orange-700 transition">Sobre nós</Link>
             </div>
 
@@ -323,6 +330,7 @@ export function Header() {
                     href: `/catalogo?category=${category.slug}`,
                     label: category.name,
                   })),
+                  ...(hasStockSale ? [{ href: '/queima-de-estoque', label: 'Queima de Estoque', fire: true }] : []),
                   { href: '/sobre', label: 'Sobre nós' },
                 ].map((item) => (
                   <Link
@@ -331,6 +339,9 @@ export function Header() {
                     onClick={() => setMenuOpen(false)}
                     className="text-gray-800 font-medium text-lg py-4 border-b border-gray-100 hover:text-[#d2741f] transition"
                   >
+                    {'fire' in item && item.fire && (
+                      <Flame size={18} className="mr-1.5 inline-block -mt-1 fill-[#ff9a3c] text-[#b3261e]" />
+                    )}
                     {item.label}
                   </Link>
                 ))}

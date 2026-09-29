@@ -12,6 +12,68 @@ import DeleteConfirmModal from '@/components/admin/DeleteConfirmModal';
 import { useProducts, useUpdateProduct, useDeleteProduct, useCreateProduct } from '@/hooks/useProducts';
 import { useCategories } from '@/hooks/useCategories';
 
+// A rota PUT sobrescreve todos os campos, entao a edicao inline manda o
+// produto completo com so o estoque trocado.
+function fullPayload(product: any, overrides: Record<string, unknown>) {
+  return {
+    name: product.name,
+    slug: product.slug,
+    sku: product.sku,
+    categoryId: product.categoryId,
+    subcategoryId: product.subcategoryId,
+    additionalCategoryIds: (product.additionalCategories || []).map((c: any) => c.id),
+    description: product.description,
+    minQuantity: product.minQuantity,
+    availableColors: product.availableColors,
+    specifications: product.specifications,
+    customization: product.customization,
+    care: product.care,
+    images: product.images,
+    imageUrl: product.imageUrl,
+    isActive: product.isActive,
+    isFeatured: product.isFeatured,
+    isNew: product.isNew,
+    isStockSale: product.isStockSale,
+    stockQuantity: product.stockQuantity,
+    orderIndex: product.orderIndex,
+    featuredOrder: product.featuredOrder,
+    newOrder: product.newOrder,
+    ...overrides,
+  };
+}
+
+function StockCell({ row, onSave }: { row: any; onSave: (overrides: Record<string, unknown>) => void }) {
+  const [qty, setQty] = useState(String(row.stockQuantity ?? 0));
+
+  return (
+    <div className="flex items-center gap-2">
+      <input
+        type="checkbox"
+        checked={!!row.isStockSale}
+        onChange={(e) => onSave({ isStockSale: e.target.checked })}
+        title="Queima de estoque"
+        className="admin-checkbox"
+      />
+      {row.isStockSale ? (
+        <input
+          type="number"
+          min="0"
+          value={qty}
+          onChange={(e) => setQty(e.target.value)}
+          onBlur={() => {
+            const n = Math.max(0, parseInt(qty) || 0);
+            setQty(String(n));
+            if (n !== (row.stockQuantity ?? 0)) onSave({ stockQuantity: n });
+          }}
+          className="w-20 admin-input"
+        />
+      ) : (
+        <span className="text-xs text-gray-400">-</span>
+      )}
+    </div>
+  );
+}
+
 export default function AdminProdutos() {
   const [selectedCategory, setSelectedCategory] = useState('Todas');
   const [searchTerm, setSearchTerm] = useState('');
@@ -116,6 +178,19 @@ export default function AdminProdutos() {
         const names = [value?.name, ...(row.additionalCategories || []).map((c: any) => c.name)].filter(Boolean);
         return names.length > 0 ? names.join(', ') : '-';
       }
+    },
+    {
+      key: 'stockQuantity',
+      label: 'QUEIMA / ESTOQUE',
+      render: (_: number, row: any) => (
+        <StockCell
+          key={`${row.id}-${row.isStockSale}-${row.stockQuantity}`}
+          row={row}
+          onSave={(overrides) =>
+            updateProduct.mutate({ id: row.id, data: fullPayload(row, overrides) })
+          }
+        />
+      ),
     },
     {
       key: 'isActive',

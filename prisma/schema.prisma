@@ -66,6 +66,10 @@ model Product {
   care String?
   isFeatured    Boolean @default(false)
   isNew         Boolean @default(false)
+  // Queima de estoque: produto listado em /queima-de-estoque, com a quantidade
+  // disponivel informada a mao no admin (a venda fecha no WhatsApp).
+  isStockSale   Boolean @default(false)
+  stockQuantity Int     @default(0)
   isActive      Boolean @default(true)
   orderIndex    Int     @default(0)
   featuredOrder Int     @default(0)

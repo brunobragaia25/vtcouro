@@ -205,6 +205,24 @@ export default function ProductDetailClient({
               {product.description}
             </p>
 
+            {/* Queima de Estoque */}
+            {product.isStockSale && product.stockQuantity > 0 && (
+              <Link
+                href="/queima-de-estoque"
+                className="bg-[#fdecea] border border-[#f5b5b0] rounded-2xl p-5 flex items-center justify-between gap-4 hover:bg-[#fbdedb] transition-colors"
+              >
+                <div>
+                  <p className="text-xs font-extrabold text-[#b3261e] tracking-widest uppercase">
+                    Queima de Estoque
+                  </p>
+                  <p className="text-base font-semibold text-gray-900">
+                    {product.stockQuantity} unidades disponíveis — fechamento pelo WhatsApp
+                  </p>
+                </div>
+                <ChevronRight size={22} className="text-[#b3261e] flex-shrink-0" />
+              </Link>
+            )}
+
             {/* Minimum Order Info */}
             <div className="bg-[#fff5ec] border border-[#ecc29c] rounded-2xl p-5 flex gap-4">
               <div className="w-16 h-16 bg-white rounded-2xl flex-shrink-0 flex items-center justify-center">

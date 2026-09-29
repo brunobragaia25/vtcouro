@@ -36,6 +36,8 @@ export default function EditProductModal({
     isActive: true,
     isFeatured: false,
     isNew: false,
+    isStockSale: false,
+    stockQuantity: 0,
     orderIndex: 0,
     featuredOrder: 0,
     newOrder: 0,
@@ -74,6 +76,8 @@ export default function EditProductModal({
               isActive: product.isActive === true || product.isActive === undefined || product.isActive === null,
               isFeatured: product.isFeatured === true,
               isNew: product.isNew === true,
+              isStockSale: product.isStockSale === true,
+              stockQuantity: product.stockQuantity ?? 0,
               orderIndex: product.orderIndex ?? 0,
               featuredOrder: product.featuredOrder ?? 0,
               newOrder: product.newOrder ?? 0,
@@ -97,6 +101,8 @@ export default function EditProductModal({
               isActive: true,
               isFeatured: false,
               isNew: false,
+              isStockSale: false,
+              stockQuantity: 0,
               orderIndex: 0,
               featuredOrder: 0,
               newOrder: 0,
@@ -503,6 +509,29 @@ export default function EditProductModal({
             />
             <span className="text-sm font-medium text-leather-700">Lançamento</span>
           </label>
+
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={formData.isStockSale}
+              onChange={(e) => setFormData(prev => ({ ...prev, isStockSale: e.target.checked }))}
+              className="admin-checkbox"
+            />
+            <span className="text-sm font-medium text-leather-700">Queima de Estoque</span>
+          </label>
+
+          {formData.isStockSale && (
+            <div className="flex items-center justify-between gap-3 pl-7">
+              <label className="text-sm text-leather-700">Unidades em estoque</label>
+              <input
+                type="number"
+                min="0"
+                value={formData.stockQuantity}
+                onChange={(e) => setFormData(prev => ({ ...prev, stockQuantity: parseInt(e.target.value) || 0 }))}
+                className="w-24 admin-input"
+              />
+            </div>
+          )}
 
           <div className="pt-1 border-t border-leather-200/70 space-y-2">
             <div className="flex items-center justify-between gap-3">
