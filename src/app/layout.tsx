@@ -5,6 +5,7 @@ import '../styles/globals.css'
 import { QueryProvider } from '@/providers/QueryProvider'
 import { ToastProvider } from '@/contexts/ToastContext'
 import { WhatsAppButton } from '@/components/ui/WhatsAppButton'
+import { StockSalePopup } from '@/components/ui/StockSalePopup'
 import { SiteAnalytics } from '@/components/ui/SiteAnalytics'
 import { AdsAttribution } from '@/components/ui/AdsAttribution'
 import { OG_IMAGE, ORGANIZATION, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from '@/lib/seo'
@@ -129,6 +130,7 @@ export default function RootLayout({
           <ToastProvider>
             {children}
             <WhatsAppButton />
+            <StockSalePopup />
           </ToastProvider>
         </QueryProvider>
         <SiteAnalytics />
