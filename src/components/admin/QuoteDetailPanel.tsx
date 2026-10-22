@@ -1,9 +1,9 @@
 ﻿'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useQueryClient } from '@tanstack/react-query';
-import { Mail, MessageCircle, Download } from 'lucide-react';
+import { Mail, MessageCircle, Download, Paperclip, X } from 'lucide-react';
 import Modal from './Modal';
 import { parseColorEntry } from '@/lib/colors';
 
@@ -26,6 +26,9 @@ export default function QuoteDetailPanel({
     notes: '',
     response: '',
   });
+  const [responseFile, setResponseFile] = useState<File | null>(null);
+  const [sendingResponse, setSendingResponse] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (quote) {
@@ -34,6 +37,7 @@ export default function QuoteDetailPanel({
         notes: quote.notes || '',
         response: '',
       });
+      setResponseFile(null);
     }
   }, [quote]);
 
@@ -82,30 +86,54 @@ export default function QuoteDetailPanel({
     window.open(whatsappUrl, '_blank');
   };
 
+  const handleResponseFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] ?? null;
+    e.target.value = '';
+    if (!file) return;
+    if (!file.name.toLowerCase().endsWith('.pdf')) {
+      alert('Envie o orçamento em PDF');
+      return;
+    }
+    // Mesmo limite do send-response (corpo maximo da Vercel)
+    if (file.size > 4 * 1024 * 1024) {
+      alert('O PDF precisa ter no máximo 4MB');
+      return;
+    }
+    setResponseFile(file);
+  };
+
   const handleSendResponse = async () => {
-    if (!formData.response.trim()) {
-      alert('Digite uma resposta');
+    if (!formData.response.trim() && !responseFile) {
+      alert('Digite uma resposta ou anexe o PDF do orçamento');
       return;
     }
 
+    setSendingResponse(true);
     try {
+      const body = new FormData();
+      body.append('response', formData.response);
+      if (responseFile) body.append('file', responseFile);
+
       const response = await fetch(`/api/quotes/${quote.id}/send-response`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ response: formData.response }),
+        body,
       });
 
       if (!response.ok) {
-        alert('Erro ao enviar resposta');
+        const data = await response.json().catch(() => null);
+        alert(data?.error ? `Erro ao enviar resposta: ${data.error}` : 'Erro ao enviar resposta');
         return;
       }
 
       alert('Resposta enviada com sucesso!');
       setFormData(prev => ({ ...prev, response: '', status: 'respondido' }));
+      setResponseFile(null);
       queryClient.invalidateQueries({ queryKey: ['quotes'] });
     } catch (error) {
       console.error('Error sending response:', error);
       alert('Erro ao enviar resposta');
+    } finally {
+      setSendingResponse(false);
     }
   };
 
@@ -329,15 +357,44 @@ export default function QuoteDetailPanel({
             value={formData.response}
             onChange={(e) => setFormData(prev => ({ ...prev, response: e.target.value }))}
             placeholder="Digite sua resposta..."
-            className="w-full px-4 py-3 border border-leather-200 rounded-lg focus:outline-none focus:border-leather-400 focus:ring-2 focus:ring-leather-300/40 resize-none"
-            rows={4}
+            className="w-full px-4 py-3 border border-leather-200 rounded-lg focus:outline-none focus:border-leather-400 focus:ring-2 focus:ring-leather-300/40 resize-y"
+            rows={12}
           />
-          {formData.response.trim() && (
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="application/pdf,.pdf"
+            onChange={handleResponseFileChange}
+            className="hidden"
+          />
+          {responseFile ? (
+            <div className="mt-3 flex items-center gap-2 px-4 py-2 border border-leather-200 rounded-lg bg-leather-100/60 text-sm text-leather-900">
+              <Paperclip className="w-4 h-4 shrink-0" />
+              <span className="truncate flex-1">{responseFile.name}</span>
+              <button
+                onClick={() => setResponseFile(null)}
+                className="text-leather-500 hover:text-leather-900"
+                aria-label="Remover PDF"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="mt-3 w-full flex items-center justify-center gap-2 px-4 py-2 border border-dashed border-leather-300 text-leather-700 rounded-lg hover:bg-leather-100/60 transition font-medium text-sm"
+            >
+              <Paperclip className="w-4 h-4" />
+              Anexar orçamento em PDF
+            </button>
+          )}
+          {(formData.response.trim() || responseFile) && (
             <button
               onClick={handleSendResponse}
-              className="mt-3 w-full px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition font-medium text-sm"
+              disabled={sendingResponse}
+              className="mt-3 w-full px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition font-medium text-sm disabled:opacity-60"
             >
-              Enviar resposta por e-mail
+              {sendingResponse ? 'Enviando...' : 'Enviar resposta por e-mail'}
             </button>
           )}
         </div>

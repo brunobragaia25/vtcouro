@@ -2,10 +2,13 @@ export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/adminAuth';
-import { escapeHtml } from '@/lib/html';
+import { escapeHtml, textToEmailHtml } from '@/lib/html';
 import { Resend } from 'resend';
 import { prisma } from '@/lib/prisma';
 import { FROM_EMAIL, ORGANIZATION } from '@/lib/seo';
+
+// A Vercel recusa corpo de requisicao acima de ~4.5MB nas functions
+const MAX_PDF_SIZE = 4 * 1024 * 1024;
 
 export async function POST(
   request: NextRequest,
@@ -19,14 +22,39 @@ export async function POST(
       );
     }
 
-    const { response } = await request.json();
+    const formData = await request.formData();
+    const message = String(formData.get('response') ?? '').trim();
+    const pdf = formData.get('file');
+    const file = pdf instanceof File && pdf.size > 0 ? pdf : null;
 
-    if (!response || response.trim().length === 0) {
+    if (!message && !file) {
       return NextResponse.json(
         { error: 'Response cannot be empty' },
         { status: 400 }
       );
     }
+
+    let attachment: { filename: string; content: Buffer } | null = null;
+    if (file) {
+      if (file.size > MAX_PDF_SIZE) {
+        return NextResponse.json(
+          { error: `PDF maior que ${MAX_PDF_SIZE / 1024 / 1024}MB` },
+          { status: 400 }
+        );
+      }
+      const content = Buffer.from(await file.arrayBuffer());
+      // %PDF - mesma checagem de magic bytes do /api/upload
+      if (content.subarray(0, 4).toString('latin1') !== '%PDF') {
+        return NextResponse.json(
+          { error: 'O arquivo enviado não é um PDF válido' },
+          { status: 400 }
+        );
+      }
+      const filename = file.name.toLowerCase().endsWith('.pdf') ? file.name : `${file.name}.pdf`;
+      attachment = { filename, content };
+    }
+
+    const response = message || 'Segue em anexo a proposta comercial referente ao seu orçamento.';
 
     const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -52,6 +80,7 @@ export async function POST(
       '',
       'Resposta:',
       response,
+      attachment ? `\nProposta em PDF anexada: ${attachment.filename}` : '',
       '',
       'Qualquer dúvida, entre em contato conosco:',
       ORGANIZATION.email,
@@ -85,7 +114,8 @@ export async function POST(
               <p style="margin: 0 0 10px 0; color: #999; font-size: 12px; text-transform: uppercase;">
                 Resposta
               </p>
-              <p style="margin: 0; color: #1f1f1f; line-height: 1.6; white-space: pre-wrap;">${escapeHtml(response)}</p>
+              ${textToEmailHtml(response)}
+              ${attachment ? `<p style="margin: 0; color: #4b1c09; font-size: 14px;">📎 Proposta em PDF anexada a este e-mail: <strong>${escapeHtml(attachment.filename)}</strong></p>` : ''}
             </div>
           </div>
 
@@ -113,6 +143,7 @@ export async function POST(
       subject: `VTCouro - Resposta ao Orçamento #${quote.protocolNumber}`,
       html: emailHtml,
       text: emailText,
+      ...(attachment && { attachments: [attachment] }),
     });
 
     if (emailResponse.error) {
@@ -127,7 +158,7 @@ export async function POST(
     const updatedQuote = await prisma.quote.update({
       where: { id: params.id },
       data: {
-        response,
+        response: attachment ? `${response}\n\n[PDF anexado: ${attachment.filename}]` : response,
         status: 'respondido',
       },
     });
