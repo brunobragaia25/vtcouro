@@ -85,6 +85,7 @@ export async function POST(
       'Qualquer dúvida, entre em contato conosco:',
       ORGANIZATION.email,
       '(11) 2636-1112',
+      'WhatsApp: (11) 94138-2445',
     ].join('\n');
 
     const emailHtml = `
@@ -124,7 +125,8 @@ export async function POST(
           </p>
           <p style="margin: 5px 0; color: #4b1c09; font-weight: bold;">
             📧 vendas@vtcouro.com.br<br/>
-            📞 (11) 2636-1112
+            📞 (11) 2636-1112<br/>
+            💬 WhatsApp: <a href="https://wa.me/5511941382445" style="color: #4b1c09;">(11) 94138-2445</a>
           </p>
         </div>
 
