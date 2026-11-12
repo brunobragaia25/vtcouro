@@ -72,20 +72,12 @@ export default function ProductDetailClient({
 
   const minQuantity = product?.minQuantity || 50;
 
-  const handleQuantityChange = (value: number) => {
-    if (value >= minQuantity && value % 5 === 0) {
-      setQuantity(value);
-    }
-  };
-
   const handleIncrement = () => {
-    handleQuantityChange(quantity + 5);
+    setQuantity((q) => q + 5);
   };
 
   const handleDecrement = () => {
-    if (quantity > minQuantity) {
-      handleQuantityChange(quantity - 5);
-    }
+    setQuantity((q) => Math.max(minQuantity, q - 5));
   };
 
   if (isLoading && !product) {
@@ -278,7 +270,7 @@ export default function ProductDetailClient({
                 <div className="flex items-center border border-gray-300 rounded-lg">
                   <button
                     onClick={handleDecrement}
-                    disabled={quantity <= 50}
+                    disabled={quantity <= minQuantity}
                     className="px-3 py-2 text-xl text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     −

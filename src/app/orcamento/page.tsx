@@ -167,12 +167,11 @@ function OrcamentoPageContent() {
     const item = cart.find(i => i.productId === productId && i.color === color)
     if (!item) return
 
-    if (newQuantity < item.minQuantity) return
-    if (newQuantity % 5 !== 0) return
+    const quantity = Math.max(item.minQuantity, newQuantity)
 
     setCart(cart.map(item =>
       item.productId === productId && item.color === color
-        ? { ...item, quantity: newQuantity }
+        ? { ...item, quantity }
         : item
     ))
   }
