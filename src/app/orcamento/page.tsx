@@ -995,6 +995,16 @@ function OrcamentoPageContent() {
                     </div>
                   )}
                 </div>
+
+                <div className="border-t border-[#c8c8c8] px-8 py-5">
+                  <Link
+                    href="/catalogo"
+                    className="w-full border-2 border-[#4b1c09] text-[#1f1f1f] font-medium py-3 rounded-2xl hover:bg-[#fff5ec] transition flex items-center justify-center gap-2"
+                  >
+                    <ChevronRight size={20} className="rotate-180" />
+                    Voltar ao catálogo
+                  </Link>
+                </div>
               </div>
             </div>
           )}
