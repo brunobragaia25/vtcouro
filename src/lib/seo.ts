@@ -91,4 +91,5 @@ export const ORGANIZATION = {
  * dominio verificado na conta Resend em uso - sem isso, o Resend aceita o
  * envio apenas para o proprio e-mail dono da conta (modo sandbox).
  */
-export const FROM_EMAIL = ORGANIZATION.email;
+export const FROM_EMAIL =
+  process.env.RESEND_FROM_EMAIL || 'VT Couro <onboarding@resend.dev>';
